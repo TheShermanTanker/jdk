@@ -12,12 +12,12 @@
 		// Avoid issues with precompiled headers
 		"ccls.clang.excludeArgs": [
 			// Windows / MSVC
-			"-Fp{{OUTPUTDIR}}/hotspot/variant-server/libjvm/objs/BUILD_LIBJVM.pch",
-			"-Fp{{OUTPUTDIR}}/hotspot/variant-server/libjvm/gtest/objs/BUILD_GTEST_LIBJVM.pch",
+			"-Fp{{OUTPUTDIR}}/hotspot/variant-server/libjvm/objects/BUILD_LIBJVM.pch",
+			"-Fp{{OUTPUTDIR}}/hotspot/variant-server/libjvm/gtest/objects/BUILD_GTEST_LIBJVM.pch",
 			"-Yuprecompiled.hpp",
 			// MacOS / clang
-			"{{OUTPUTDIR}}/hotspot/variant-server/libjvm/objs/precompiled/precompiled.hpp.pch",
-			"{{OUTPUTDIR}}/hotspot/variant-server/libjvm/gtest/objs/precompiled/precompiled.hpp.pch",
+			"{{OUTPUTDIR}}/hotspot/variant-server/libjvm/objects/precompiled/precompiled.hpp.pch",
+			"{{OUTPUTDIR}}/hotspot/variant-server/libjvm/gtest/objects/precompiled/precompiled.hpp.pch",
 			"-include-pch"
 		],
 
