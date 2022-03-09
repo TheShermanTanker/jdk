@@ -20,7 +20,7 @@
 # questions.
 
 CFLAGS =	-nologo
-OBJS =		myfile.obj
+OBJS =		myfile.o
 HEADERS =	MyCanvas.h
 CLASSES =	MyCanvas.class
 
@@ -36,10 +36,10 @@ all:		$(CLASSES) mylib.dll
 mylib.dll: $(HEADERS) $(OBJS) 
 	$(LINK) -nologo -dll -out:mylib.dll $(OBJS) $(LIBS)
 
-myfile.obj: $(TESTSRC)\myfile.cpp
-	$(CC) $(CFLAGS) $(INCLUDES) -c $(TESTSRC)\myfile.cpp
+myfile.o: $(TESTSRC)\myfile.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) -Fo"myfile.o" -c $(TESTSRC)\myfile.cpp
 
 clean:
 	$(DEL) mylib.* 
 	$(DEL) $(HEADERS) $(CLASSES)
-	$(DEL) *.obj
+	$(DEL) *.o
