@@ -175,13 +175,13 @@ define ResolveLibPath
       endif
       ifeq ($(TOOLCHAIN_TYPE), microsoft)
         ifeq ($(STATIC_LIBS), true)
-          $1_$2_LIBPATH := $$(HOTSPOT_OUTPUTDIR)/variant-$$($1_$2_JVM_VARIANT_PATH)/libjvm/objs/static
+          $1_$2_LIBPATH := $$(HOTSPOT_OUTPUTDIR)/variant-$$($1_$2_JVM_VARIANT_PATH)/libjvm/objects/static
         else
           $1_$2_LIBPATH := $$(SUPPORT_OUTPUTDIR)/modules_libs/$$($1_$2_MODULE)
         endif
       else
         ifeq ($(STATIC_LIBS), true)
-          $1_$2_LIBPATH := $$(HOTSPOT_OUTPUTDIR)/variant-$$($1_$2_JVM_VARIANT_PATH)/libjvm/objs/static
+          $1_$2_LIBPATH := $$(HOTSPOT_OUTPUTDIR)/variant-$$($1_$2_JVM_VARIANT_PATH)/libjvm/objects/static
         else
           $1_$2_LIBPATH := $$(SUPPORT_OUTPUTDIR)/modules_libs/$$($1_$2_MODULE)/$$($1_$2_JVM_VARIANT_PATH)
         endif
@@ -192,13 +192,13 @@ define ResolveLibPath
     ifeq ($$($1_$2_NAME), jvm)
       ifeq ($(TOOLCHAIN_TYPE), microsoft)
         ifeq ($(STATIC_LIBS), true)
-          $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest/objs/static
+          $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest/objects/static
         else
-          $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest/objs
+          $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest/objects
         endif
       else
         ifeq ($(STATIC_LIBS), true)
-          $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest/objs/static
+          $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest/objects/static
         else
           $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/gtest
         endif
@@ -206,7 +206,7 @@ define ResolveLibPath
     else ifeq ($$($1_$2_NAME), gtest)
       $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/libgtest
       ifeq ($(STATIC_LIBS), true)
-        $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/libgtest/objs/static
+        $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/libgtest/objects/static
       else
         $1_$2_LIBPATH := $$(JVM_OUTPUTDIR)/libgtest
       endif

@@ -83,7 +83,7 @@ $(eval $(call SetupJdkExecutable, BUILD_DATA_GENERATOR, \
     CFLAGS := $(X_CFLAGS) $(DATA_GENERATOR_INCLUDES), \
     LIBS := $(X_LIBS), \
     OUTPUT_DIR := $(X11WRAPPERS_OUTPUT)/bin, \
-    OBJECT_DIR := $(X11WRAPPERS_OUTPUT)/objs, \
+    OBJECT_DIR := $(X11WRAPPERS_OUTPUT)/objects, \
 ))
 
 # Run the executable to create the data file.

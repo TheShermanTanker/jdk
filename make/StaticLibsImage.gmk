@@ -60,9 +60,9 @@ ifneq ($(filter static-libs-image, $(MAKECMDGOALS)), )
   # Copy libjvm static library to the image.
   $(foreach v, $(JVM_VARIANTS), \
     $(eval $(call SetupCopyFiles, COPY_STATIC_LIBS_$v, \
-        SRC := $(HOTSPOT_OUTPUTDIR)/variant-$v/libjvm/objs/static, \
+        SRC := $(HOTSPOT_OUTPUTDIR)/variant-$v/libjvm/objects/static, \
         DEST := $(IMAGE_DEST_DIR)/$v, \
-        FILES := $(wildcard $(HOTSPOT_OUTPUTDIR)/variant-$v/libjvm/objs/static/*$(STATIC_LIBRARY_SUFFIX)), \
+        FILES := $(wildcard $(HOTSPOT_OUTPUTDIR)/variant-$v/libjvm/objects/static/*$(STATIC_LIBRARY_SUFFIX)), \
     )) \
     $(eval TARGETS += $$(COPY_STATIC_LIBS_$v)) \
     $(eval HOTSPOT_VARIANT_STATIC_LIBS_TARGETS += $$(COPY_STATIC_LIBS_$v)) \
