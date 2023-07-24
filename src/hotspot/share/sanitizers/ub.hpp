@@ -34,7 +34,7 @@
 // example causing desired signals/crashes.
 #ifdef UNDEFINED_BEHAVIOR_SANITIZER
 #if defined(__clang__) || defined(__GNUC__)
-#define ATTRIBUTE_NO_UBSAN __attribute__((no_sanitize("undefined")))
+#define ATTRIBUTE_NO_UBSAN [[gnu::no_sanitize("undefined")]]
 #endif
 #endif
 
