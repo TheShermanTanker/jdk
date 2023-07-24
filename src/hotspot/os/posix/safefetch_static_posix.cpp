@@ -36,12 +36,12 @@
 // SafeFetch32 and SafeFetchN are implemented via static assembly
 // and live in os_cpu/xx_xx/safefetch_xx_xx.S
 
-extern "C" char _SafeFetch32_continuation[] __attribute__ ((visibility ("hidden")));
-extern "C" char _SafeFetch32_fault[] __attribute__ ((visibility ("hidden")));
+extern "C" [[gnu::visibility ("hidden")]] char _SafeFetch32_continuation[];
+extern "C" [[gnu::visibility ("hidden")]] char _SafeFetch32_fault[];
 
 #ifdef _LP64
-extern "C" char _SafeFetchN_continuation[] __attribute__ ((visibility ("hidden")));
-extern "C" char _SafeFetchN_fault[] __attribute__ ((visibility ("hidden")));
+extern "C" [[gnu::visibility ("hidden")]] char _SafeFetchN_continuation[];
+extern "C" [[gnu::visibility ("hidden")]] char _SafeFetchN_fault[];
 #endif // _LP64
 
 bool handle_safefetch(int sig, address pc, void* context) {

@@ -679,7 +679,7 @@ void AsyncGetCallTrace(ASGCT_CallTrace *trace, jint depth, void* ucontext) {
 // Because it is weakly bound, the calls become NOP's when the library
 // isn't present.
 #if defined(__APPLE__) || defined(_AIX)
-// XXXDARWIN: Link errors occur even when __attribute__((weak_import))
+// XXXDARWIN: Link errors occur even when [[clang::weak_import]]
 // is added
 #define collector_func_load(x0,x1,x2,x3,x4,x5,x6) ((void) 0)
 #define collector_func_load_enabled() false

@@ -242,7 +242,7 @@ public:
   double elapsed_cycle_time() const;
 
   // Format prefix and emit log message indicating a GC cycle hs been triggered
-  void log_trigger(const char* fmt, ...) ATTRIBUTE_PRINTF(2, 3);
+  ATTRIBUTE_PRINTF(2, 3) void log_trigger(const char* fmt, ...);
 };
 
 #endif // SHARE_GC_SHENANDOAH_HEURISTICS_SHENANDOAHHEURISTICS_HPP
