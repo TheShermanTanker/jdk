@@ -71,7 +71,7 @@ struct Atomic::PlatformAdd {
 #ifndef FULL_COMPILER_ATOMIC_SUPPORT
 template<>
 template<typename T>
-inline T Atomic::PlatformCmpxchg<1>::operator()(T volatile* dest __attribute__((unused)),
+inline T Atomic::PlatformCmpxchg<1>::operator()([[gnu::unused]] T volatile* dest,
                                                 T compare_value,
                                                 T exchange_value,
                                                 atomic_memory_order order) const {
@@ -122,7 +122,7 @@ inline T Atomic::PlatformCmpxchg<1>::operator()(T volatile* dest __attribute__((
 // See also JDK-8326936.
 template<>
 template<typename T>
-inline T Atomic::PlatformCmpxchg<4>::operator()(T volatile* dest __attribute__((unused)),
+inline T Atomic::PlatformCmpxchg<4>::operator()([[gnu::unused]] T volatile* dest,
                                                 T compare_value,
                                                 T exchange_value,
                                                 atomic_memory_order order) const {
@@ -177,10 +177,10 @@ inline T Atomic::PlatformXchg<byte_size>::operator()(T volatile* dest,
   return res;
 }
 
-// __attribute__((unused)) on dest is to get rid of spurious GCC warnings.
+// [[gnu::unused]] on dest is to get rid of spurious GCC warnings.
 template<size_t byte_size>
 template<typename T>
-inline T Atomic::PlatformCmpxchg<byte_size>::operator()(T volatile* dest __attribute__((unused)),
+inline T Atomic::PlatformCmpxchg<byte_size>::operator()([[gnu::unused]] T volatile* dest,
                                                         T compare_value,
                                                         T exchange_value,
                                                         atomic_memory_order order) const {

@@ -145,9 +145,9 @@ inline int g_isfinite(jdouble f)                 { return std::isfinite(f); }
 #define THREAD_LOCAL __thread
 
 // Inlining support
-#define NOINLINE     __attribute__ ((noinline))
-#define ALWAYSINLINE inline __attribute__ ((always_inline))
-#define ATTRIBUTE_FLATTEN __attribute__ ((flatten))
+#define NOINLINE     [[gnu::noinline]]
+#define ALWAYSINLINE [[gnu::always_inline]] inline
+#define ATTRIBUTE_FLATTEN [[gnu::flatten]]
 
 #ifdef _WIN32
 #define USE_VECTORED_EXCEPTION_HANDLING
