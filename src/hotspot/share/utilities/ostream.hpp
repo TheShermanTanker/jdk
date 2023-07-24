@@ -77,17 +77,18 @@ class outputStream : public CHeapObjBase {
   // If add_cr is true then the cr will always be placed in the buffer (buffer minimum size is 2).
   //
   // In a debug build, if truncation occurs a VM warning is issued.
+   ATTRIBUTE_PRINTF(3, 0)
    static const char* do_vsnprintf(char* buffer, size_t buflen,
                                    const char* format, va_list ap,
                                    bool add_cr,
-                                   size_t& result_len)  ATTRIBUTE_PRINTF(3, 0);
+                                   size_t& result_len);
 
    // calls do_vsnprintf and writes output to stream; uses an on-stack buffer.
-   void do_vsnprintf_and_write_with_automatic_buffer(const char* format, va_list ap, bool add_cr) ATTRIBUTE_PRINTF(2, 0);
+   ATTRIBUTE_PRINTF(2, 0) void do_vsnprintf_and_write_with_automatic_buffer(const char* format, va_list ap, bool add_cr);
    // calls do_vsnprintf and writes output to stream; uses the user-provided buffer;
-   void do_vsnprintf_and_write_with_scratch_buffer(const char* format, va_list ap, bool add_cr) ATTRIBUTE_PRINTF(2, 0);
+   ATTRIBUTE_PRINTF(2, 0) void do_vsnprintf_and_write_with_scratch_buffer(const char* format, va_list ap, bool add_cr);
    // calls do_vsnprintf, then writes output to stream.
-   void do_vsnprintf_and_write(const char* format, va_list ap, bool add_cr) ATTRIBUTE_PRINTF(2, 0);
+   ATTRIBUTE_PRINTF(2, 0) void do_vsnprintf_and_write(const char* format, va_list ap, bool add_cr);
 
    // Automatic indentation. Returns old autoindent state.
    bool set_autoindent(bool value);
@@ -120,10 +121,10 @@ class outputStream : public CHeapObjBase {
    // appending of the "cr". This can lead to truncation if the buffer is
    // too small.
 
-   void print(const char* format, ...) ATTRIBUTE_PRINTF(2, 3);
-   void print_cr(const char* format, ...) ATTRIBUTE_PRINTF(2, 3);
-   void vprint(const char *format, va_list argptr) ATTRIBUTE_PRINTF(2, 0);
-   void vprint_cr(const char* format, va_list argptr) ATTRIBUTE_PRINTF(2, 0);
+   ATTRIBUTE_PRINTF(2, 3) void print(const char* format, ...);
+   ATTRIBUTE_PRINTF(2, 3) void print_cr(const char* format, ...);
+   ATTRIBUTE_PRINTF(2, 0) void vprint(const char *format, va_list argptr);
+   ATTRIBUTE_PRINTF(2, 0) void vprint_cr(const char* format, va_list argptr);
    void print_raw(const char* str)                { print_raw(str, strlen(str)); }
    void print_raw(const char* str, size_t len);
    void print_raw_cr(const char* str)             { print_raw(str); cr(); }
