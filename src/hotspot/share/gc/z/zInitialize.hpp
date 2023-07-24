@@ -50,8 +50,8 @@ private:
   static void pd_initialize();
 
 public:
-  static void error(const char* msg_format, ...) ATTRIBUTE_PRINTF(1, 2);
-  static void error_d(const char* msg_format, ...) ATTRIBUTE_PRINTF(1, 2);
+  ATTRIBUTE_PRINTF(1, 2) static void error(const char* msg_format, ...);
+  ATTRIBUTE_PRINTF(1, 2) static void error_d(const char* msg_format, ...);
 
   static bool had_error();
   static const char* error_message();

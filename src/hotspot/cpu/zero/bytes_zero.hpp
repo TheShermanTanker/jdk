@@ -28,11 +28,11 @@
 
 #include "memory/allStatic.hpp"
 
-typedef union unaligned {
+typedef union [[gnu::packed]] unaligned {
   u4 u;
   u2 us;
   u8 ul;
-} __attribute__((packed)) unaligned;
+} unaligned;
 
 class Bytes: AllStatic {
  public:

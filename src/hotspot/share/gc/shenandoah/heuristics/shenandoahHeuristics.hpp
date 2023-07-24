@@ -284,7 +284,7 @@ public:
   double elapsed_degenerated_cycle_time() const;
 
   // Format prefix and emit log message indicating a GC cycle hs been triggered
-  void log_trigger(const char* fmt, ...) ATTRIBUTE_PRINTF(2, 3);
+  ATTRIBUTE_PRINTF(2, 3) void log_trigger(const char* fmt, ...);
 
   DEBUG_ONLY(static void assert_humongous_mark_consistency(ShenandoahHeapRegion* region));
 };

@@ -133,10 +133,10 @@ private:
   FILE* do_open(const char* file);
   ClassListParser(const char* file, ParseMode _parse_mode);
   ~ClassListParser();
-  void print_diagnostic_info(outputStream* st, const char* msg, va_list ap) ATTRIBUTE_PRINTF(3, 0);
-  void print_diagnostic_info(outputStream* st, const char* msg, ...) ATTRIBUTE_PRINTF(3, 0);
-  void constant_pool_resolution_warning(const char* msg, ...) ATTRIBUTE_PRINTF(2, 0);
-  void error(const char* msg, ...) ATTRIBUTE_PRINTF(2, 0);
+  ATTRIBUTE_PRINTF(3, 0) void print_diagnostic_info(outputStream* st, const char* msg, va_list ap);
+  ATTRIBUTE_PRINTF(3, 0) void print_diagnostic_info(outputStream* st, const char* msg, ...);
+  ATTRIBUTE_PRINTF(2, 0) void constant_pool_resolution_warning(const char* msg, ...);
+  ATTRIBUTE_PRINTF(2, 0) void error(const char* msg, ...);
   GrowableArray<InstanceKlass*> get_specified_interfaces();
   void check_supertype_obstruction(int specified_supertype_id, const InstanceKlass* specified_supertype, TRAPS);
 

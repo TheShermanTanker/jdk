@@ -35,22 +35,22 @@ class ClassLoaderData;
 class Devirtualizer {
  public:
   template <typename OopClosureType, typename T>
-  static ALWAYSINLINE void do_oop(OopClosureType* closure, T* p);
+  ALWAYSINLINE static void do_oop(OopClosureType* closure, T* p);
 
   template <typename OopClosureType>
-  static ALWAYSINLINE void do_klass(OopClosureType* closure, Klass* k);
+  ALWAYSINLINE static void do_klass(OopClosureType* closure, Klass* k);
 
   template <typename OopClosureType>
-  static ALWAYSINLINE void do_cld(OopClosureType* closure, ClassLoaderData* cld);
+  ALWAYSINLINE static void do_cld(OopClosureType* closure, ClassLoaderData* cld);
 
   template <typename OopClosureType>
-  static ALWAYSINLINE bool do_metadata(OopClosureType* closure);
+  ALWAYSINLINE static bool do_metadata(OopClosureType* closure);
 
   template <typename DerivedOopClosureType>
-  static ALWAYSINLINE void do_derived_oop(DerivedOopClosureType* closure, derived_base* base, derived_pointer* derived);
+  ALWAYSINLINE static void do_derived_oop(DerivedOopClosureType* closure, derived_base* base, derived_pointer* derived);
 
   template <typename BitMapClosureType>
-  static ALWAYSINLINE bool do_bit(BitMapClosureType* closure, BitMap::idx_t index);
+  ALWAYSINLINE static bool do_bit(BitMapClosureType* closure, BitMap::idx_t index);
 };
 
 #endif // SHARE_UTILITIES_DEVIRTUALIZER_HPP
