@@ -33,7 +33,7 @@
 // Useful if the function or method is known to do something special or even 'dangerous', for
 // example causing desired signals/crashes.
 #if defined(__clang__) || defined(__GNUC__)
-#define ATTRIBUTE_NO_UBSAN __attribute__((no_sanitize("undefined")))
+#define ATTRIBUTE_NO_UBSAN [[gnu::no_sanitize("undefined")]]
 #endif
 
 #ifndef ATTRIBUTE_NO_UBSAN
