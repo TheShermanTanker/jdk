@@ -60,17 +60,17 @@
 
 #define ENTER_CONNECTION(connection) \
         do { \
-            InterlockedIncrement(&connection->refcount); \
+            InterlockedIncrement((volatile LONG*)&connection->refcount); \
             if (IS_STATE_CLOSED(connection->state)) { \
                 setLastErrorMsg("stream closed"); \
-                InterlockedDecrement(&connection->refcount); \
+                InterlockedDecrement((volatile LONG*)&connection->refcount); \
                 return SYS_ERR; \
             } \
         } while (0)
 
 #define LEAVE_CONNECTION(connection) \
         do { \
-            InterlockedDecrement(&connection->refcount); \
+            InterlockedDecrement((volatile LONG*)&connection->refcount); \
         } while (0)
 
 /*
@@ -570,7 +570,7 @@ openConnection(SharedMemoryTransport *transport, jlong otherPID,
 
     snprintf(connection->name, sizeof(connection->name), "%s.%" PRId64, transport->name, sysProcessGetID());
     error = sysSharedMemOpen(connection->name, &connection->sharedMemory,
-                             &connection->shared);
+                             (void**)&connection->shared);
     if (error != SYS_OK) {
         freeConnection(connection);
         return error;
@@ -638,7 +638,7 @@ createConnection(SharedMemoryTransport *transport, jlong otherPID,
 
     snprintf(connection->name, sizeof(connection->name), "%s.%" PRId64, transport->name, otherPID);
     error = sysSharedMemCreate(connection->name, sizeof(SharedMemory),
-                               &connection->sharedMemory, &connection->shared);
+                               &connection->sharedMemory, (void**)&connection->shared);
     if (error != SYS_OK) {
         freeConnection(connection);
         return error;
@@ -741,7 +741,7 @@ openTransport(const char *address, SharedMemoryTransport **transportPtr)
         return SYS_ERR;
     }
 
-    error = sysSharedMemOpen(address, &transport->sharedMemory, &transport->shared);
+    error = sysSharedMemOpen(address, &transport->sharedMemory, (void**)&transport->shared);
     if (error != SYS_OK) {
         setLastError(error);
         closeTransport(transport);
@@ -806,7 +806,7 @@ createTransport(const char *address, SharedMemoryTransport **transportPtr)
         }
         strcpy(transport->name, address);
         error = sysSharedMemCreate(address, sizeof(SharedListener),
-                                   &transport->sharedMemory, &transport->shared);
+                                   &transport->sharedMemory, (void**)&transport->shared);
     }
     if (error != SYS_OK) {
         setLastError(error);

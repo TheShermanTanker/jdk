@@ -52,8 +52,11 @@ inline void OrderAccess::fence() {
   compiler_barrier();
 }
 
+#ifdef __GNUC__
+[[gnu::target("serialize")]]
+#endif
 inline void OrderAccess::cross_modify_fence_impl()
-#if _MSC_VER >= 1928
+#if defined(__GNUC__) || (defined(_MSC_VER) && _MSC_VER >= 1928)
 {
 //_serialize() intrinsic is supported starting from VS2019-16.7.2
   if (VM_Version::supports_serialize()) {

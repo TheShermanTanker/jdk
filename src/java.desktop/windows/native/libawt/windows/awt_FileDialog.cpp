@@ -475,7 +475,7 @@ UINT AwtFileDialog::GetBufferLength(LPTSTR buffer, UINT limit)
 {
     UINT index = 0;
     while ((index < limit) &&
-           (buffer[index] != NULL || buffer[index+1] != NULL))
+           (buffer[index] != 0 || buffer[index+1] != 0))
     {
         index++;
     }

@@ -53,6 +53,6 @@ typedef RECT RECT_T;
                                     (r).right=(xx)+(ww); (r).bottom=(yy)+(hh);
 #define RECT_INC_HEIGHT(r) (r).bottom++;
 
-#define INLINE __inline
+#define INLINE static inline
 
 #endif
