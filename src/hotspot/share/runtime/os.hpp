@@ -1024,8 +1024,12 @@ class os: AllStatic {
 #ifdef _WINDOWS
   // strtok_s is the Windows thread-safe equivalent of POSIX strtok_r
 # define strtok_r strtok_s
+#ifndef S_ISCHR
 # define S_ISCHR(mode)   (((mode) & _S_IFCHR) == _S_IFCHR)
+#endif
+#ifndef S_ISFIFO
 # define S_ISFIFO(mode)  (((mode) & _S_IFIFO) == _S_IFIFO)
+#endif
 #endif
 
 #ifndef OS_NATIVE_THREAD_CREATION_FAILED_MSG

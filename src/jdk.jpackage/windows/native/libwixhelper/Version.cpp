@@ -25,7 +25,9 @@
 
 #include <algorithm>
 
+#ifndef NOMINMAX
 #define NOMINMAX
+#endif
 #include "Version.h"
 
 

@@ -37,10 +37,8 @@
 #include <assert.h>
 #include <limits.h>
 #include <tchar.h>
-// Don't #include <new> because that makes awt.dll dependent on
-// msvcp50.dll. Instead, we've replicated the parts of <new>
-// we need in alloc.h.
-// #include <new>
+
+#include <new>
 
 extern "C" {
 

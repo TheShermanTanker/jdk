@@ -58,6 +58,9 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJAVA, \
     java_props_md.c_CFLAGS := \
         -DARCHPROPNAME='"$(OPENJDK_TARGET_CPU_OSARCH)"', \
     DISABLED_WARNINGS_gcc_ProcessImpl_md.c := unused-result, \
+    DISABLED_WARNINGS_gcc_windows_TimeZone_md.c := format, \
+    DISABLED_WARNINGS_gcc_windows := parentheses cast-function-type \
+        missing-field-initializers unknown-pragmas pointer-sign, \
     JDK_LIBS := libjvm, \
     LIBS_linux := $(LIBDL), \
     LIBS_aix := $(LIBDL) $(LIBM),\
@@ -65,7 +68,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJAVA, \
         -framework CoreFoundation \
         -framework Foundation \
         -framework SystemConfiguration, \
-    LIBS_windows := advapi32.lib ole32.lib shell32.lib version.lib, \
+    LIBS_microsoft_windows := advapi32.lib ole32.lib shell32.lib version.lib, \
+    LIBS_gcc_windows := -lole32 -luuid -lversion, \
 ))
 
 TARGETS += $(BUILD_LIBJAVA)
@@ -94,6 +98,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBZIP, \
     DISABLED_WARNINGS_clang_gzwrite.c := format-nonliteral, \
     JDK_LIBS := libjava libjvm, \
     LIBS_unix := $(LIBZ_LIBS), \
+    LIBS_gcc_windows := $(LIBZ_LIBS), \
 ))
 
 TARGETS += $(BUILD_LIBZIP)
@@ -104,7 +109,7 @@ TARGETS += $(BUILD_LIBZIP)
 
 $(eval $(call SetupJdkLibrary, BUILD_LIBJIMAGE, \
     NAME := jimage, \
-    LINK_TYPE := C++, \
+    LANG := C++, \
     OPTIMIZATION := LOW, \
     EXTRA_HEADER_DIRS := libjava, \
     CFLAGS_unix := -UDEBUG, \
@@ -168,6 +173,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJLI, \
     OPTIMIZATION := HIGH, \
     CFLAGS := $(LIBJLI_CFLAGS) $(LIBZ_CFLAGS), \
     DISABLED_WARNINGS_gcc := unused-function, \
+    DISABLED_WARNINGS_gcc_windows_java_md.c := sign-compare incompatible-pointer-types, \
+    DISABLED_WARNINGS_gcc_windows := cast-function-type, \
     DISABLED_WARNINGS_clang := format-nonliteral deprecated-non-prototype, \
     LIBS_unix := $(LIBZ_LIBS), \
     LIBS_linux := $(LIBDL) -lpthread, \
@@ -175,7 +182,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJLI, \
         -framework ApplicationServices \
         -framework Cocoa \
         -framework Security, \
-    LIBS_windows := advapi32.lib comctl32.lib user32.lib, \
+    LIBS_microsoft_windows := advapi32.lib comctl32.lib user32.lib, \
+    LIBS_gcc_windows := $(LIBZ_LIBS) -lcomctl32, \
     STATIC_LIB_EXCLUDE_OBJS := $(LIBJLI_STATIC_EXCLUDE_OBJS), \
 ))
 
