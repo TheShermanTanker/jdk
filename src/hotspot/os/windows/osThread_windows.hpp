@@ -31,7 +31,7 @@
 class OSThread : public OSThreadBase {
   friend class VMStructs;
 
-  typedef unsigned long thread_id_t;
+  typedef unsigned int thread_id_t;
   typedef void* HANDLE;
 
   thread_id_t _thread_id;

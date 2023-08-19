@@ -84,3 +84,80 @@ namespace SUN_DBG_NS{
         va_end(argList);
   }
 }//SUN_DBG_NS namespace end
+
+
+#ifdef __MINGW32__
+#undef new
+// gcc relying on the MinGW compatibility layer is missing this util
+namespace _com_util {
+    BSTR WINAPI ConvertStringToBSTR(const char *ptr) {
+        DWORD cwch;
+        BSTR bstr(nullptr);
+
+        if (ptr == nullptr) return nullptr;
+
+        /* Compute the needed size with the NULL terminator */
+        cwch = ::MultiByteToWideChar(CP_ACP, 0, ptr, -1, nullptr, 0);
+        if (cwch == 0) return nullptr;
+
+        /* Allocate the BSTR (without the NULL terminator) */
+        bstr = ::SysAllocStringLen(nullptr, cwch - 1);
+        if (!bstr) {
+            ::_com_issue_error(HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY));
+            return nullptr;
+        }
+
+        /* Convert the string */
+        if (::MultiByteToWideChar(CP_ACP, 0, ptr, -1, bstr, cwch) == 0) {
+            /* We failed, clean everything up */
+            cwch = ::GetLastError();
+
+            ::SysFreeString(bstr);
+            bstr = nullptr;
+
+            ::_com_issue_error(!IS_ERROR(cwch) ? HRESULT_FROM_WIN32(cwch) : cwch);
+        }
+
+        return bstr;
+    }
+
+    char* WINAPI ConvertBSTRToString(BSTR ptr) {
+        DWORD cb, cwch;
+        char *szOut = nullptr;
+
+        if (!ptr) return nullptr;
+
+        /* Retrieve the size of the BSTR with the NULL terminator */
+        cwch = ::SysStringLen(ptr) + 1;
+
+        /* Compute the needed size with the NULL terminator */
+        cb = ::WideCharToMultiByte(CP_ACP, 0, ptr, cwch, NULL, 0, NULL, NULL);
+        if (cb == 0) {
+            cwch = ::GetLastError();
+            ::_com_issue_error(!IS_ERROR(cwch) ? HRESULT_FROM_WIN32(cwch) : cwch);
+            return NULL;
+        }
+
+        /* Allocate the string */
+        szOut = (char*)::operator new(cb * sizeof(char));
+        if (!szOut) {
+            ::_com_issue_error(HRESULT_FROM_WIN32(ERROR_OUTOFMEMORY));
+            return NULL;
+        }
+
+        /* Convert the string and NULL-terminate */
+        szOut[cb - 1] = '\0';
+        if (::WideCharToMultiByte(CP_ACP, 0, ptr, cwch, szOut, cb, NULL, NULL) == 0) {
+            /* We failed, clean everything up */
+            cwch = ::GetLastError();
+
+            ::operator delete(szOut);
+            szOut = NULL;
+
+            ::_com_issue_error(!IS_ERROR(cwch) ? HRESULT_FROM_WIN32(cwch) : cwch);
+        }
+
+        return szOut;
+    }
+}
+#endif

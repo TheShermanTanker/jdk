@@ -274,7 +274,7 @@ BOOL getToken(PHANDLE tokenHandle) {
                         FALSE,
                         tokenHandle) == 0) {
         if (debug) {
-            printf("  [getToken] OpenThreadToken error [%d]: ", GetLastError());
+            printf("  [getToken] OpenThreadToken error [%ld]: ", GetLastError());
             DisplayErrorText(GetLastError());
         }
 
@@ -283,7 +283,7 @@ BOOL getToken(PHANDLE tokenHandle) {
                         TOKEN_READ,
                         tokenHandle) == 0) {
             if (debug) {
-                printf("  [getToken] OpenProcessToken error [%d]: ",
+                printf("  [getToken] OpenProcessToken error [%ld]: ",
                         GetLastError());
                 DisplayErrorText(GetLastError());
             }
@@ -325,7 +325,7 @@ BOOL getUser(HANDLE tokenHandle, LPTSTR *userName,
                         bufSize,
                         &retBufSize) == 0) {
         if (debug) {
-            printf("  [getUser] GetTokenInformation error [%d]: ",
+            printf("  [getUser] GetTokenInformation error [%ld]: ",
                 GetLastError());
             DisplayErrorText(GetLastError());
         }
@@ -358,7 +358,7 @@ BOOL getUser(HANDLE tokenHandle, LPTSTR *userName,
                 &buf2Size,
                 &nameUse) == 0) {
         if (debug) {
-            printf("  [getUser] LookupAccountSid error [%d]: ",
+            printf("  [getUser] LookupAccountSid error [%ld]: ",
                 GetLastError());
             DisplayErrorText(GetLastError());
         }
@@ -400,7 +400,7 @@ BOOL getUser(HANDLE tokenHandle, LPTSTR *userName,
                 &buf2Size,
                 &nameUse) == 0) {
         if (debug) {
-            printf("  [getUser] LookupAccountName error [%d]: ",
+            printf("  [getUser] LookupAccountName error [%ld]: ",
                 GetLastError());
             DisplayErrorText(GetLastError());
         }
@@ -455,7 +455,7 @@ BOOL getPrimaryGroup(HANDLE tokenHandle, LPTSTR *primaryGroup) {
                         bufSize,
                         &retBufSize) == 0) {
         if (debug) {
-            printf("  [getPrimaryGroup] GetTokenInformation error [%d]: ",
+            printf("  [getPrimaryGroup] GetTokenInformation error [%ld]: ",
                 GetLastError());
             DisplayErrorText(GetLastError());
         }
@@ -508,7 +508,7 @@ BOOL getGroups(HANDLE tokenHandle, PDWORD numGroups, LPTSTR **groups) {
                         bufSize,
                         &retBufSize) == 0) {
         if (debug) {
-            printf("  [getGroups] GetTokenInformation error [%d]: ",
+            printf("  [getGroups] GetTokenInformation error [%ld]: ",
                 GetLastError());
             DisplayErrorText(GetLastError());
         }
@@ -535,7 +535,7 @@ BOOL getGroups(HANDLE tokenHandle, PDWORD numGroups, LPTSTR **groups) {
         (*groups)[i] = (LPTSTR)HeapAlloc(GetProcessHeap(), 0, bufSize);
         getTextualSid(tokenGroupInfo->Groups[i].Sid, (*groups)[i], &bufSize);
         if (debug) {
-            printf("  [getGroups] group %d: %s\n", i, (*groups)[i]);
+            printf("  [getGroups] group %ld: %s\n", i, (*groups)[i]);
         }
     }
 
@@ -562,7 +562,7 @@ BOOL getImpersonationToken(PHANDLE impersonationToken) {
                                 &dupToken) == 0) {
             if (debug) {
                 printf
-                    ("  [getImpersonationToken] OpenProcessToken error [%d]: ",
+                    ("  [getImpersonationToken] OpenProcessToken error [%ld]: ",
                     GetLastError());
                 DisplayErrorText(GetLastError());
             }
@@ -574,7 +574,7 @@ BOOL getImpersonationToken(PHANDLE impersonationToken) {
                         SecurityImpersonation,
                         impersonationToken) == 0) {
         if (debug) {
-            printf("  [getImpersonationToken] DuplicateToken error [%d]: ",
+            printf("  [getImpersonationToken] DuplicateToken error [%ld]: ",
                 GetLastError());
             DisplayErrorText(GetLastError());
         }
@@ -681,13 +681,13 @@ void DisplayErrorText(DWORD dwLastError) {
     //  or from the supplied module handle.
     //
 
-    if(dwBufferLength = FormatMessageA(dwFormatFlags,
+    if((dwBufferLength = FormatMessageA(dwFormatFlags,
                 hModule, // module to get message from (NULL == system)
                 dwLastError,
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
                 (LPSTR) &MessageBuffer,
                 0,
-                NULL)) {
+                NULL))) {
         DWORD dwBytesWritten;
 
         //

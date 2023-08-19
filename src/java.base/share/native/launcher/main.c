@@ -41,18 +41,8 @@
 
 char **__initenv;
 
-int WINAPI
-WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
-{
-    int margc;
-    char** margv;
-    int jargc;
-    char** jargv;
-    const jboolean const_javaw = JNI_TRUE;
+#endif /* JAVAW */
 
-    __initenv = _environ;
-
-#else /* JAVAW */
 JNIEXPORT int
 main(int argc, char **argv)
 {
@@ -60,6 +50,12 @@ main(int argc, char **argv)
     char** margv;
     int jargc;
     char** jargv;
+#ifdef JAVAW
+    const jboolean const_javaw = JNI_TRUE;
+
+    __initenv = _environ;
+
+#else /* JAVAW */
     const jboolean const_javaw = JNI_FALSE;
 #endif /* JAVAW */
     {
@@ -105,8 +101,8 @@ main(int argc, char **argv)
         int i = 0;
         if (getenv(JLDEBUG_ENV_ENTRY) != NULL) {
             printf("Windows original main args:\n");
-            for (i = 0 ; i < __argc ; i++) {
-                printf("wwwd_args[%d] = %s\n", i, __argv[i]);
+            for (i = 0 ; i < argc ; i++) {
+                printf("wwwd_args[%d] = %s\n", i, argv[i]);
             }
         }
     }

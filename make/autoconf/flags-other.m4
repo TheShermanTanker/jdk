@@ -88,11 +88,12 @@ AC_DEFUN([FLAGS_SETUP_STRIPFLAGS],
 AC_DEFUN([FLAGS_SETUP_RCFLAGS],
 [
   # On Windows, we need to set RC flags.
+  RCFLAGS=""
   if test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     RCFLAGS="-nologo"
-    if test "x$DEBUG_LEVEL" = xrelease; then
-      RCFLAGS="$RCFLAGS -DNDEBUG"
-    fi
+  fi
+  if test "x$DEBUG_LEVEL" = xrelease; then
+    RCFLAGS="$RCFLAGS -DNDEBUG"
   fi
   AC_SUBST(RCFLAGS)
 ])

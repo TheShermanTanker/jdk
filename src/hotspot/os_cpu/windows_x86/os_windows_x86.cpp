@@ -71,7 +71,7 @@ extern LONG WINAPI topLevelExceptionFilter(_EXCEPTION_POINTERS* );
 
 // Install a win32 structured exception handler around thread.
 void os::os_exception_wrapper(java_call_t f, JavaValue* value, const methodHandle& method, JavaCallArguments* args, JavaThread* thread) {
-  __try {
+  WIN32_TRY {
 
 #ifndef AMD64
     // We store the current thread in this wrapperthread location
@@ -111,7 +111,7 @@ void os::os_exception_wrapper(java_call_t f, JavaValue* value, const methodHandl
 #endif // !AMD64
 
     f(value, method, args, thread);
-  } __except(topLevelExceptionFilter((_EXCEPTION_POINTERS*)_exception_info())) {
+  } WIN32_EXCEPT (topLevelExceptionFilter(GetExceptionInformation())) {
       // Nothing to do.
   }
 }
@@ -396,16 +396,32 @@ bool os::win32::get_frame_at_stack_banging_point(JavaThread* thread,
 
 
 // VC++ does not save frame pointer on stack in optimized build. It
-// can be turned off by /Oy-. If we really want to walk C frames,
+// can be turned off by -Oy-. If we really want to walk C frames,
 // we can use the StackWalk() API.
 frame os::get_sender_for_C_frame(frame* fr) {
+#ifdef __GNUC__
+  return frame(fr->sender_sp(), fr->link(), fr->sender_pc());
+#elif defined(_MSC_VER)
   ShouldNotReachHere();
   return frame();
+#endif
 }
 
 frame os::current_frame() {
+#ifdef __GNUC__
+  frame f(reinterpret_cast<intptr_t*>(os::current_stack_pointer()),
+          reinterpret_cast<intptr_t*>(__builtin_frame_address(1)),
+          CAST_FROM_FN_PTR(address, &os::current_frame));
+  if (os::is_first_C_frame(&f)) {
+    // stack is not walkable
+    return frame();
+  } else {
+    return os::get_sender_for_C_frame(&f);
+  }
+#elif defined(_MSC_VER)
   return frame();  // cannot walk Windows frames this way.  See os::get_native_stack
                    // and os::platform_print_native_stack
+#endif
 }
 
 void os::print_context(outputStream *st, const void *context) {
