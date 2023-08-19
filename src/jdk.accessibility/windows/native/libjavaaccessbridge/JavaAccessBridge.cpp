@@ -128,7 +128,7 @@ extern "C" {
                 PrintDebugString("[INFO]: In AccessBridgeDialog - Got AB_MESSAGE_WAITING from ourselves");
             } else {
                 PrintDebugString("[INFO]: In AccessBridgeDialog - Got AB_MESSAGE_WAITING from HWND %p", wParam);
-                LRESULT returnVal = theJavaAccessBridge->receiveMemoryPackage((HWND) wParam, (long) lParam);
+                /* LRESULT returnVal = */ theJavaAccessBridge->receiveMemoryPackage((HWND) wParam, (long) lParam);
             }
             break;
 
@@ -1729,7 +1729,7 @@ JavaAccessBridge::firePropertyCaretChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyCaretChangePackage *pkg = (PropertyCaretChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyCaretChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -1784,7 +1784,7 @@ JavaAccessBridge::firePropertyDescriptionChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyDescriptionChangePackage *pkg = (PropertyDescriptionChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyDescriptionChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -1816,7 +1816,7 @@ JavaAccessBridge::firePropertyDescriptionChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->oldDescription, stringBytes, (sizeof(pkg->oldDescription) / sizeof(wchar_t)));
-                env->ReleaseStringChars(oldValue, stringBytes);
+                env->ReleaseStringChars(oldValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->oldDescription, L"(null)", (sizeof(pkg->oldDescription) / sizeof(wchar_t)));
             }
@@ -1833,7 +1833,7 @@ JavaAccessBridge::firePropertyDescriptionChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->newDescription, stringBytes, (sizeof(pkg->newDescription) / sizeof(wchar_t)));
-                env->ReleaseStringChars(newValue, stringBytes);
+                env->ReleaseStringChars(newValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->newDescription, L"(null)", (sizeof(pkg->newDescription) / sizeof(wchar_t)));
             }
@@ -1870,7 +1870,7 @@ JavaAccessBridge::firePropertyNameChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyNameChangePackage *pkg = (PropertyNameChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyNameChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -1902,7 +1902,7 @@ JavaAccessBridge::firePropertyNameChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->oldName, stringBytes, (sizeof(pkg->oldName) / sizeof(wchar_t)));
-                env->ReleaseStringChars(oldValue, stringBytes);
+                env->ReleaseStringChars(oldValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->oldName, L"(null)", (sizeof(pkg->oldName) / sizeof(wchar_t)));
             }
@@ -1919,7 +1919,7 @@ JavaAccessBridge::firePropertyNameChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->newName, stringBytes, (sizeof(pkg->newName) / sizeof(wchar_t)));
-                env->ReleaseStringChars(newValue, stringBytes);
+                env->ReleaseStringChars(newValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->newName, L"(null)", (sizeof(pkg->newName) / sizeof(wchar_t)));
             }
@@ -1954,7 +1954,7 @@ JavaAccessBridge::firePropertySelectionChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertySelectionChangePackage *pkg = (PropertySelectionChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertySelectionChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2007,7 +2007,7 @@ JavaAccessBridge::firePropertyStateChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyStateChangePackage *pkg = (PropertyStateChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyStateChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2039,7 +2039,7 @@ JavaAccessBridge::firePropertyStateChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->oldState, stringBytes, (sizeof(pkg->oldState) / sizeof(wchar_t)));
-                env->ReleaseStringChars(oldValue, stringBytes);
+                env->ReleaseStringChars(oldValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->oldState, L"(null)", (sizeof(pkg->oldState) / sizeof(wchar_t)));
             }
@@ -2056,7 +2056,7 @@ JavaAccessBridge::firePropertyStateChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->newState, stringBytes, (sizeof(pkg->newState) / sizeof(wchar_t)));
-                env->ReleaseStringChars(newValue, stringBytes);
+                env->ReleaseStringChars(newValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->newState, L"(null)", (sizeof(pkg->newState) / sizeof(wchar_t)));
             }
@@ -2091,7 +2091,7 @@ JavaAccessBridge::firePropertyTextChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyTextChangePackage *pkg = (PropertyTextChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyTextChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2144,7 +2144,7 @@ JavaAccessBridge::firePropertyValueChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyValueChangePackage *pkg = (PropertyValueChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyValueChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2176,7 +2176,7 @@ JavaAccessBridge::firePropertyValueChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->oldValue, stringBytes, (sizeof(pkg->oldValue) / sizeof(wchar_t)));
-                env->ReleaseStringChars(oldValue, stringBytes);
+                env->ReleaseStringChars(oldValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->oldValue, L"(null)", (sizeof(pkg->oldValue) / sizeof(wchar_t)));
             }
@@ -2193,7 +2193,7 @@ JavaAccessBridge::firePropertyValueChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->newValue, stringBytes, (sizeof(pkg->newValue) / sizeof(wchar_t)));
-                env->ReleaseStringChars(newValue, stringBytes);
+                env->ReleaseStringChars(newValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->newValue, L"(null)", (sizeof(pkg->newValue) / sizeof(wchar_t)));
             }
@@ -2227,7 +2227,7 @@ JavaAccessBridge::firePropertyVisibleDataChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyVisibleDataChangePackage *pkg = (PropertyVisibleDataChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyVisibleDataChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2279,7 +2279,7 @@ JavaAccessBridge::firePropertyChildChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyChildChangePackage *pkg = (PropertyChildChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyChildChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2339,7 +2339,7 @@ JavaAccessBridge::firePropertyActiveDescendentChange(JNIEnv *env, jobject callin
     PackageType *type = (PackageType *) buffer;
     PropertyActiveDescendentChangePackage *pkg = (PropertyActiveDescendentChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyActiveDescendentChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2399,7 +2399,7 @@ JavaAccessBridge::firePropertyTableModelChange(JNIEnv *env, jobject callingObj,
     PackageType *type = (PackageType *) buffer;
     PropertyTableModelChangePackage *pkg = (PropertyTableModelChangePackage *) (buffer + sizeof(PackageType));
     *type = cPropertyTableModelChangePackage;
-    pkg->vmID = (long) dialogWindow;
+    pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
     // make new Global Refs and send events only to those ATs that want 'em
     AccessBridgeATInstance *ati = ATs;
@@ -2431,7 +2431,7 @@ JavaAccessBridge::firePropertyTableModelChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->oldValue, stringBytes, (sizeof(pkg->oldValue) / sizeof(wchar_t)));
-                env->ReleaseStringChars(oldValue, stringBytes);
+                env->ReleaseStringChars(oldValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->oldValue, L"(null)", (sizeof(pkg->oldValue) / sizeof(wchar_t)));
             }
@@ -2448,7 +2448,7 @@ JavaAccessBridge::firePropertyTableModelChange(JNIEnv *env, jobject callingObj,
                     return;
                 }
                 wcsncpy(pkg->newValue, stringBytes, (sizeof(pkg->newValue) / sizeof(wchar_t)));
-                env->ReleaseStringChars(newValue, stringBytes);
+                env->ReleaseStringChars(newValue, reinterpret_cast<const jchar*>(stringBytes));
             } else {
                 wcsncpy(pkg->newValue, L"(null)", (sizeof(pkg->newValue) / sizeof(wchar_t)));
             }
@@ -2490,7 +2490,7 @@ JavaAccessBridge::firePropertyTableModelChange(JNIEnv *env, jobject callingObj,
         PackageType *type = (PackageType *) buffer;                                     \
         packageStruct *pkg = (packageStruct *) (buffer + sizeof(PackageType));          \
         *type = packageConstant;                                                        \
-        pkg->vmID = (long) dialogWindow;                                                \
+        pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));       \
                                                                                         \
         /* make new Global Refs, send events only to those ATs that want 'em */         \
         AccessBridgeATInstance *ati = ATs;                                              \
@@ -2528,7 +2528,7 @@ JavaAccessBridge::firePropertyTableModelChange(JNIEnv *env, jobject callingObj,
         PackageType *type = (PackageType *) buffer;
         JavaShutdownPackage *pkg = (JavaShutdownPackage *) (buffer + sizeof(PackageType));
         *type = cJavaShutdownPackage;
-        pkg->vmID = (long) dialogWindow;
+        pkg->vmID = static_cast<long>(reinterpret_cast<uintptr_t>(dialogWindow));
 
         /* make new Global Refs, send events only to those ATs that want 'em */
         AccessBridgeATInstance *ati = ATs;
@@ -2578,7 +2578,7 @@ extern "C" {        // event stuff from AccessBridge.h, generated by JNI
             return;
         }
         wPrintJavaDebugString(L"AccessBridge.java: %ls", stringBytes);
-        env->ReleaseStringChars(debugStr, stringBytes);
+        env->ReleaseStringChars(debugStr, reinterpret_cast<const jchar*>(stringBytes));
     }
 
     JNIEXPORT void JNICALL
@@ -2716,7 +2716,7 @@ extern "C" {        // event stuff from AccessBridge.h, generated by JNI
 
     JAWT awt;
     jboolean result;
-    jobject component = (jobject)0;
+ // jobject component = (jobject)0;
 
     // Get the AWT
     awt.version = JAWT_VERSION_1_4;
@@ -2769,7 +2769,7 @@ extern "C" {        // event stuff from AccessBridge.h, generated by JNI
         dsi_win = (JAWT_Win32DrawingSurfaceInfo *)dsi->platformInfo;
 
         // Get the window handle
-        windowHandle = (jint)dsi_win->hwnd;
+        windowHandle = static_cast<jint>(reinterpret_cast<uintptr_t>(dsi_win->hwnd));
 
         // Free the drawing surface info
         ds->FreeDrawingSurfaceInfo(dsi);

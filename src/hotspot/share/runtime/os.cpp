@@ -183,7 +183,7 @@ char* os::iso8601_time(jlong milliseconds_since_19700101, char* buffer, size_t b
   // No offset when dealing with UTC
   time_t UTC_to_local = 0;
   if (!utc) {
-#if (defined(_ALLBSD_SOURCE) || defined(_GNU_SOURCE)) && !defined(AIX)
+#if (defined(_ALLBSD_SOURCE) || defined(_GNU_SOURCE)) && !defined(AIX) && !defined(_WIN32)
     UTC_to_local = -(time_struct.tm_gmtoff);
 #elif defined(_WINDOWS)
     long zone;
@@ -1407,7 +1407,9 @@ static bool is_pointer_bad(intptr_t* ptr) {
 bool os::is_first_C_frame(frame* fr) {
 
 #ifdef _WINDOWS
+#ifdef _MSC_VER
   return true; // native stack isn't walkable on windows this way.
+#endif
 #endif
   // Load up sp, fp, sender sp and sender fp, check for reasonable values.
   // Check usp first, because if that's bad the other accessors may fault

@@ -3707,11 +3707,11 @@ _JNI_IMPORT_OR_EXPORT_ jint JNICALL JNI_CreateJavaVM(JavaVM **vm, void **penv, v
   jint result = JNI_ERR;
   // On Windows, let CreateJavaVM run with SEH protection
 #if defined(_WIN32) && !defined(USE_VECTORED_EXCEPTION_HANDLING)
-  __try {
+  WIN32_TRY {
 #endif
     result = JNI_CreateJavaVM_inner(vm, penv, args);
 #if defined(_WIN32) && !defined(USE_VECTORED_EXCEPTION_HANDLING)
-  } __except(topLevelExceptionFilter((_EXCEPTION_POINTERS*)_exception_info())) {
+  } WIN32_EXCEPT (topLevelExceptionFilter(GetExceptionInformation())) {
     // Nothing to do.
   }
 #endif
@@ -3780,11 +3780,11 @@ jint JNICALL jni_DestroyJavaVM(JavaVM *vm) {
   jint result = JNI_ERR;
   // On Windows, we need SEH protection
 #if defined(_WIN32) && !defined(USE_VECTORED_EXCEPTION_HANDLING)
-  __try {
+  WIN32_TRY {
 #endif
     result = jni_DestroyJavaVM_inner(vm);
 #if defined(_WIN32) && !defined(USE_VECTORED_EXCEPTION_HANDLING)
-  } __except(topLevelExceptionFilter((_EXCEPTION_POINTERS*)_exception_info())) {
+  } WIN32_EXCEPT (topLevelExceptionFilter(GetExceptionInformation())) {
     // Nothing to do.
   }
 #endif

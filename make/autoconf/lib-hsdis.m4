@@ -38,7 +38,10 @@ AC_DEFUN([LIB_SETUP_HSDIS_CAPSTONE],
     AC_MSG_RESULT([$CAPSTONE])
 
     HSDIS_CFLAGS="-I${CAPSTONE}/include/capstone"
-    if test "x$OPENJDK_TARGET_OS" != xwindows; then
+    if test "x$OPENJDK_TARGET_OS_ENV" = xwindows.msys2; then
+      HSDIS_LDFLAGS="-L${CAPSTONE}/lib"
+      HSDIS_LIBS="-l:libcapstone.a"
+    elif test "x$OPENJDK_TARGET_OS" != xwindows; then
       HSDIS_LDFLAGS="-L${CAPSTONE}/lib"
       if test "x$OPENJDK_TARGET_CPU_BITS" = "x64" ; then
         HSDIS_LDFLAGS="-L${CAPSTONE}/lib64 $HSDIS_LDFLAGS"
@@ -49,14 +52,18 @@ AC_DEFUN([LIB_SETUP_HSDIS_CAPSTONE],
       HSDIS_LIBS="${CAPSTONE}/capstone.lib"
     fi
   else
-    if test "x$OPENJDK_TARGET_OS" = xwindows; then
+    if test "x$OPENJDK_TARGET_OS" = xwindows && test "x$OPENJDK_TARGET_OS_ENV" != xwindows.msys2; then
       # There is no way to auto-detect capstone on Windows
       AC_MSG_NOTICE([You must specify capstone location using --with-capstone=<path>])
       AC_MSG_ERROR([Cannot continue])
     fi
 
     PKG_CHECK_MODULES(CAPSTONE, capstone, [CAPSTONE_FOUND=yes], [CAPSTONE_FOUND=no])
-    if test "x$CAPSTONE_FOUND" = xyes; then
+    if test "x$OPENJDK_TARGET_OS_ENV" = xwindows.msys2 && test "x$CAPSTONE_FOUND" = xyes; then
+      HSDIS_CFLAGS="$CAPSTONE_CFLAGS"
+      HSDIS_LDFLAGS="$CAPSTONE_LDFLAGS"
+      HSDIS_LIBS="-l:libcapstone.a"
+    elif test "x$CAPSTONE_FOUND" = xyes; then
       HSDIS_CFLAGS="$CAPSTONE_CFLAGS"
       HSDIS_LDFLAGS="$CAPSTONE_LDFLAGS"
       HSDIS_LIBS="$CAPSTONE_LIBS"
@@ -173,22 +180,24 @@ AC_DEFUN([LIB_BUILD_BINUTILS],
     # On Windows, we cannot build with the normal Microsoft CL, but must instead use
     # a separate mingw toolchain.
     if test "x$OPENJDK_BUILD_OS" = xwindows; then
-      if test "x$OPENJDK_TARGET_CPU" = "xx86"; then
-        target_base="i686-w64-mingw32"
-      else
-        target_base="$OPENJDK_TARGET_CPU-w64-mingw32"
-      fi
-      binutils_cc="$target_base-gcc"
-      binutils_target="--host=$target_base --target=$target_base"
-      # Somehow the uint typedef is not included when building with mingw
-      binutils_cflags="-Duint=unsigned"
-      compiler_version=`$binutils_cc --version 2>&1`
-      if ! [ [[ "$compiler_version" =~ GCC ]] ]; then
-        AC_MSG_NOTICE([Could not find correct mingw compiler $binutils_cc.])
-        HELP_MSG_MISSING_DEPENDENCY([$binutils_cc])
-        AC_MSG_ERROR([Cannot continue. $HELP_MSG])
-      else
-        AC_MSG_NOTICE([Using compiler $binutils_cc with version $compiler_version])
+      if test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
+        if test "x$OPENJDK_TARGET_CPU" = "xx86"; then
+          target_base="i686-w64-mingw32"
+        else
+          target_base="$OPENJDK_TARGET_CPU-w64-mingw32"
+        fi
+        binutils_cc="$target_base-gcc"
+        binutils_target="--host=$target_base --target=$target_base"
+        # Somehow the uint typedef is not included when building with mingw
+        binutils_cflags="-Duint=unsigned"
+        compiler_version=`$binutils_cc --version 2>&1`
+        if ! [ [[ "$compiler_version" =~ GCC ]] ]; then
+          AC_MSG_NOTICE([Could not find correct mingw compiler $binutils_cc.])
+          HELP_MSG_MISSING_DEPENDENCY([$binutils_cc])
+          AC_MSG_ERROR([Cannot continue. $HELP_MSG])
+        else
+          AC_MSG_NOTICE([Using compiler $binutils_cc with version $compiler_version])
+        fi
       fi
     elif test "x$OPENJDK_BUILD_OS" = xmacosx; then
       if test "x$OPENJDK_TARGET_CPU" = "xaarch64"; then
@@ -260,12 +269,27 @@ AC_DEFUN([LIB_SETUP_HSDIS_BINUTILS],
   disasm_header="<dis-asm.h>"
 
   if test "x$BINUTILS_INSTALL_DIR" = xsystem; then
-    AC_CHECK_LIB(bfd, bfd_openr, [ HSDIS_LIBS="-lbfd" ], [ binutils_system_error="libbfd not found" ])
-    AC_CHECK_LIB(opcodes, disassembler, [ HSDIS_LIBS="$HSDIS_LIBS -lopcodes" ], [ binutils_system_error="libopcodes not found" ])
-    AC_CHECK_LIB(z, deflate, [ HSDIS_LIBS="$HSDIS_LIBS -lz" ], [ binutils_system_error="libz not found" ])
-    # libiberty is not required on Ubuntu
-    AC_CHECK_LIB(iberty, xmalloc, [ HSDIS_LIBS="$HSDIS_LIBS -liberty" ])
-    AC_CHECK_LIB(sframe, frame, [ HSDIS_LIBS="$HSDIS_LIBS -lsframe" ], )
+    if test "x$OPENJDK_TARGET_OS" = xlinux; then
+      AC_CHECK_LIB(bfd, bfd_openr, [ HSDIS_LIBS="-lbfd" ], [ binutils_system_error="libbfd not found" ])
+      AC_CHECK_LIB(opcodes, disassembler, [ HSDIS_LIBS="$HSDIS_LIBS -lopcodes" ], [ binutils_system_error="libopcodes not found" ])
+      AC_CHECK_LIB(z, deflate, [ HSDIS_LIBS="$HSDIS_LIBS -lz" ], [ binutils_system_error="libz not found" ])
+      # libiberty is not required on Ubuntu
+      AC_CHECK_LIB(iberty, xmalloc, [ HSDIS_LIBS="$HSDIS_LIBS -liberty" ])
+      AC_CHECK_LIB(sframe, frame, [ HSDIS_LIBS="$HSDIS_LIBS -lsframe" ], )
+    elif test "x$OPENJDK_TARGET_OS_ENV" = xwindows.msys2; then
+      if test "x$TOOLCHAIN_TYPE" = xgcc; then
+        AC_CHECK_LIB(bfd, bfd_openr, [ HSDIS_LIBS="-lbfd" ], [ binutils_system_error="libbfd not found" ], [ -l:libz.a -liberty -lsframe -l:libintl.a -l:libiconv.a -l:libzstd.a ])
+        AC_CHECK_LIB(opcodes, disassembler, [ HSDIS_LIBS="$HSDIS_LIBS -lopcodes" ], [ binutils_system_error="libopcodes not found" ], [ -lbfd -l:libz.a -liberty -lsframe -l:libintl.a -l:libiconv.a -l:libzstd.a ])
+        AC_CHECK_LIB(z, deflate, [ HSDIS_LIBS="$HSDIS_LIBS -l:libz.a" ], [ binutils_system_error="libz not found" ])
+        AC_CHECK_LIB(iberty, xmalloc, [ HSDIS_LIBS="$HSDIS_LIBS -liberty" ])
+        AC_CHECK_LIB(sframe, frame, [ HSDIS_LIBS="$HSDIS_LIBS -lsframe" ])
+        AC_CHECK_LIB(intl, libintl_fprintf, [ HSDIS_LIBS="$HSDIS_LIBS -l:libintl.a" ])
+        AC_CHECK_LIB(iconv, libiconv, [ HSDIS_LIBS="$HSDIS_LIBS -l:libiconv.a" ])
+        AC_CHECK_LIB(zstd, ZSTD_decompress, [ HSDIS_LIBS="$HSDIS_LIBS -l:libzstd.a" ])
+      elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
+        AC_MSG_ERROR([gcc is currently the only supported hsdis compiler with MSYS2])
+      fi
+    fi
     HSDIS_CFLAGS="-DLIBARCH_$OPENJDK_TARGET_CPU_LEGACY_LIB"
   elif test "x$BINUTILS_INSTALL_DIR" != x; then
     disasm_header="\"$BINUTILS_INSTALL_DIR/include/dis-asm.h\""
@@ -307,7 +331,18 @@ AC_DEFUN([LIB_SETUP_HSDIS_BINUTILS],
       elif test -e $BINUTILS_INSTALL_DIR/lib64/libsframe.a; then
         HSDIS_LIBS="$HSDIS_LIBS $BINUTILS_INSTALL_DIR/lib64/libsframe.a"
       fi
-      AC_CHECK_LIB(z, deflate, [ HSDIS_LIBS="$HSDIS_LIBS -lz" ], AC_MSG_ERROR([libz not found]))
+      if test "x$OPENJDK_TARGET_OS_ENV" = xwindows.msys2; then
+        if test "x$TOOLCHAIN_TYPE" = xgcc; then
+          AC_CHECK_LIB(z, deflate, [ HSDIS_LIBS="$HSDIS_LIBS -l:libz.a" ], AC_MSG_ERROR([libz not found]))
+          AC_CHECK_LIB(intl, libintl_fprintf, [ HSDIS_LIBS="$HSDIS_LIBS -l:libintl.a" ], AC_MSG_ERROR([libintl not found]))
+          AC_CHECK_LIB(iconv, libiconv, [ HSDIS_LIBS="$HSDIS_LIBS -l:libiconv.a" ], AC_MSG_ERROR([libiconv not found]))
+          AC_CHECK_LIB(zstd, ZSTD_decompress, [ HSDIS_LIBS="$HSDIS_LIBS -l:libzstd.a" ], AC_MSG_ERROR([libzstd not found]))
+        else
+          AC_MSG_ERROR([gcc is currently the only supported hsdis compiler with MSYS2])
+        fi
+      else
+        AC_CHECK_LIB(z, deflate, [ HSDIS_LIBS="$HSDIS_LIBS -lz" ], AC_MSG_ERROR([libz not found]))
+      fi
     else
       AC_MSG_ERROR(["$BINUTILS_INSTALL_DIR/lib[64] must contain libbfd.a, libopcodes.a and libiberty.a"])
     fi
@@ -327,12 +362,14 @@ AC_DEFUN([LIB_SETUP_HSDIS_BINUTILS],
   AC_MSG_CHECKING([for binutils to use with hsdis])
   case "x$BINUTILS_INSTALL_DIR" in
     xsystem)
-      if test "x$OPENJDK_TARGET_OS" != xlinux; then
+      if test "x$OPENJDK_TARGET_OS" != xlinux && test "x$OPENJDK_TARGET_OS_ENV" != xwindows.msys2; then
         AC_MSG_RESULT([invalid])
-        AC_MSG_ERROR([binutils on system is supported for Linux only])
+        AC_MSG_ERROR([binutils on system is supported for Linux and Windows with MSYS2 only])
       elif test "x$binutils_system_error" = x; then
         AC_MSG_RESULT([system])
-        HSDIS_CFLAGS="$HSDIS_CFLAGS -DSYSTEM_BINUTILS"
+        if test "x$OPENJDK_TARGET_OS" = xlinux; then
+          HSDIS_CFLAGS="$HSDIS_CFLAGS -DSYSTEM_BINUTILS"
+        fi
       else
         AC_MSG_RESULT([invalid])
         AC_MSG_ERROR([$binutils_system_error])

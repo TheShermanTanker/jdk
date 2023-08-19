@@ -305,7 +305,7 @@ static int revokeAll(const char* path) {
     if (sd == NULL) {
         return -1;      /* error already reported */
     }
-    if (!GetSecurityDescriptorOwner(sd, &owner, &defaulted)) {
+    if (!GetSecurityDescriptorOwner(sd, (PSID*) &owner, &defaulted)) {
         printLastError("GetSecurityDescriptorOwner failed");
         return -1;
     }

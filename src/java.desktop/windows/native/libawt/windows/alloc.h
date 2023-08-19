@@ -28,13 +28,6 @@
 
 #include "stdhdrs.h"
 
-// By defining std::bad_alloc in a local header file instead of including
-// the Standard C++ <new> header file, we avoid making awt.dll dependent
-// on msvcp50.dll. This reduces the size of the JRE by 500kb.
-namespace std {
-    class bad_alloc {};
-}
-
 #define SIZECALC_ALLOC_THROWING_BAD_ALLOC
 #include "sizecalc.h"
 

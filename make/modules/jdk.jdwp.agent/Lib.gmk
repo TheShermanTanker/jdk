@@ -39,7 +39,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBDT_SOCKET, \
         include \
         libjdwp/export, \
     LIBS_linux := $(LIBPTHREAD), \
-    LIBS_windows := iphlpapi.lib ws2_32.lib, \
+    LIBS_microsoft_windows := iphlpapi.lib ws2_32.lib, \
+    LIBS_gcc_windows := -liphlpapi -lws2_32, \
 ))
 
 # Include socket transport with JDWP agent to allow for remote debugging
@@ -59,6 +60,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJDWP, \
     DISABLED_WARNINGS_gcc_threadControl.c := unused-but-set-variable \
         unused-variable, \
     DISABLED_WARNINGS_gcc_utf_util.c := unused-but-set-variable, \
+    DISABLED_WARNINGS_gcc_windows := sign-compare, \
+    DISABLED_WARNINGS_gcc_windows_log_messages.c := format, \
     DISABLED_WARNINGS_clang_error_messages.c := format-nonliteral, \
     DISABLED_WARNINGS_clang_eventFilter.c := unused-variable, \
     DISABLED_WARNINGS_clang_EventRequestImpl.c := self-assign, \

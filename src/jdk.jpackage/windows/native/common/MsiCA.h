@@ -265,10 +265,13 @@ private:
 //  - registers CA function with linker, so there is no need to manage
 //    separate .def file with the list of CA functions explicitly.
 //
+#define JP_PRAGMA(str) _Pragma(#str)
+
+#ifdef _MSC_VER
 #define JP_CA_BASE(name, ca_type) \
     static void name ## Body(ca_type&); \
     extern "C" UINT name(MSIHANDLE hInstall) { \
-        __pragma(comment(linker, "/EXPORT:" __FUNCTION__ "=" __FUNCDNAME__)); \
+        JP_PRAGMA(comment(linker, "/EXPORT:" __FUNCTION__ "=" __FUNCDNAME__)); \
         const msi::MsiLogTrigger logTrigger(hInstall); \
         JP_DEBUG_BREAK(JP_CA_DEBUG_BREAK, name); \
         LOG_TRACE_FUNCTION(); \
@@ -282,12 +285,36 @@ private:
         return ca_type::FatalError; \
     } \
     static void name ## Body(ca_type& ca)
+#elif defined(__GNUC__)
+#define JP_CA_BASE(name, ca_type) \
+    static void name ## Body(ca_type&); \
+    extern "C" [[gnu::dllexport]] UINT name(MSIHANDLE hInstall) { \
+        const msi::MsiLogTrigger logTrigger(hInstall); \
+        JP_DEBUG_BREAK(JP_CA_DEBUG_BREAK, name); \
+        LOG_TRACE_FUNCTION(); \
+        JP_TRY; \
+        UINT status = ca_type::Success; \
+        ca_type ca(hInstall, _T(#name), &status); \
+        LOG_TRACE(tstrings::any() << "CA modes=[" << ca.getModes() << "]"); \
+        name ## Body(ca); \
+        return status; \
+        JP_CATCH_ALL; \
+        return ca_type::FatalError; \
+    } \
+    static void name ## Body(ca_type& ca)
+#endif
+
 #define JP_CA(name) JP_CA_BASE(name, msi::CA)
 #define JP_DEFERRED_CA(name) JP_CA_BASE(name, msi::DeferredCA)
 
+#ifdef _MSC_VER
 #define JP_CA_DECLARE(name) \
     extern "C" UINT name(MSIHANDLE); \
-    __pragma(comment(linker, "/INCLUDE:" JP_CA_MANGLED_NAME(name)))
+    JP_PRAGMA(comment(linker, "/INCLUDE:" JP_CA_MANGLED_NAME(name)))
+#elif defined(__GNUC__)
+#define JP_CA_DECLARE(name) \
+    extern "C" UINT name(MSIHANDLE);
+#endif
 
 #define JP_CA_MANGLED_NAME(name) #name
 

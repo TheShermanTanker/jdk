@@ -83,17 +83,17 @@ LPVOID Resource::getPtr(DWORD &size) const
     // so we need to ensure the stringtable exists
     HRSRC resInfo = findResource();
     if (resInfo == NULL) {
-        JP_THROW(SysError(getErrMsg("cannot find resource"), FindResource));
+        JP_THROW(SysError(getErrMsg("cannot find resource"), reinterpret_cast<uintptr_t>(FindResource)));
     }
 
     HGLOBAL res = LoadResource(instance, resInfo);
     if (res == NULL) {
-        JP_THROW(SysError(getErrMsg("cannot load resource"), LoadResource));
+        JP_THROW(SysError(getErrMsg("cannot load resource"), reinterpret_cast<uintptr_t>(LoadResource)));
     }
 
     LPVOID ptr = LockResource(res);
     if (res == NULL) {
-        JP_THROW(SysError(getErrMsg("cannot lock resource"), LockResource));
+        JP_THROW(SysError(getErrMsg("cannot lock resource"), reinterpret_cast<uintptr_t>(LockResource)));
     }
 
     if (typePtr == RT_STRING) {

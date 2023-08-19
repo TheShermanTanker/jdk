@@ -55,6 +55,7 @@
 #include "runtime/osInfo.hpp"
 #include "runtime/osThread.hpp"
 #include "runtime/park.hpp"
+#include "runtime/frame.inline.hpp"
 #include "runtime/perfMemory.hpp"
 #include "runtime/safefetch.hpp"
 #include "runtime/safepointMechanism.hpp"
@@ -551,10 +552,9 @@ static unsigned thread_native_entry(void* t) {
   // Install a win32 structured exception handler around every thread created
   // by VM, so VM can generate error dump when an exception occurred in non-
   // Java thread (e.g. VM thread).
-  __try {
+  WIN32_TRY {
     thread->call_run();
-  } __except(topLevelExceptionFilter(
-                                     (_EXCEPTION_POINTERS*)_exception_info())) {
+  } WIN32_EXCEPT (topLevelExceptionFilter(GetExceptionInformation())) {
     // Nothing to do.
   }
 #endif
@@ -1110,9 +1110,9 @@ void os::set_native_thread_name(const char *name) {
   info.dwThreadID = -1;
   info.dwFlags = 0;
 
-  __try {
+  WIN32_TRY {
     RaiseException (MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(DWORD), (const ULONG_PTR*)&info );
-  } __except(EXCEPTION_EXECUTE_HANDLER) {}
+  } WIN32_EXCEPT (EXCEPTION_EXECUTE_HANDLER) {}
 }
 
 void os::win32::initialize_performance_counter() {
@@ -1438,7 +1438,7 @@ void  os::dll_unload(void *lib) {
 
 void* os::dll_lookup(void *lib, const char *name) {
   ::SetLastError(0); // Clear old pending errors
-  void* ret = ::GetProcAddress((HMODULE)lib, name);
+  void* ret = CAST_FROM_FN_PTR(void*, ::GetProcAddress((HMODULE)lib, name));
   if (ret == nullptr) {
     char buf[512];
     if (os::lasterror(buf, sizeof(buf)) > 0) {
@@ -1449,7 +1449,7 @@ void* os::dll_lookup(void *lib, const char *name) {
 }
 
 void* os::lookup_function(const char* name) {
-  return ::GetProcAddress(nullptr, name);
+  return CAST_FROM_FN_PTR(void*, ::GetProcAddress(nullptr, name));
 }
 
 // Directory routines copied from src/win32/native/java/io/dirent_md.c
@@ -2294,7 +2294,10 @@ size_t os::lasterror(char* buf, size_t len) {
     const char* s = os::strerror(errno);
     size_t n = strlen(s);
     if (n >= len) n = len - 1;
+PRAGMA_DIAG_PUSH
+PRAGMA_STRINGOP_TRUNCATION_IGNORED
     strncpy(buf, s, n);
+PRAGMA_DIAG_POP
     buf[n] = '\0';
     return n;
   }
@@ -2826,21 +2829,20 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
 
 #if defined(USE_VECTORED_EXCEPTION_HANDLING)
 LONG WINAPI topLevelUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
-  if (!InterceptOSException) {
-    DWORD exceptionCode = exceptionInfo->ExceptionRecord->ExceptionCode;
+  if (InterceptOSException) return previousUnhandledExceptionFilter ? previousUnhandledExceptionFilter(exceptionInfo) : EXCEPTION_CONTINUE_SEARCH;
+  DWORD exceptionCode = exceptionInfo->ExceptionRecord->ExceptionCode;
 #if defined(_M_ARM64)
-    address pc = (address) exceptionInfo->ContextRecord->Pc;
+  address pc = (address) exceptionInfo->ContextRecord->Pc;
 #elif defined(_M_AMD64)
-    address pc = (address) exceptionInfo->ContextRecord->Rip;
+  address pc = (address) exceptionInfo->ContextRecord->Rip;
 #else
-    address pc = (address) exceptionInfo->ContextRecord->Eip;
+  address pc = (address) exceptionInfo->ContextRecord->Eip;
 #endif
-    Thread* thread = Thread::current_or_null_safe();
+  Thread* thread = Thread::current_or_null_safe();
 
-    if (exceptionCode != EXCEPTION_BREAKPOINT) {
-      report_error(thread, exceptionCode, pc, exceptionInfo->ExceptionRecord,
-                  exceptionInfo->ContextRecord);
-    }
+  if (exceptionCode != EXCEPTION_BREAKPOINT) {
+    report_error(thread, exceptionCode, pc, exceptionInfo->ExceptionRecord,
+                exceptionInfo->ContextRecord);
   }
 
   return previousUnhandledExceptionFilter ? previousUnhandledExceptionFilter(exceptionInfo) : EXCEPTION_CONTINUE_SEARCH;
@@ -3834,9 +3836,9 @@ void os::naked_short_nanosleep(jlong ns) {
 
 // Sleep forever; naked call to OS-specific sleep; use with CAUTION
 void os::infinite_sleep() {
-  while (true) {    // sleep forever ...
+  loop:             // sleep forever ...
     Sleep(100000);  // ... 100 seconds at a time
-  }
+  goto loop;
 }
 
 typedef BOOL (WINAPI * STTSignature)(void);
@@ -4224,7 +4226,7 @@ static BOOL CALLBACK init_crit_sect_call(PINIT_ONCE, PVOID pcrit_sect, PVOID*) {
   return TRUE;
 }
 
-static void exit_process_or_thread(Ept what, int exit_code) {
+static void exit_process_or_thread(Ept what, int code) {
   // Basic approach:
   //  - Each exiting thread registers its intent to exit and then does so.
   //  - A thread trying to terminate the process must wait for all
@@ -4394,11 +4396,11 @@ static void exit_process_or_thread(Ept what, int exit_code) {
   // - the current thread has registered itself and left the critical section;
   // - the process-exiting thread has raised the flag and left the critical section.
   if (what == EPT_THREAD) {
-    _endthreadex((unsigned)exit_code);
+    _endthreadex((unsigned)code);
   } else if (what == EPT_PROCESS) {
-    permit_forbidden_function::exit(exit_code);
+    permit_forbidden_function::exit(code);
   } else { // EPT_PROCESS_DIE
-    permit_forbidden_function::_exit(exit_code);
+    permit_forbidden_function::_exit(code);
   }
 
   // Should not reach here

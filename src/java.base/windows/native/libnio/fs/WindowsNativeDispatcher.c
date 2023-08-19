@@ -366,8 +366,9 @@ Java_sun_nio_fs_WindowsNativeDispatcher_FindNextFile0(JNIEnv* env, jclass this,
     if (FindNextFileW(h, data) != 0) {
         return (*env)->NewString(env, data->cFileName, (jsize)wcslen(data->cFileName));
     } else {
-    if (GetLastError() != ERROR_NO_MORE_FILES)
-        throwWindowsException(env, GetLastError());
+        if (GetLastError() != ERROR_NO_MORE_FILES) {
+            throwWindowsException(env, GetLastError());
+        }
         return NULL;
     }
 }

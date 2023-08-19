@@ -45,6 +45,10 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBNET, \
     OPTIMIZATION := LOW, \
     DISABLED_WARNINGS_gcc_net_util_md.c := format-nonliteral unused-variable, \
     DISABLED_WARNINGS_gcc_NetworkInterface.c := unused-function, \
+    DISABLED_WARNINGS_gcc_NTLMAuthSequence.c := int-conversion maybe-uninitialized, \
+    DISABLED_WARNINGS_gcc_windows_net_util_md.c := format, \
+    DISABLED_WARNINGS_gcc_windows := cast-function-type missing-field-initializers \
+        pointer-sign, \
     DISABLED_WARNINGS_clang_net_util_md.c := format-nonliteral \
         unused-variable, \
     DISABLED_WARNINGS_clang_NetworkInterface.c := unused-function, \
@@ -53,13 +57,14 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBNET, \
     DISABLED_WARNINGS_clang_aix_NetworkInterface.c := gnu-pointer-arith, \
     DISABLED_WARNINGS_microsoft_InetAddress.c := 4244, \
     DISABLED_WARNINGS_microsoft_ResolverConfigurationImpl.c := 4996, \
-    LDFLAGS_windows := -delayload:iphlpapi.dll -delayload:secur32.dll \
+    LDFLAGS_microsoft_windows := -delayload:iphlpapi.dll -delayload:secur32.dll \
         -delayload:winhttp.dll, \
     JDK_LIBS := libjava libjvm, \
     LIBS_linux := $(LIBDL), \
     LIBS_aix := $(LIBDL), \
-    LIBS_windows := advapi32.lib delayimp.lib iphlpapi.lib secur32.lib \
+    LIBS_microsoft_windows := advapi32.lib delayimp.lib iphlpapi.lib secur32.lib \
         winhttp.lib ws2_32.lib, \
+    LIBS_gcc_windows := -liphlpapi -lsecur32 -lwinhttp -lws2_32, \
     LIBS_macosx := \
         -framework CoreFoundation \
         -framework CoreServices, \
@@ -74,6 +79,8 @@ TARGETS += $(BUILD_LIBNET)
 $(eval $(call SetupJdkLibrary, BUILD_LIBNIO, \
     NAME := nio, \
     OPTIMIZATION := HIGH, \
+    DISABLED_WARNINGS_gcc_windows := unknown-pragmas \
+        sign-compare pointer-sign, \
     EXTRA_HEADER_DIRS := \
         libnio/ch \
         libnio/fs \
@@ -86,7 +93,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBNIO, \
     LIBS_macosx := \
         -framework CoreFoundation \
         -framework CoreServices, \
-    LIBS_windows := advapi32.lib mswsock.lib ws2_32.lib, \
+    LIBS_microsoft_windows := advapi32.lib mswsock.lib ws2_32.lib, \
+    LIBS_gcc_windows := -lmswsock -lws2_32, \
 ))
 
 TARGETS += $(BUILD_LIBNIO)
@@ -194,7 +202,7 @@ ifeq ($(call isTargetOs, linux)+$(call isTargetCpu, x86_64)+$(INCLUDE_COMPILER2)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBSIMD_SORT, \
       NAME := simdsort, \
-      LINK_TYPE := C++, \
+      LANG := C++, \
       OPTIMIZATION := HIGH, \
       CXXFLAGS := -std=c++17, \
       DISABLED_WARNINGS_gcc := unused-variable, \

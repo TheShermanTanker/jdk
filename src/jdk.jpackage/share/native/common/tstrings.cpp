@@ -49,7 +49,7 @@ tstring unsafe_format(tstring::const_pointer format, ...) {
     va_start(args, format);
     do {
         fmtout.resize(fmtout.size() + inc);
-#ifdef _MSC_VER
+#ifdef _WIN32
         ret = _vsntprintf_s(&*fmtout.begin(), fmtout.size(), _TRUNCATE, format, args);
 #else
 #if defined(__GNUC__)

@@ -229,7 +229,7 @@ void MallocSiteTable::print_tuning_statistics(outputStream* st) {
       stack_depth_distribution[callstack_depth] ++;
       head = head->next();
     }
-    lengths[i] = (uint16_t)MIN2(this_chain_length, USHRT_MAX);
+    lengths[i] = (uint16_t) (this_chain_length < USHRT_MAX) ? this_chain_length : USHRT_MAX;
   }
 
   st->print_cr("Malloc allocation site table:");

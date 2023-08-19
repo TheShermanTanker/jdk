@@ -94,7 +94,7 @@ Java_com_sun_media_sound_MidiOutDevice_nGetTimeStamp(JNIEnv* e, jobject thisObj,
 
     /* Handle error codes. */
     if (ret < -1) {
-        ERROR1("Java_com_sun_media_sound_MidiOutDevice_nGetTimeStamp: MIDI_IN_GetTimeStamp returned %lld\n", (long long int) ret);
+        ERROR1("Java_com_sun_media_sound_MidiOutDevice_nGetTimeStamp: MIDI_IN_GetTimeStamp returned %lld\n", ret);
         ret = -1;
     }
     return ret;

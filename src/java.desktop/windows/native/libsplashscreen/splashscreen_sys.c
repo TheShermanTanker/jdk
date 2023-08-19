@@ -144,8 +144,9 @@ SplashPaint(Splash * splash, HDC hdc)
         return;
     if (splash->currentFrame < 0 || splash->currentFrame >= splash->frameCount)
         return;
-    pBmi = (BITMAPV4HEADER *) SAFE_SIZE_STRUCT_ALLOC(alloca, sizeof(BITMAPV4HEADER),
-            sizeof(RGBQUAD), numColors);
+    // SAFE_SIZE_STRUCT_ALLOC has been inlined here due to how alloca is defined in the gcc headers
+    pBmi = (BITMAPV4HEADER *) (IS_SAFE_STRUCT_SIZE(sizeof(BITMAPV4HEADER), sizeof(RGBQUAD), numColors) ?
+            alloca(sizeof(BITMAPV4HEADER) + sizeof(RGBQUAD) * numColors) : FAILURE_RESULT);
     if (!pBmi) {
         return;
     }

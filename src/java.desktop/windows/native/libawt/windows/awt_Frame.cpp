@@ -1632,8 +1632,7 @@ void AwtFrame::_NotifyModalBlocked(void *param)
         }
     }
 
-    if ((f != NULL) && ::IsWindow(f->GetHWnd()))
-    {
+    if ((f != NULL) && ::IsWindow(f->GetHWnd())) {
         // get an HWND of the toplevel window this embedded frame is within
         HWND fHWnd = f->GetHWnd();
         while (::GetParent(fHWnd) != NULL) {
@@ -1650,7 +1649,7 @@ void AwtFrame::_NotifyModalBlocked(void *param)
             DWORD fThread = ::GetWindowThreadProcessId(fHWnd, NULL);
             if (fThread != AwtToolkit::GetInstance().MainThread()) {
                 // check if this thread has been already blocked
-                BlockedThreadStruct *blockedThread = (BlockedThreadStruct *)sm_BlockedThreads.get((void *)((intptr_t)fThread));
+                BlockedThreadStruct *blockedThread = static_cast<BlockedThreadStruct *>(sm_BlockedThreads.get((void *)((intptr_t)fThread)));
                 if (blocked) {
                     if (blockedThread == NULL) {
                         blockedThread = new BlockedThreadStruct;

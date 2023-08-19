@@ -54,17 +54,16 @@ extern "C" {
         }
     }
 
-    /*
-      /**
-      * Windows_shutdown - where Windows executables will load/unload us
-      *
-      *
-      void Windows_shutdown() {
-      if (theWindowsAccessBridge != (WinAccessBridge *) 0) {
-      theWindowsAccessBridge->initWindow();
-      }
-      }
-    */
+    /**
+     * Windows_shutdown - where Windows executables will load/unload us
+     *
+     *
+    void Windows_shutdown() {
+        if (theWindowsAccessBridge != (WinAccessBridge *) 0) {
+            theWindowsAccessBridge->initWindow();
+        }
+    }
+     */
 
     /**
      * getTopLevelHWND - returns the top-level window parent of the descendent

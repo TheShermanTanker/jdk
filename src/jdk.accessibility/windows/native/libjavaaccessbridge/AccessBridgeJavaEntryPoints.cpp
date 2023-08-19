@@ -84,15 +84,15 @@ AccessBridgeJavaEntryPoints::~AccessBridgeJavaEntryPoints() {
 
 #define EXCEPTION_CHECK_WITH_RELEASE(situationDescription, returnVal, js, stringBytes)              \
     if (jniEnv->ExceptionCheck()) {                                                                 \
-        PrintDebugString("[ERROR]: *** Exception occured while doing: %s - call to GetStringLength; returning %d", situationDescription, returnVal);    \
+        PrintDebugString("[ERROR]: *** Exception occurred while doing: %s - call to GetStringLength; returning %d", situationDescription, returnVal);    \
         jniEnv->ExceptionDescribe();                                                                \
         jniEnv->ExceptionClear();                                                                   \
-        jniEnv->ReleaseStringChars(js, stringBytes);                                                \
+        jniEnv->ReleaseStringChars(js, reinterpret_cast<const jchar*>(stringBytes));                \
         return (returnVal);                                                                         \
     }                                                                                               \
-    jniEnv->ReleaseStringChars(js, stringBytes);                                                    \
+    jniEnv->ReleaseStringChars(js, reinterpret_cast<const jchar*>(stringBytes));                    \
     if (jniEnv->ExceptionCheck()) {                                                                 \
-        PrintDebugString("[ERROR]: *** Exception occured while doing: %s - call to ReleaseStringChars; returning %d", situationDescription, returnVal); \
+        PrintDebugString("[ERROR]: *** Exception occurred while doing: %s - call to ReleaseStringChars; returning %d", situationDescription, returnVal); \
         jniEnv->ExceptionDescribe();                                                                \
         jniEnv->ExceptionClear();                                                                   \
         return (returnVal);                                                                         \
@@ -100,7 +100,7 @@ AccessBridgeJavaEntryPoints::~AccessBridgeJavaEntryPoints() {
 
 #define EXCEPTION_CHECK_VOID(situationDescription)                                                  \
     if (jniEnv->ExceptionCheck()) {                                                                 \
-        PrintDebugString("[ERROR]: *** Exception occured while doing: %s", situationDescription);   \
+        PrintDebugString("[ERROR]: *** Exception occurred while doing: %s", situationDescription);  \
         jniEnv->ExceptionDescribe();                                                                \
         jniEnv->ExceptionClear();                                                                   \
         return;                                                                                     \
@@ -991,7 +991,7 @@ AccessBridgeJavaEntryPoints::setTextContents(const jobject accessibleContext, co
     if (setTextContentsMethod != (jmethodID) 0) {
 
         // create a Java String for the text
-        jstring textString = jniEnv->NewString(text, (jsize)wcslen(text));
+        jstring textString = jniEnv->NewString(reinterpret_cast<const jchar*>(text), (jsize)wcslen(text));
         if (textString == 0) {
             PrintDebugString("[ERROR]:    NewString failed");
             return FALSE;
@@ -1026,7 +1026,7 @@ AccessBridgeJavaEntryPoints::getParentWithRole(const jobject accessibleContext, 
 
     if (getParentWithRoleMethod != (jmethodID) 0) {
         // create a Java String for the role
-        jstring roleName = jniEnv->NewString(role, (jsize)wcslen(role));
+        jstring roleName = jniEnv->NewString(reinterpret_cast<const jchar*>(role), (jsize)wcslen(role));
         if (roleName == 0) {
             PrintDebugString("[ERROR]:     NewString failed");
             return FALSE;
@@ -1094,7 +1094,7 @@ AccessBridgeJavaEntryPoints::getParentWithRoleElseRoot(const jobject accessibleC
     if (getParentWithRoleElseRootMethod != (jmethodID) 0) {
 
         // create a Java String for the role
-        jstring roleName = jniEnv->NewString(role, (jsize)wcslen(role));
+        jstring roleName = jniEnv->NewString(reinterpret_cast<const jchar*>(role), (jsize)wcslen(role));
         if (roleName == 0) {
             PrintDebugString("[ERROR]:     NewString failed");
             return FALSE;
@@ -1205,7 +1205,7 @@ AccessBridgeJavaEntryPoints::getVirtualAccessibleName (
 
     jstring js = NULL;
     const wchar_t * stringBytes = NULL;
-    jsize length = 0;
+ // jsize length = 0;
     PrintDebugString("[INFO]:  getVirtualAccessibleName called.");
     if (getVirtualAccessibleNameFromContextMethod != (jmethodID) 0)
     {
@@ -1219,7 +1219,7 @@ AccessBridgeJavaEntryPoints::getVirtualAccessibleName (
             stringBytes = (const wchar_t *) jniEnv->GetStringChars (js, 0);
             EXCEPTION_CHECK("Getting AccessibleName - call to GetStringChars()", FALSE);
             wcsncpy(name, stringBytes, nameSize - 1);
-            length = jniEnv->GetStringLength(js);
+         // length = jniEnv->GetStringLength(js);
             EXCEPTION_CHECK_WITH_RELEASE("Getting AccessibleName", FALSE, js, stringBytes);
             jniEnv->CallVoidMethod (
                 accessBridgeObject,
@@ -1553,7 +1553,7 @@ AccessBridgeJavaEntryPoints::getVersionInfo(AccessBridgeVersionInfo *info) {
                     sizeof(info->bridgeWinDLLVersion)  / sizeof(wchar_t));
             info->bridgeWinDLLVersion[length < (sizeof(info->bridgeWinDLLVersion) / sizeof(wchar_t)) ?
                                          length : (sizeof(info->bridgeWinDLLVersion) / sizeof(wchar_t))-2] = (wchar_t) 0;
-            jniEnv->ReleaseStringChars(js, stringBytes);
+            jniEnv->ReleaseStringChars(js, reinterpret_cast<const jchar*>(stringBytes));
             EXCEPTION_CHECK("Getting JavaVersionProperty - call to ReleaseStringChars()", FALSE);
             jniEnv->CallVoidMethod(accessBridgeObject,
                                    decrementReferenceMethod, js);
@@ -3350,7 +3350,7 @@ BOOL AccessBridgeJavaEntryPoints::doAccessibleActions(jobject accessibleContext,
 
         // create a Java String for the action name
         wchar_t *actionName = (wchar_t *)actionsToDo->actions[i].name;
-        jstring javaName = jniEnv->NewString(actionName, (jsize)wcslen(actionName));
+        jstring javaName = jniEnv->NewString(reinterpret_cast<const jchar*>(actionName), (jsize)wcslen(actionName));
         if (javaName == 0) {
             PrintDebugString("[ERROR]:     NewString failed");
             *failure = i;
@@ -3458,7 +3458,7 @@ AccessBridgeJavaEntryPoints::getAccessibleTextItems(jobject accessibleContext,
             stringBytes = (const wchar_t *) jniEnv->GetStringChars(js, 0);
             EXCEPTION_CHECK("Getting AccessibleLetterAtIndex - call to GetStringChars()", FALSE);
             textItems->letter = stringBytes[0];
-            jniEnv->ReleaseStringChars(js, stringBytes);
+            jniEnv->ReleaseStringChars(js, reinterpret_cast<const jchar*>(stringBytes));
             EXCEPTION_CHECK("Getting AccessibleLetterAtIndex - call to ReleaseStringChars()", FALSE);
             jniEnv->CallVoidMethod(accessBridgeObject,
                                    decrementReferenceMethod, js);

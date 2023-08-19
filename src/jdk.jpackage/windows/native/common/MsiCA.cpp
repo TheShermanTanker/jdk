@@ -217,7 +217,7 @@ MsiLogTrigger::~MsiLogTrigger() {
 namespace {
 MSIHANDLE openDatabase(const CA& ca) {
     MSIHANDLE h = MsiGetActiveDatabase(ca.getHandle());
-    if (h == NULL) {
+    if (h == 0) {
         JP_THROW(Error(std::string("MsiGetActiveDatabase() failed"),
                                                     ERROR_FUNCTION_FAILED));
     }

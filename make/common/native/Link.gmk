@@ -50,10 +50,10 @@ GetEntitlementsFile = \
       $(if $(wildcard $f), $f, $(DEFAULT_ENTITLEMENTS_FILE)) \
     )
 
-ifeq ($(call isCompiler, gcc), true)
+ifeq ($(TOOLCHAIN_TYPE), gcc)
   SetSharedLibraryName = \
       -Wl,-soname=$1
-else ifeq ($(call isCompiler, clang), true)
+else ifeq ($(TOOLCHAIN_TYPE), clang)
   ifeq ($(call isTargetOs, macosx), true)
     SetSharedLibraryName = \
         -Wl,-install_name,@rpath/$1
@@ -64,7 +64,7 @@ else ifeq ($(call isCompiler, clang), true)
     SetSharedLibraryName = \
         -Wl,-soname=$1
   endif
-else ifeq ($(call isCompiler, microsoft), true)
+else ifeq ($(TOOLCHAIN_TYPE), microsoft)
   SetSharedLibraryName =
 else
   $(error Unknown toolchain)
@@ -107,7 +107,7 @@ define CreateStaticLibrary
   $1_VARDEPS_FILE := $$(call DependOnVariable, $1_VARDEPS, \
       $$($1_OBJECT_DIR)/$$($1_NOSUFFIX).vardeps)
 
-  $1_TARGET_DEPS := $$($1_ALL_OBJS) $$($1_EXTRA_LINK_DEPS) $$($1_VARDEPS_FILE)
+  $1_TARGET_DEPS := $$($1_ALL_OBJS) $$($1_RES) $$($1_EXTRA_LINK_DEPS) $$($1_VARDEPS_FILE)
 
   $1_AR_OBJ_ARG := $$($1_LD_OBJ_ARG)
   # With clang on linux, partial linking is enabled and 'AR' takes the output
@@ -167,7 +167,7 @@ define CreateDynamicLibraryOrExecutable
   $1_VARDEPS_FILE := $$(call DependOnVariable, $1_VARDEPS, \
       $$($1_OBJECT_DIR)/$$($1_NOSUFFIX).vardeps)
 
-  $1_TARGET_DEPS := $$($1_ALL_OBJS) $$($1_EXTRA_LINK_DEPS) $$($1_VARDEPS_FILE)
+  $1_TARGET_DEPS := $$($1_ALL_OBJS) $$($1_RES) $$($1_EXTRA_LINK_DEPS) $$($1_VARDEPS_FILE)
 
   $$($1_TARGET): $$($1_TARGET_DEPS)
         ifneq ($$($1_OBJ_FILE_LIST), )
@@ -183,7 +183,7 @@ define CreateDynamicLibraryOrExecutable
 	    $$(if $$($1_LINK_OBJS_RELATIVE), $$(CD) $$(OUTPUTDIR) ; ) \
 	    $$($1_LD) $$($1_LDFLAGS) $$($1_EXTRA_LDFLAGS) \
 	        $$($1_SYSROOT_LDFLAGS) -o $$($1_TARGET) $$($1_LD_OBJ_ARG) \
-	        $$($1_LIBS) $$($1_EXTRA_LIBS))
+	        $$($1_RES) $$($1_LIBS) $$($1_EXTRA_LIBS))
         ifeq ($$($1_CREATE_DEBUGINFO), true)
           ifeq ($(call isTargetOs, linux), true)
             # This cannot be run separately since it updates the original target

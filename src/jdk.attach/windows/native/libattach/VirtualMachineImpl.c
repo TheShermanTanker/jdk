@@ -541,7 +541,7 @@ JNIEXPORT void JNICALL Java_sun_tools_attach_VirtualMachineImpl_enqueue
                         break;
                     default : {
                         char errmsg[128];
-                        snprintf(errmsg, sizeof(errmsg), "Remote thread failed for unknown reason (%d)", exitCode);
+                        snprintf(errmsg, sizeof(errmsg), "Remote thread failed for unknown reason (%ld)", exitCode);
                         JNU_ThrowInternalError(env, errmsg);
                     }
                 }

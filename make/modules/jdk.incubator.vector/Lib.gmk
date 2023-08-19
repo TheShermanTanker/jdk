@@ -34,9 +34,20 @@ ifeq ($(INCLUDE_COMPILER2), true)
   ##############################################################################
 
   ifeq ($(call isTargetOs, linux windows)+$(call isTargetCpu, x86_64), true+true)
+    ifeq ($(call isTargetOs, windows), true)
+      ifeq ($(TOOLCHAIN_TYPE), gcc)
+        JSVML_INCLUDES := as
+      else ifeq ($(TOOLCHAIN_TYPE), microsoft)
+        JSVML_INCLUDES := ml
+      endif
+    else
+      JSVML_INCLUDES :=
+    endif
+
     $(eval $(call SetupJdkLibrary, BUILD_LIBJSVML, \
         NAME := jsvml, \
-        LDFLAGS_windows := -defaultlib:msvcrt, \
+        INCLUDES := $(JSVML_INCLUDES), \
+        LDFLAGS_microsoft_windows := -defaultlib:msvcrt, \
     ))
 
     TARGETS += $(BUILD_LIBJSVML)

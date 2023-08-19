@@ -44,21 +44,20 @@ AccessibleNode *thePopupNode;
 AccessibleContext theSelectedAccessibleContext;
 HWND hwndTV;    // handle of tree-view control
 
-int APIENTRY WinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPSTR     lpCmdLine,
-                     int       nCmdShow)
-{
+int main() {
 
     if (logfile == null) {
         logfile = fopen(JACCESSWALKER_LOG, "w"); // overwrite existing log file
         logString(logfile, "Starting jaccesswalker.exe %s\n", getTimeAndDate());
     }
 
-    theInstance = hInstance;
+    theInstance = GetModuleHandle(nullptr);
+
+    STARTUPINFOA info;
+    GetStartupInfoA(&info);
 
     // start Jaccesswalker
-    theJaccesswalker = new Jaccesswalker(nCmdShow);
+    theJaccesswalker = new Jaccesswalker(info.wShowWindow);
 
     return 0;
 }
@@ -252,12 +251,13 @@ LRESULT CALLBACK AccessInfoWindowProc(HWND hWnd, UINT message,
     switch (message) {
     case WM_CREATE:
         RECT rcClient;    // dimensions of client area
-        HWND hwndEdit;    // handle of tree-view control
+     // HWND hwndEdit;    // handle of tree-view control
 
         // Get the dimensions of the parent window's client area,
         // and create the edit control.
         GetClientRect(hWnd, &rcClient);
-        hwndEdit = CreateWindow("Edit",
+     // hwndEdit =
+                   CreateWindow("Edit",
                                 "",
                                 WS_VISIBLE | WS_TABSTOP | WS_CHILD |
                                 ES_MULTILINE | ES_AUTOVSCROLL |
@@ -351,7 +351,7 @@ BOOL IsInaccessibleJavaWindow(const HWND hwnd)
                     AccessibleContext acChild ( 0 );
                     acChild =
                         GetAccessibleChildFromContext(vmIdWindow, acWindow, 0);
-                    if ( NULL != acChild ) {
+                    if ( 0 != acChild ) {
                         AccessibleContextInfo infoChild = {0};
                         bT = GetAccessibleContextInfo( vmIdWindow, acChild,
                                                        &infoChild );
@@ -363,7 +363,7 @@ BOOL IsInaccessibleJavaWindow(const HWND hwnd)
                             AccessibleContext acChild1 ( 0 );
                             acChild1 = GetAccessibleChildFromContext( vmIdWindow,
                                                                       acChild, 0);
-                            if ( NULL != acChild1 ) {
+                            if ( 0 != acChild1 ) {
                                 AccessibleContextInfo infoChild1 = {0};
                                 bT = GetAccessibleContextInfo( vmIdWindow,
                                                                acChild1, &infoChild1 );
@@ -382,7 +382,7 @@ BOOL IsInaccessibleJavaWindow(const HWND hwnd)
                                     AccessibleContext acChild2 ( 0 );
                                     acChild2 = GetAccessibleChildFromContext(
                                                     vmIdWindow, acChild1, 0 );
-                                    if ( NULL != acChild2 ) {
+                                    if ( 0 != acChild2 ) {
                                         AccessibleContextInfo infoChild2 = {0};
                                         bT = GetAccessibleContextInfo(
                                                 vmIdWindow, acChild2, &infoChild2 );
@@ -415,7 +415,7 @@ BOOL IsInaccessibleJavaWindow(const HWND hwnd)
                     AccessibleContext acChild ( 0 );
                     acChild = GetAccessibleChildFromContext( vmIdWindow,
                                                              acWindow, 0 );
-                    if ( NULL != acChild ) {
+                    if ( 0 != acChild ) {
                         AccessibleContextInfo infoChild = {0};
                         bT = GetAccessibleContextInfo( vmIdWindow,
                                                        acChild, &infoChild );
@@ -434,7 +434,7 @@ BOOL IsInaccessibleJavaWindow(const HWND hwnd)
                             AccessibleContext acChild1 ( 0 );
                             acChild1 = GetAccessibleChildFromContext( vmIdWindow,
                                                                       acChild, 0);
-                            if ( NULL != acChild1 ) {
+                            if ( 0 != acChild1 ) {
                                 AccessibleContextInfo infoChild1 = {0};
                                 bT = GetAccessibleContextInfo( vmIdWindow,
                                                                acChild1,
@@ -557,7 +557,7 @@ void Jaccesswalker::addComponentNodes(long vmID, AccessibleContext context,
         tvis.hInsertAfter = TVI_LAST;  // make tree in order given
         tvis.item = tvi;
 
-        HTREEITEM treeNodeItem = TreeView_InsertItem(treeWnd, &tvis);
+        /* HTREEITEM treeNodeItem = */ TreeView_InsertItem(treeWnd, &tvis);
     }
 }
 

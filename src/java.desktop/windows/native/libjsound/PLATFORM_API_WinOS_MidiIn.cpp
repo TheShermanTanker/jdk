@@ -47,8 +47,6 @@ extern "C" {
 #define MIDIIN_CHECK_ERROR
 #endif
 
-#include <inttypes.h>
-
 /*
  * Callback from the MIDI device for all messages.
  */
@@ -57,8 +55,8 @@ void CALLBACK MIDI_IN_PutMessage( HMIDIIN hMidiIn, UINT wMsg, UINT_PTR dwInstanc
 
     MidiDeviceHandle* handle = (MidiDeviceHandle*) dwInstance;
 
-    TRACE3("> MIDI_IN_PutMessage, hMidiIn: 0x%" PRIxPTR ", wMsg: %x, dwInstance: 0x%" PRIxPTR "\n", (uintptr_t)hMidiIn, wMsg, (uintptr_t)dwInstance);
-    TRACE2("                      dwParam1: 0x%" PRIxPTR ", dwParam2: 0x%" PRIxPTR "\n", (uintptr_t)dwParam1, (uintptr_t)dwParam2);
+    TRACE3("> MIDI_IN_PutMessage, hMidiIn: %p, wMsg: %x, dwInstance: %llx\n", hMidiIn, wMsg, dwInstance);
+    TRACE2("                      dwParam1: %llx, dwParam2: %llx\n", dwParam1, dwParam2);
 
     switch(wMsg) {
 
@@ -72,8 +70,8 @@ void CALLBACK MIDI_IN_PutMessage( HMIDIIN hMidiIn, UINT wMsg, UINT_PTR dwInstanc
 
     case MIM_MOREDATA:
     case MIM_DATA:
-        TRACE3("  MIDI_IN_PutMessage: MIM_MOREDATA or MIM_DATA. status=%x data1=%x data2=%x\n",
-               (int)(dwParam1 & 0xFF), (int)((dwParam1 & 0xFF00)>>8), (int)((dwParam1 & 0xFF0000)>>16));
+        TRACE3("  MIDI_IN_PutMessage: MIM_MOREDATA or MIM_DATA. status=%llx  data1=%llx  data2=%llx\n",
+               dwParam1 & 0xFF, (dwParam1 & 0xFF00)>>8, (dwParam1 & 0xFF0000)>>16);
         if (handle!=NULL && handle->queue!=NULL && handle->platformData) {
             MIDI_QueueAddShort(handle->queue,
                                // queue stores packedMsg in big endian

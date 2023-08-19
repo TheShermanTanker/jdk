@@ -41,10 +41,10 @@ ThreadCrashProtection::ThreadCrashProtection() {
 //
 bool ThreadCrashProtection::call(CrashProtectionCallback& cb) {
   bool success = true;
-  __try {
+  WIN32_TRY {
     _crash_protection = this;
     cb.call();
-  } __except(EXCEPTION_EXECUTE_HANDLER) {
+  } WIN32_EXCEPT (EXCEPTION_EXECUTE_HANDLER) {
     // only for protection, nothing to do
     success = false;
   }

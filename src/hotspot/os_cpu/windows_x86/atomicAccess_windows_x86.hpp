@@ -28,17 +28,6 @@
 #include <intrin.h>
 #include "runtime/os.hpp"
 
-// Note that in MSVC, volatile memory accesses are explicitly
-// guaranteed to have acquire release semantics (w.r.t. compiler
-// reordering) and therefore does not even need a compiler barrier
-// for normal acquire release accesses. And all generalized
-// bound calls like release_store go through AtomicAccess::load
-// and AtomicAccess::store which do volatile memory accesses.
-template<> inline void ScopedFence<X_ACQUIRE>::postfix()       { }
-template<> inline void ScopedFence<RELEASE_X>::prefix()        { }
-template<> inline void ScopedFence<RELEASE_X_FENCE>::prefix()  { }
-template<> inline void ScopedFence<RELEASE_X_FENCE>::postfix() { OrderAccess::fence(); }
-
 template<size_t byte_size>
 struct AtomicAccess::PlatformAdd {
   template<typename D, typename I>

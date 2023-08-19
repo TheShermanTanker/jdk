@@ -84,7 +84,7 @@ std::unique_ptr<Dll> loadDllWithAddDllDirectory(const tstring& dllFullPath) {
     DLL_DIRECTORY_COOKIE res = func(dirPath.c_str());
     if (!res) {
         JP_THROW(SysError(tstrings::any()
-                << "AddDllDirectory(" << dirPath << ") failed", func));
+                << "AddDllDirectory(" << dirPath << ") failed", reinterpret_cast<uintptr_t>(func)));
     }
 
     LOG_TRACE(tstrings::any() << "AddDllDirectory(" << dirPath << "): OK");
@@ -159,14 +159,14 @@ public:
         UniqueHandle threadHandle = UniqueHandle(CreateThread(NULL, 0, worker,
                                     static_cast<LPVOID>(&instance), 0, NULL));
         if (threadHandle.get() == NULL) {
-            JP_THROW(SysError("CreateThread() failed", CreateThread));
+            JP_THROW(SysError("CreateThread() failed", reinterpret_cast<uintptr_t>(CreateThread)));
         }
 
         MSG msg;
         BOOL bRet;
         while((bRet = GetMessage(&msg, instance.hwnd, 0, 0 )) != 0) {
             if (bRet == -1) {
-                JP_THROW(SysError("GetMessage() failed", GetMessage));
+                JP_THROW(SysError("GetMessage() failed", reinterpret_cast<uintptr_t>(GetMessage)));
             } else {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
@@ -178,7 +178,7 @@ public:
         const DWORD res = ::WaitForSingleObject(threadHandle.get(), INFINITE);
         if (WAIT_FAILED ==  res) {
             JP_THROW(SysError("WaitForSingleObject() failed",
-                                                        WaitForSingleObject));
+                                                        reinterpret_cast<uintptr_t>(WaitForSingleObject)));
         }
 
         LOG_TRACE(tstrings::any()
@@ -195,7 +195,7 @@ private:
         hwnd = CreateWindowEx(0, _T("STATIC"), _T(""), 0, 0, 0, 0, 0,
                               HWND_MESSAGE, NULL, GetModuleHandle(NULL), NULL);
         if (!hwnd) {
-            JP_THROW(SysError("CreateWindowEx() failed", CreateWindowEx));
+            JP_THROW(SysError("CreateWindowEx() failed", reinterpret_cast<uintptr_t>(CreateWindowEx)));
         }
     }
 
@@ -211,7 +211,7 @@ private:
 
         JP_TRY;
         if (!PostMessage(hwnd, WM_QUIT, 0, 0)) {
-            JP_THROW(SysError("PostMessage(WM_QUIT) failed", PostMessage));
+            JP_THROW(SysError("PostMessage(WM_QUIT) failed", reinterpret_cast<uintptr_t>(PostMessage)));
         }
         return;
         JP_CATCH_ALL;
@@ -261,7 +261,7 @@ void enableConsoleCtrlHandler(bool enable) {
         JP_THROW(SysError(tstrings::any() << "SetConsoleCtrlHandler(NULL, "
                                             << (enable ? "FALSE" : "TRUE")
                                             << ") failed",
-                                                    SetConsoleCtrlHandler));
+                                                    reinterpret_cast<uintptr_t>(SetConsoleCtrlHandler)));
     }
 }
 
@@ -301,7 +301,7 @@ void launchApp() {
         UniqueHandle jobHandle(CreateJobObject(NULL, NULL));
         if (jobHandle.get() == NULL) {
             JP_THROW(SysError(tstrings::any() << "CreateJobObject() failed",
-                                                            CreateJobObject));
+                                                            reinterpret_cast<uintptr_t>(CreateJobObject)));
         }
         JOBOBJECT_EXTENDED_LIMIT_INFORMATION jobInfo = { };
         jobInfo.BasicLimitInformation.LimitFlags =
@@ -310,7 +310,7 @@ void launchApp() {
                 JobObjectExtendedLimitInformation, &jobInfo, sizeof(jobInfo))) {
             JP_THROW(SysError(tstrings::any() <<
                                             "SetInformationJobObject() failed",
-                                                    SetInformationJobObject));
+                                                    reinterpret_cast<uintptr_t>(SetInformationJobObject)));
         }
 
         Executor exec(launcherPath);
@@ -362,13 +362,13 @@ void launchApp() {
 
 #ifndef JP_LAUNCHERW
 
-int wmain() {
+int main() {
     return app::launch(std::nothrow, launchApp);
 }
 
 #else
 
-int wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int) {
+int main() {
     return app::wlaunch(std::nothrow, launchApp);
 }
 

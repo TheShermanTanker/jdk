@@ -31,7 +31,6 @@
 // globally used constants & types, class (forward)
 // declarations and a few frequently used utility functions.
 
-#include <alloca.h>
 #include <ctype.h>
 #include <dlfcn.h>
 #include <errno.h>
@@ -39,7 +38,6 @@
 #include <inttypes.h>
 #include <limits.h>
 #include <math.h>
-#include <pthread.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -58,6 +56,9 @@
 #include <wchar.h>
 
 #if defined(LINUX) || defined(_ALLBSD_SOURCE) || defined(_AIX)
+#include <alloca.h>
+#include <dlfcn.h>
+#include <pthread.h>
 #include <signal.h>
 #ifndef __OpenBSD__
 #include <ucontext.h>
@@ -72,7 +73,7 @@
 // checking for nanness
 #if defined(__APPLE__)
 inline int g_isnan(double f) { return isnan(f); }
-#elif defined(LINUX) || defined(_ALLBSD_SOURCE) || defined(_AIX)
+#elif defined(LINUX) || defined(_ALLBSD_SOURCE) || defined(_AIX) || defined(_WIN32)
 inline int g_isnan(float  f) { return isnan(f); }
 inline int g_isnan(double f) { return isnan(f); }
 #else
@@ -95,5 +96,11 @@ inline int g_isfinite(jdouble f)                 { return isfinite(f); }
 #define NOINLINE     __attribute__ ((noinline))
 #define ALWAYSINLINE inline __attribute__ ((always_inline))
 #define ATTRIBUTE_FLATTEN __attribute__ ((flatten))
+
+#ifdef _WIN32
+#define M_PI 3.14159265358979323846
+#define WIN32_TRY
+#define WIN32_EXCEPT(filter) if (false)
+#endif
 
 #endif // SHARE_UTILITIES_GLOBALDEFINITIONS_GCC_HPP

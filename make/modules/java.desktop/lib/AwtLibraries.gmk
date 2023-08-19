@@ -89,7 +89,7 @@ LIBAWT_EXTRA_HEADER_DIRS := \
 LIBAWT_CFLAGS := -D__MEDIALIB_OLD_NAMES -D__USE_J2D_NAMES -DMLIB_NO_LIBSUNMATH
 
 ifeq ($(call isTargetOs, windows), true)
-  LIBAWT_CFLAGS += -EHsc -DUNICODE -D_UNICODE -DMLIB_OS64BIT
+  LIBAWT_CFLAGS += -DUNICODE -D_UNICODE -DMLIB_OS64BIT
   LIBAWT_RCFLAGS ?= -I$(TOPDIR)/src/java.base/windows/native/launcher/icons
   LIBAWT_VERSIONINFO_RESOURCE := \
       $(TOPDIR)/src/$(MODULE)/windows/native/libawt/windows/awt.rc
@@ -109,11 +109,13 @@ endif
 # some gcc
 $(eval $(call SetupJdkLibrary, BUILD_LIBAWT, \
     NAME := awt, \
+    LANG := $(if $(filter $(OPENJDK_TARGET_OS), windows), C++, C), \
     EXTRA_SRC := $(LIBAWT_EXTRA_SRC), \
     EXCLUDE_FILES := $(LIBAWT_EXCLUDE_FILES), \
     OPTIMIZATION := HIGHEST, \
     CFLAGS := $(LIBAWT_CFLAGS) $(X_CFLAGS), \
     CXXFLAGS := $(LIBAWT_CFLAGS) $(X_CFLAGS), \
+    CXXFLAGS_microsoft_windows := -EHsc, \
     CFLAGS_gcc := -fgcse-after-reload, \
     EXTRA_HEADER_DIRS := $(LIBAWT_EXTRA_HEADER_DIRS), \
     DISABLED_WARNINGS_gcc := unused-but-set-variable unused-variable, \
@@ -123,6 +125,22 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBAWT, \
     DISABLED_WARNINGS_gcc_Region.c := maybe-uninitialized, \
     DISABLED_WARNINGS_gcc_SurfaceData.c := unused-value, \
     DISABLED_WARNINGS_gcc_TransformHelper.c := sign-compare, \
+    DISABLED_WARNINGS_gcc_windows_awt_Font.cpp := unused-local-typedefs, \
+    DISABLED_WARNINGS_gcc_windows_awt_PrintControl.cpp := unused-const-variable, \
+    DISABLED_WARNINGS_gcc_windows_awt_PrintJob.cpp := unused-const-variable, \
+    DISABLED_WARNINGS_gcc_windows_awt_ScrollPane.cpp := overloaded-virtual, \
+    DISABLED_WARNINGS_gcc_windows_awt_TextComponent.cpp := alloc-size, \
+    DISABLED_WARNINGS_gcc_windows_awt_Toolkit.cpp := maybe-uninitialized, \
+    DISABLED_WARNINGS_gcc_windows_awt_Win32GraphicsDevice.cpp := tautological-compare, \
+    DISABLED_WARNINGS_gcc_windows_D3DPipelineManager.cpp := parentheses shift-negative-value, \
+    DISABLED_WARNINGS_gcc_windows_Hashtable.cpp := unused-value, \
+    DISABLED_WARNINGS_gcc_windows_ShellFolder2.cpp := address format, \
+    DISABLED_WARNINGS_gcc_windows := unknown-pragmas cast-function-type type-limits \
+        strict-aliasing implicit-fallthrough int-to-pointer-cast switch \
+        missing-field-initializers char-subscripts sign-compare format-nonliteral \
+        format-security unused-function dangling-else, \
+    DISABLED_WARNINGS_C_gcc_windows := pointer-sign, \
+    DISABLED_WARNINGS_CXX_gcc_windows := conversion-null delete-non-virtual-dtor, \
     DISABLED_WARNINGS_clang := unused-but-set-variable unused-variable, \
     DISABLED_WARNINGS_clang_awt_ImagingLib.c := deprecated-non-prototype, \
     DISABLED_WARNINGS_clang_debug_trace.c := format-nonliteral, \
@@ -130,7 +148,7 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBAWT, \
     DISABLED_WARNINGS_clang_TransformHelper.c := sign-compare, \
     DISABLED_WARNINGS_microsoft := 4244 4996, \
     DISABLED_WARNINGS_microsoft_awt_Toolkit.cpp := 4267, \
-    LDFLAGS_windows := -delayload:comctl32.dll -delayload:comdlg32.dll \
+    LDFLAGS_microsoft_windows := -delayload:comctl32.dll -delayload:comdlg32.dll \
         -delayload:gdi32.dll -delayload:imm32.dll -delayload:ole32.dll \
         -delayload:shell32.dll -delayload:shlwapi.dll -delayload:user32.dll \
         -delayload:winmm.dll -delayload:winspool.drv, \
@@ -145,9 +163,11 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBAWT, \
         -framework JavaRuntimeSupport \
         -framework Metal \
         -framework OpenGL, \
-    LIBS_windows := advapi32.lib comctl32.lib comdlg32.lib delayimp.lib \
+    LIBS_microsoft_windows := advapi32.lib comctl32.lib comdlg32.lib delayimp.lib \
         gdi32.lib imm32.lib kernel32.lib ole32.lib shell32.lib shlwapi.lib \
         user32.lib uuid.lib winmm.lib winspool.lib, \
+    LIBS_gcc_windows := -lcomctl32 -lcomdlg32 -lgdi32 -limm32 -lole32 -loleaut32 \
+        -lshlwapi -luuid -lwinmm -lwinspool, \
     VERSIONINFO_RESOURCE := $(LIBAWT_VERSIONINFO_RESOURCE), \
     EXTRA_RCFLAGS := $(LIBAWT_RCFLAGS), \
     STATIC_LIB_EXCLUDE_OBJS := $(LIBAWT_STATIC_EXCLUDE_OBJS), \
@@ -427,11 +447,15 @@ endif
 
 $(eval $(call SetupJdkLibrary, BUILD_LIBJAWT, \
     NAME := jawt, \
+    LANG := $(if $(filter $(OPENJDK_TARGET_OS), windows), C++, C), \
     EXCLUDE_SRC_PATTERNS := $(LIBJAWT_EXCLUDE_SRC_PATTERNS), \
     OPTIMIZATION := LOW, \
     CFLAGS := $(LIBJAWT_CFLAGS), \
-    CFLAGS_windows := -EHsc -DUNICODE -D_UNICODE, \
-    CXXFLAGS_windows := -EHsc -DUNICODE -D_UNICODE, \
+    CFLAGS_windows := -DUNICODE -D_UNICODE, \
+    CXXFLAGS_microsoft_windows := -EHsc -DUNICODE -D_UNICODE, \
+    CXXFLAGS_gcc_windows := -DUNICODE -D_UNICODE, \
+    DISABLED_WARNINGS_gcc_windows := unknown-pragmas deprecated cast-function-type \
+        conversion-null unused-variable, \
     DISABLED_WARNINGS_clang_jawt.m := sign-compare, \
     EXTRA_HEADER_DIRS := $(LIBJAWT_EXTRA_HEADER_DIRS), \
     LDFLAGS_windows := $(LDFLAGS_CXX_JDK), \
@@ -440,20 +464,22 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJAWT, \
     JDK_LIBS_windows := libawt, \
     JDK_LIBS_macosx := libawt_lwawt, \
     LIBS_macosx := -framework Cocoa, \
-    LIBS_windows := advapi32.lib $(LIBJAWT_LIBS_windows), \
+    LIBS_microsoft_windows := advapi32.lib $(LIBJAWT_LIBS_windows), \
 ))
 
 TARGETS += $(BUILD_LIBJAWT)
 
 ifeq ($(call isTargetOs, windows), true)
-  $(eval $(call SetupCopyFiles, COPY_JAWT_LIB, \
-      FILES := $(BUILD_LIBJAWT_IMPORT_LIBRARY), \
-      DEST := $(SUPPORT_OUTPUTDIR)/modules_libs/$(MODULE), \
-  ))
+  ifeq ($(TOOLCHAIN_TYPE), microsoft)
+    $(eval $(call SetupCopyFiles, COPY_JAWT_LIB, \
+        FILES := $(BUILD_LIBJAWT_IMPORT_LIBRARY), \
+        DEST := $(SUPPORT_OUTPUTDIR)/modules_libs/$(MODULE), \
+    ))
 
-  $(COPY_JAWT_LIB): $(BUILD_LIBJAWT)
+    $(COPY_JAWT_LIB): $(BUILD_LIBJAWT)
 
-  TARGETS += $(COPY_JAWT_LIB)
+    TARGETS += $(COPY_JAWT_LIB)
+  endif
 endif
 
 ################################################################################

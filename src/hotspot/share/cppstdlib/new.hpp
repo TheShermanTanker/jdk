@@ -25,8 +25,6 @@
 #ifndef SHARE_CPPSTDLIB_NEW_HPP
 #define SHARE_CPPSTDLIB_NEW_HPP
 
-#include "utilities/compilerWarnings.hpp"
-
 // HotSpot usage:
 // Only the following may be used:
 // * std::nothrow_t, std::nothrow
@@ -40,70 +38,14 @@
 //   expression that fails by throwing an exception. But they might still
 //   end up being referenced in such a situation.
 
-BEGIN_ALLOW_FORBIDDEN_FUNCTIONS
 #include "utilities/vmassert_uninstall.hpp"
 
 #include <new>
 
 #include "utilities/vmassert_reinstall.hpp" // don't reorder
-END_ALLOW_FORBIDDEN_FUNCTIONS
 
 // Deprecation declarations to forbid use of the default global allocator.
 // See C++17 21.6.1 Header <new> synopsis.
-
-namespace std {
-
-#if 0
-// We could deprecate exception types, for completeness, but don't bother.  We
-// already have exceptions disabled, and run into compiler bugs when we try.
-//
-// gcc -Wattributes => type attributes ignored after type is already defined
-// See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=122167
-//
-// clang -Wignored-attributes => attribute declaration must precede definition
-// The clang warning is https://github.com/llvm/llvm-project/issues/135481,
-// which should be fixed in clang 21.
-class [[deprecated]] bad_alloc;
-class [[deprecated]] bad_array_new_length;
-#endif // #if 0
-
-// Forbid new_handler manipulation by HotSpot code, leaving it untouched for
-// use by application code.
-[[deprecated]] new_handler get_new_handler() noexcept;
-[[deprecated]] new_handler set_new_handler(new_handler) noexcept;
-
-// Prefer HotSpot mechanisms for padding.
-//
-// The syntax for redeclaring these for deprecation is tricky, and not
-// supported by some versions of some compilers.  Dispatch on compiler and
-// version to decide whether to redeclare deprecated.
-
-#if defined(__clang__)
-// Some versions of clang with some stdlibs reject the declaration. Others may
-// accept the declaration but go wrong with uses.  Different warnings and
-// link-time failures are both possible.
-// Known to have problems at least through clang19.
-
-#elif defined(__GNUC__)
-#if (__GNUC__ > 13) || (__GNUC__ == 13 && __GNUC_MINOR__ >= 2)
-// g++11.5 accepts the declaration and reports deprecation for uses, but also
-// has link-time failure for uses. Haven't tested intermediate versions.
-#define CAN_DEPRECATE_HARDWARE_INTERFERENCE_SIZES 1
-#endif // restrict gcc version
-
-#elif defined(_MSVC)
-// VS2022-17.13.2 => error C2370: '...': redefinition; different storage class
-
-#endif // Compiler dispatch
-
-// Redeclare deprecated if such is supported.
-#ifdef CAN_DEPRECATE_HARDWARE_INTERFERENCE_SIZES
-[[deprecated]] extern const size_t hardware_destructive_interference_size;
-[[deprecated]] extern const size_t hardware_constructive_interference_size;
-#undef CAN_DEPRECATE_HARDWARE_INTERFERENCE_SIZES
-#endif // CAN_DEPRECATE_HARDWARE_INTERFERENCE_SIZES
-
-} // namespace std
 
 // Forbid using the global allocator by HotSpot code.
 // This doesn't provide complete coverage. Some global allocation and

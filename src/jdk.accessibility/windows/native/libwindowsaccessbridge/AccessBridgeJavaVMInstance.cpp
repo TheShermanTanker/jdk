@@ -131,7 +131,7 @@ AccessBridgeJavaVMInstance::initiateIPC() {
                                                   memoryMappedFileName);
     if (memoryMappedFileMapHandle == NULL) {
         errorCode = GetLastError();
-        DEBUG_CODE(snprintf(debugBuf, sizeof(debugBuf), "  Failed to CreateFileMapping for %s, error: %X", memoryMappedFileName, errorCode));
+        DEBUG_CODE(snprintf(debugBuf, sizeof(debugBuf), "  Failed to CreateFileMapping for %s, error: %lX", memoryMappedFileName, errorCode));
         DEBUG_CODE(AppendToCallInfo(debugBuf));
         return errorCode;
     } else {
@@ -144,7 +144,7 @@ AccessBridgeJavaVMInstance::initiateIPC() {
                                               0, 0, 0);
     if (memoryMappedView == NULL) {
         errorCode = GetLastError();
-        DEBUG_CODE(snprintf(debugBuf, sizeof(debugBuf), "  Failed to MapViewOfFile for %s, error: %X", memoryMappedFileName, errorCode));
+        DEBUG_CODE(snprintf(debugBuf, sizeof(debugBuf), "  Failed to MapViewOfFile for %s, error: %lX", memoryMappedFileName, errorCode));
         DEBUG_CODE(AppendToCallInfo(debugBuf));
         return errorCode;
     } else {
@@ -245,7 +245,7 @@ AccessBridgeJavaVMInstance::sendMemoryPackage(char *buffer, long bufsize) {
     BOOL retval = FALSE;
 
     DEBUG_CODE(char outputBuf[256]);
-    DEBUG_CODE(snprintf(outputBuf, sizeof(outputBuf), "AccessBridgeJavaVMInstance::sendMemoryPackage(, %d)", bufsize));
+    DEBUG_CODE(snprintf(outputBuf, sizeof(outputBuf), "AccessBridgeJavaVMInstance::sendMemoryPackage(, %ld)", bufsize));
     DEBUG_CODE(AppendToCallInfo(outputBuf));
 
     DEBUG_CODE(PackageType *type = (PackageType *) buffer);
@@ -268,7 +268,7 @@ AccessBridgeJavaVMInstance::sendMemoryPackage(char *buffer, long bufsize) {
             DEBUG_CODE(PackageType *type = (PackageType *) memoryMappedView);
             DEBUG_CODE(if (*type == cGetAccessibleTextItemsPackage) {)
                 DEBUG_CODE(AppendToCallInfo("  'memoryMappedView' now contains:"));
-                DEBUG_CODE(GetAccessibleTextItemsPackage *pkg = (GetAccessibleTextItemsPackage *) (buffer + sizeof(PackageType)));
+             // DEBUG_CODE(GetAccessibleTextItemsPackage *pkg = (GetAccessibleTextItemsPackage *) (buffer + sizeof(PackageType)));
                 DEBUG_CODE(snprintf(outputBuf, sizeof(outputBuf), "    PackageType = %X", *type));
                 DEBUG_CODE(AppendToCallInfo(outputBuf));
             DEBUG_CODE(})

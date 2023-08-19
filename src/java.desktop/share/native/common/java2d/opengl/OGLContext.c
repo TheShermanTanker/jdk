@@ -54,7 +54,7 @@ extern OGLContext *OGLSD_MakeOGLContextCurrent(JNIEnv *env,
  * factors) used in glBlendFunc(), indexed by the rule constants from the
  * AlphaComposite class.
  */
-OGLBlendRule StdBlendRules[] = {
+static OGLBlendRule StdBlendRules[] = {
     { GL_ZERO,                GL_ZERO                }, /* 0 - Nothing      */
     { GL_ZERO,                GL_ZERO                }, /* 1 - RULE_Clear   */
     { GL_ONE,                 GL_ZERO                }, /* 2 - RULE_Src     */

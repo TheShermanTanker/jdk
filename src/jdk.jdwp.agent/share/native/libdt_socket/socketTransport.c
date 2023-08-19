@@ -28,10 +28,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "jni.h"
-#include "jdwpTransport.h"
-#include "sysSocket.h"
-
 #ifdef _WIN32
  #include <winsock2.h>
  #include <ws2tcpip.h>
@@ -41,6 +37,16 @@
  #include <sys/socket.h>
  #include <net/if.h>
 #endif
+
+// We don't want this definition from the Windows headers to leak here
+#ifdef interface
+#undef interface
+#endif
+
+// Has to be included after system includes for the addrinfo struct
+#include "jni.h"
+#include "jdwpTransport.h"
+#include "sysSocket.h"
 
 /*
  * The Socket Transport Library.

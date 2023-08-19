@@ -36,11 +36,16 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkExecutable, BUILD_JABSWITCH, \
       NAME := jabswitch, \
-      CXXFLAGS_FILTER_OUT := -Zc:wchar_t-, \
-      CXXFLAGS := -Zc:wchar_t -analyze- -Od -Gd -D_WINDOWS -D_UNICODE \
+      LANG := C++, \
+      CXXFLAGS_FILTER_OUT_microsoft := -Zc:wchar_t-, \
+      CXXFLAGS_microsoft := -Zc:wchar_t -analyze- -Od -Gd -D_WINDOWS -D_UNICODE \
           -DUNICODE -RTC1 -EHsc, \
+      CXXFLAGS_gcc := -O0 -D_WINDOWS -D_UNICODE -DUNICODE, \
       DISABLED_WARNINGS_microsoft_jabswitch.cpp := 4267 4996, \
-      LIBS_windows := advapi32.lib user32.lib version.lib, \
+      DISABLED_WARNINGS_gcc := format-security type-limits \
+          conversion-null format-nonliteral, \
+      LIBS_microsoft := advapi32.lib user32.lib version.lib, \
+      LIBS_gcc := -lversion, \
       VERSIONINFO_RESOURCE := \
           $(ACCESSIBILITY_SRCDIR)/common/AccessBridgeStatusWindow.rc, \
       MANIFEST := $(ACCESSIBILITY_SRCDIR)/jabswitch/jabswitch.manifest, \
@@ -55,15 +60,21 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkExecutable, BUILD_JACCESSINSPECTOR, \
       NAME := jaccessinspector, \
+      LANG := C++, \
       EXTRA_SRC := \
           bridge \
           common \
           toolscommon, \
       EXTRA_HEADER_DIRS := include/bridge, \
-      CFLAGS := -DACCESSBRIDGE_ARCH_64 -EHsc, \
-      CXXFLAGS := -DACCESSBRIDGE_ARCH_64 -EHsc, \
-      LDFLAGS_windows := -stack:655360, \
-      LIBS_windows := advapi32.lib user32.lib, \
+      DISABLED_WARNINGS_gcc := cast-function-type format-security format-nonliteral \
+          stringop-overflow, \
+      DISABLED_WARNINGS_CXX_gcc := conversion-null, \
+      CFLAGS := -DACCESSBRIDGE_ARCH_64, \
+      CXXFLAGS_microsoft := -DACCESSBRIDGE_ARCH_64 -EHsc, \
+      CXXFLAGS_gcc := -DACCESSBRIDGE_ARCH_64, \
+      LDFLAGS_microsoft := -stack:655360 -subsystem:windows -entry:mainCRTStartup, \
+      LDFLAGS_gcc := -Wl$(COMMA)--stack=655360 -Wl$(COMMA)--subsystem$(COMMA)windows, \
+      LIBS_microsoft := advapi32.lib user32.lib, \
       VERSIONINFO_RESOURCE := \
           $(ACCESSIBILITY_SRCDIR)/jaccessinspector/jaccessinspectorWindow.rc, \
   ))
@@ -76,15 +87,22 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkExecutable, BUILD_JACCESSWALKER, \
       NAME := jaccesswalker, \
+      LANG := C++, \
       EXTRA_SRC := \
           bridge \
           common \
           toolscommon, \
       EXTRA_HEADER_DIRS := include/bridge, \
-      CFLAGS := -DACCESSBRIDGE_ARCH_64 -EHsc, \
-      CXXFLAGS := -DACCESSBRIDGE_ARCH_64 -EHsc, \
-      LDFLAGS_windows := -stack:655360, \
-      LIBS_windows := advapi32.lib comctl32.lib gdi32.lib user32.lib, \
+      DISABLED_WARNINGS_gcc := format-security format-nonliteral cast-function-type \
+          missing-field-initializers, \
+      DISABLED_WARNINGS_CXX_gcc := conversion-null, \
+      CFLAGS := -DACCESSBRIDGE_ARCH_64, \
+      CXXFLAGS_microsoft := -DACCESSBRIDGE_ARCH_64 -EHsc, \
+      CXXFLAGS_gcc := -DACCESSBRIDGE_ARCH_64, \
+      LDFLAGS_microsoft := -stack:655360 -subsystem:windows -entry:mainCRTStartup, \
+      LDFLAGS_gcc := -Wl$(COMMA)--stack=655360 -Wl$(COMMA)--subsystem$(COMMA)windows, \
+      LIBS_microsoft := advapi32.lib comctl32.lib gdi32.lib user32.lib, \
+      LIBS_gcc := -lcomctl32 -lgdi32, \
       VERSIONINFO_RESOURCE := \
           $(ACCESSIBILITY_SRCDIR)/jaccesswalker/jaccesswalkerWindow.rc, \
   ))

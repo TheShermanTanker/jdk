@@ -38,19 +38,27 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBJAVAACCESSBRIDGE, \
       NAME := javaaccessbridge, \
+      LANG := C++, \
       EXTRA_SRC := common, \
       OPTIMIZATION := LOW, \
       ONLY_EXPORTED := true, \
       DISABLED_WARNINGS_microsoft := 4311 4302 4312, \
+      DISABLED_WARNINGS_gcc := cast-function-type, \
+      DISABLED_WARNINGS_gcc_AccessBridgeATInstance.cpp := stringop-truncation, \
+      DISABLED_WARNINGS_gcc_AccessBridgeJavaEntryPoints.cpp := int-to-pointer-cast sign-compare \
+          conversion-null unused-function, \
+      DISABLED_WARNINGS_gcc_JavaAccessBridge.cpp := int-to-pointer-cast ignored-qualifiers, \
       CXXFLAGS_FILTER_OUT := -MD, \
-      CXXFLAGS := -MT -DACCESSBRIDGE_ARCH_64, \
+      CXXFLAGS_microsoft := -MT -DACCESSBRIDGE_ARCH_64, \
+      CXXFLAGS_gcc := -DACCESSBRIDGE_ARCH_64, \
       EXTRA_HEADER_DIRS := \
           include/bridge \
           java.desktop:include, \
       JDK_LIBS := java.desktop:libjawt, \
-      LIBS_windows := advapi32.lib comdlg32.lib gdi32.lib kernel32.lib \
+      LIBS_microsoft := advapi32.lib comdlg32.lib gdi32.lib kernel32.lib \
           odbc32.lib odbccp32.lib ole32.lib oleaut32.lib shell32.lib \
           user32.lib uuid.lib winspool.lib, \
+      LIBS_gcc := -lcomdlg32 -lgdi32 -lodbc32 -lodbccp32 -lole32 -loleaut32 -luuid -lwinspool, \
       VERSIONINFO_RESOURCE := \
           $(ACCESSIBILITY_SRCDIR)/common/AccessBridgeStatusWindow.rc, \
   ))
@@ -63,19 +71,24 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBWINDOWSACCESSBRIDGE, \
       NAME := windowsaccessbridge-64, \
+      LANG := C++, \
       SRC := libwindowsaccessbridge, \
       EXTRA_SRC := common, \
       OPTIMIZATION := LOW, \
       DISABLED_WARNINGS_microsoft_WinAccessBridge.cpp := 4302 4311, \
+      DISABLED_WARNINGS_gcc_WinAccessBridge.cpp := sign-compare switch-unreachable, \
+      DISABLED_WARNINGS_gcc := cast-function-type, \
       CXXFLAGS := -DACCESSBRIDGE_ARCH_64, \
       EXTRA_HEADER_DIRS := \
           include/bridge, \
       ONLY_EXPORTED := true, \
-      LDFLAGS := \
+      LDFLAGS_microsoft := \
           -def:$(ACCESSIBILITY_SRCDIR)/libwindowsaccessbridge/WinAccessBridge.DEF, \
-      LIBS_windows := advapi32.lib comdlg32.lib gdi32.lib kernel32.lib \
+      LDFLAGS_gcc := $(ACCESSIBILITY_SRCDIR)/libwindowsaccessbridge/WinAccessBridge.DEF, \
+      LIBS_microsoft := advapi32.lib comdlg32.lib gdi32.lib kernel32.lib \
           odbc32.lib odbccp32.lib ole32.lib oleaut32.lib shell32.lib \
           user32.lib uuid.lib winspool.lib, \
+      LIBS_gcc := -lcomdlg32 -lgdi32 -lodbc32 -lodbccp32 -lole32 -loleaut32 -luuid -lwinspool, \
       VERSIONINFO_RESOURCE := \
           $(ACCESSIBILITY_SRCDIR)/common/AccessBridgeStatusWindow.rc, \
   ))

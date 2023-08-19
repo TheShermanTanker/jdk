@@ -65,9 +65,19 @@ ifeq ($(call isTargetOs, windows), true)
       exelauncher.c libFDLeaker.c exeFDLeakTester.c \
       libChangeSignalDisposition.c exePrintSignalDisposition.c
 
-  BUILD_JDK_JTREG_EXECUTABLES_LIBS_exeNullCallerTest := $(LIBCXX)
-  BUILD_JDK_JTREG_EXECUTABLES_LIBS_exerevokeall := advapi32.lib
-  BUILD_JDK_JTREG_EXECUTABLES_CFLAGS_exeNullCallerTest := /EHsc
+  ifeq ($(TOOLCHAIN_TYPE), gcc)
+    BUILD_JDK_JTREG_EXECUTABLES_LIBS_exeNullCallerTest := $(LIBCXX)
+    ifeq ($(ENABLE_LINKTIME_GC), true)
+      BUILD_JDK_JTREG_LIBRARIES_CFLAGS_libTestUpcall := -Wa$(COMMA)-mbig-obj
+      BUILD_JDK_JTREG_LIBRARIES_CFLAGS_libTestUpcallStack := -Wa$(COMMA)-mbig-obj
+      BUILD_JDK_JTREG_LIBRARIES_CFLAGS_libTestDowncall := -Wa$(COMMA)-mbig-obj
+      BUILD_JDK_JTREG_LIBRARIES_CFLAGS_libTestDowncallStack := -Wa$(COMMA)-mbig-obj
+    endif
+  else ifeq ($(TOOLCHAIN_TYPE), microsoft)
+    BUILD_JDK_JTREG_EXECUTABLES_LIBS_exeNullCallerTest := $(LIBCXX)
+    BUILD_JDK_JTREG_EXECUTABLES_LIBS_exerevokeall := advapi32.lib
+    BUILD_JDK_JTREG_EXECUTABLES_CFLAGS_exeNullCallerTest := -EHsc
+  endif
 else
   BUILD_JDK_JTREG_LIBRARIES_LDFLAGS_libNativeThread := -pthread
 

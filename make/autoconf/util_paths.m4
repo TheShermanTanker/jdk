@@ -197,6 +197,7 @@ AC_DEFUN([UTIL_CHECK_WINENV_EXEC_TYPE],
 # it need to be in the PATH.
 # $1: The name of the variable to fix
 # $2: Where to look for the command (replaces $PATH)
+# $3: set to NOFIXPATH to skip prefixing FIXPATH, even if needed on platform
 AC_DEFUN([UTIL_FIXUP_EXECUTABLE],
 [
   input="[$]$1"
@@ -294,6 +295,10 @@ AC_DEFUN([UTIL_FIXUP_EXECUTABLE],
           new_path="${new_path%.exe}"
         fi
       fi
+    fi
+
+    if test "x$3" = xNOFIXPATH; then
+      fixpath_prefix=""
     fi
 
     # Now join together the path and the arguments once again
@@ -397,6 +402,7 @@ AC_DEFUN([UTIL_SETUP_TOOL],
 # $1: variable to set
 # $2: executable name (or list of names) to look for
 # $3: [path]
+# $4: set to NOFIXPATH to skip prefixing FIXPATH, even if needed on platform
 AC_DEFUN([UTIL_LOOKUP_PROGS],
 [
   UTIL_SETUP_TOOL($1, [
@@ -438,8 +444,10 @@ AC_DEFUN([UTIL_LOOKUP_PROGS],
 
             # If we have FIXPATH enabled, strip all instances of it and prepend
             # a single one, to avoid double fixpath prefixing.
-            [ if [[ $FIXPATH != "" && $result =~ ^"$FIXPATH " ]]; then ]
-              result="\$FIXPATH ${result#"$FIXPATH "}"
+            if test "x$4" != xNOFIXPATH; then
+              [ if [[ $FIXPATH != "" && $result =~ ^"$FIXPATH " ]]; then ]
+                result="\$FIXPATH ${result#"$FIXPATH "}"
+              fi
             fi
             AC_MSG_RESULT([$result])
             break 2;
@@ -463,13 +471,14 @@ AC_DEFUN([UTIL_LOOKUP_PROGS],
 # toolchain path, and then in the normal path.
 # $1: variable to set
 # $2: executable name (or list of names) to look for
+# $3: set to NOFIXPATH to skip prefixing FIXPATH, even if needed on platform
 AC_DEFUN([UTIL_LOOKUP_TOOLCHAIN_PROGS],
 [
   if test "x$ac_tool_prefix" = x; then
-    UTIL_LOOKUP_PROGS($1, $2, [$TOOLCHAIN_PATH:$PATH])
+    UTIL_LOOKUP_PROGS($1, $2, [$TOOLCHAIN_PATH:$PATH], $3)
   else
     prefixed_names=$(for name in $2; do echo ${ac_tool_prefix}${name} $name; done)
-    UTIL_LOOKUP_PROGS($1, $prefixed_names, [$TOOLCHAIN_PATH:$PATH])
+    UTIL_LOOKUP_PROGS($1, $prefixed_names, [$TOOLCHAIN_PATH:$PATH], $3)
   fi
 ])
 

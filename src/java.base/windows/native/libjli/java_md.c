@@ -701,9 +701,11 @@ CallJavaMainInNewThread(jlong stack_size, void* args) {
 #endif /* ENABLE_AWT_PRELOAD */
 
     if (thread_handle) {
+        DWORD dword;
         WaitForSingleObject(thread_handle, INFINITE);
-        GetExitCodeThread(thread_handle, &rslt);
+        GetExitCodeThread(thread_handle, &dword);
         CloseHandle(thread_handle);
+        rslt = dword;
     } else {
         rslt = JavaMain(args);
     }

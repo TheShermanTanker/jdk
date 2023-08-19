@@ -972,9 +972,9 @@ void os::naked_yield() {
 
 // Sleep forever; naked call to OS-specific sleep; use with CAUTION
 void os::infinite_sleep() {
-  while (true) {    // sleep forever ...
+  loop:             // sleep forever ...
     ::sleep(100);   // ... 100 seconds at a time
-  }
+  goto loop;
 }
 
 void os::naked_short_nanosleep(jlong ns) {

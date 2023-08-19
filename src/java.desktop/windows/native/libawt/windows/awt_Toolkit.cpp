@@ -610,7 +610,7 @@ BOOL AwtToolkit::Initialize() {
     ComCtl32Util::GetInstance().InitLibraries();
 
     /* Register this toolkit's helper window */
-    VERIFY(tk.RegisterClass() != NULL);
+    VERIFY(tk.RegisterClass() != 0);
 
     // Set up operator new/malloc out of memory handler.
     NewHandler::init();
@@ -753,7 +753,7 @@ BOOL AwtToolkit::Dispose() {
 
     HWND toolkitHWndToDestroy = tk.m_toolkitHWnd;
     tk.m_toolkitHWnd = 0;
-    VERIFY(::DestroyWindow(toolkitHWndToDestroy) != NULL);
+    VERIFY(::DestroyWindow(toolkitHWndToDestroy) != FALSE);
 
     tk.UnregisterClass();
 
@@ -810,7 +810,7 @@ ATOM AwtToolkit::RegisterClass() {
     wc.lpszClassName = szAwtToolkitClassName;
 
     ATOM ret = ::RegisterClass(&wc);
-    DASSERT(ret != NULL);
+    DASSERT(ret != 0);
     return ret;
 }
 
@@ -913,11 +913,11 @@ LRESULT CALLBACK AwtToolkit::WndProc(HWND hWnd, UINT message,
       }
       case WM_AWT_DESTROY_WINDOW: {
           /* Destroy widgets from this same thread that created them */
-          VERIFY(::DestroyWindow((HWND)wParam) != NULL);
+          VERIFY(::DestroyWindow((HWND)wParam) != FALSE);
           return 0;
       }
       case WM_AWT_DISPOSE: {
-          if(wParam != NULL) {
+          if(wParam != reinterpret_cast<WPARAM>(nullptr)) {
               jobject self = (jobject)wParam;
               AwtObject *o = (AwtObject *) JNI_GET_PDATA(self);
               env->DeleteGlobalRef(self);
