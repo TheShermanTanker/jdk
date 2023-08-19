@@ -342,7 +342,7 @@ void AwtComponent::Dispose()
 
 /* store component pointer in window extra bytes */
 void AwtComponent::SetComponentInHWND() {
-    DASSERT(::GetWindowLongPtr(GetHWnd(), GWLP_USERDATA) == NULL);
+    DASSERT(::GetWindowLongPtr(GetHWnd(), GWLP_USERDATA) == reinterpret_cast<LONG_PTR>(nullptr));
     ::SetWindowLongPtr(GetHWnd(), GWLP_USERDATA, (LONG_PTR)this);
 }
 
@@ -3580,7 +3580,7 @@ UINT AwtComponent::WindowsKeyToJavaChar(UINT wkey, UINT modifiers, TransOps ops,
         } // ctrlIsDown
     } // modifiers
 
-    WORD wChar[2];
+    WCHAR wChar[2];
     int converted = 1;
     UINT ch = ::MapVirtualKeyEx(wkey, 2, GetKeyboardLayout());
     if (ch & 0x80000000) {
@@ -6239,8 +6239,7 @@ ret:
     return result;
 }
 
-void AwtComponent::_SetParent(void * param)
-{
+void AwtComponent::_SetParent(void * param) {
     if (AwtToolkit::IsMainThread()) {
         JNIEnv *env = (JNIEnv *)JNU_GetEnv(jvm, JNI_VERSION_1_2);
         SetParentStruct *data = static_cast<SetParentStruct*>(param);
@@ -6446,8 +6445,7 @@ AwtComponent_GetHWnd(JNIEnv *env, jlong pData)
     return p->GetHWnd();
 }
 
-static void _GetInsets(void* param)
-{
+static void _GetInsets(void* param) {
     JNIEnv *env = (JNIEnv *)JNU_GetEnv(jvm, JNI_VERSION_1_2);
 
     GetInsetsStruct *gis = static_cast<GetInsetsStruct *>(param);
@@ -7313,7 +7311,7 @@ void AwtComponent::VerifyState()
         }
         printf("\twas:       [%d,%d,%dx%d]\n", x, y, width, height);
         if (!fSizeValid) {
-            printf("\tshould be: [%d,%d,%dx%d]\n", rect.left, rect.top,
+            printf("\tshould be: [%ld,%ld,%ldx%ld]\n", rect.left, rect.top,
                    rect.right-rect.left, rect.bottom-rect.top);
         }
         if (!fVisibleValid) {

@@ -33,7 +33,7 @@
 
 class SysError : public std::runtime_error {
 public:
-    SysError(const tstrings::any& msg, const void* caller,
+    SysError(const tstrings::any& msg, const uintptr_t caller,
             DWORD errorCode=GetLastError(), const char* label="System error");
 
     // returns string "system error <errCode> (error_description)"

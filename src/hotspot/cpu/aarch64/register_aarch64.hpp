@@ -75,7 +75,7 @@ class Register {
   constexpr const RegisterImpl* operator->() const { return RegisterImpl::first() + _encoding; }
 };
 
-extern Register::RegisterImpl all_RegisterImpls[Register::number_of_declared_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern Register::RegisterImpl all_RegisterImpls[Register::number_of_declared_registers + 1];
 
 inline constexpr const Register::RegisterImpl* Register::RegisterImpl::first() {
   return all_RegisterImpls + 1;
@@ -196,7 +196,7 @@ class FloatRegister {
   constexpr const FloatRegisterImpl* operator->() const { return FloatRegisterImpl::first() + _encoding; }
 };
 
-extern FloatRegister::FloatRegisterImpl all_FloatRegisterImpls[FloatRegister::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern FloatRegister::FloatRegisterImpl all_FloatRegisterImpls[FloatRegister::number_of_registers + 1];
 
 inline constexpr const FloatRegister::FloatRegisterImpl* FloatRegister::FloatRegisterImpl::first() {
   return all_FloatRegisterImpls + 1;
@@ -328,7 +328,7 @@ public:
   const PRegisterImpl* operator->() const { return PRegisterImpl::first() + _encoding; }
 };
 
-extern PRegister::PRegisterImpl all_PRegisterImpls[PRegister::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern PRegister::PRegisterImpl all_PRegisterImpls[PRegister::number_of_registers + 1];
 
 inline constexpr const PRegister::PRegisterImpl* PRegister::PRegisterImpl::first() {
   return all_PRegisterImpls + 1;

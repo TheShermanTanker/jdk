@@ -34,6 +34,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJ2PKCS11, \
     OPTIMIZATION := LOW, \
     EXTRA_HEADER_DIRS := java.base:libjava, \
     DISABLED_WARNINGS_clang_p11_util.c := format-nonliteral, \
+    DISABLED_WARNINGS_gcc_windows := format-nonliteral cast-function-type \
+        maybe-uninitialized, \
     LIBS_unix := $(LIBDL), \
 ))
 

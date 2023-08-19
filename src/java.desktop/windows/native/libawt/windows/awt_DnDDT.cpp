@@ -38,6 +38,9 @@
 #include "awt_DnDDT.h"
 #include "awt_DnDDS.h"
 
+#ifdef __GNUC__
+_COM_SMARTPTR_TYPEDEF(IStream,__uuidof(IStream));
+#endif
 
 // forwards
 
@@ -826,7 +829,7 @@ HRESULT AwtDropTarget::SaveIndexToFile(LPCTSTR pFileName, UINT lIndex)
         } else if(TYMED_ISTREAM == stgmedium.tymed) {
             spSrc = stgmedium.pstm;
         }
-        if (NULL == spSrc) {
+        if (nullptr == spSrc) {
             OLE_HRT(E_INVALIDARG);
         }
         IStreamPtr spDst;
@@ -957,7 +960,7 @@ jobject AwtDropTarget::ConvertMemoryMappedData(JNIEnv* env, jlong fmt, STGMEDIUM
             ::GlobalUnlock(pFileListWithDoubleZeroTerminator);
             retObj = bytes;
         }
-        //std::bad_alloc could happen in JStringBuffer
+        //std::bad_alloc could happen in JavaStringBuffer
         //no leaks due to wrapper
     OLE_CATCH_BAD_ALLOC
     ::GlobalUnlock(pmedium->hGlobal);

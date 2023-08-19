@@ -38,6 +38,18 @@ LAUNCHER_CFLAGS += -I$(TOPDIR)/src/java.base/share/native/launcher \
 MACOSX_PLIST_DIR := $(TOPDIR)/src/java.base/macosx/native/launcher
 JAVA_MANIFEST := $(TOPDIR)/src/java.base/windows/native/launcher/java.manifest
 
+ifeq ($(ENABLE_LINKTIME_OPT), true)
+  ifeq ($(TOOLCHAIN_TYPE), gcc)
+    CFLAGS_JDKEXE += -flto=$(JOBS) -fuse-linker-plugin -fno-fat-lto-objects
+    CXXFLAGS_JDKEXE += -flto=$(JOBS) -fuse-linker-plugin -fno-fat-lto-objects
+    LDFLAGS_JDKEXE += -flto=$(JOBS) -fuse-linker-plugin
+  else ifeq ($(TOOLCHAIN_TYPE), microsoft)
+    CFLAGS_JDKEXE += -GL -Gy
+    CXXFLAGS_JDKEXE += -GL -Gy
+    LDFLAGS_JDKEXE += -LTCG:INCREMENTAL
+  endif
+endif
+
 ################################################################################
 # Build standard launcher.
 

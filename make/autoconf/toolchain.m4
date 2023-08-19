@@ -41,7 +41,7 @@ VALID_TOOLCHAINS_all="gcc clang microsoft"
 VALID_TOOLCHAINS_linux="gcc clang"
 VALID_TOOLCHAINS_macosx="clang"
 VALID_TOOLCHAINS_aix="clang"
-VALID_TOOLCHAINS_windows="microsoft"
+VALID_TOOLCHAINS_windows="microsoft gcc"
 
 # Toolchain descriptions
 TOOLCHAIN_DESCRIPTION_clang="clang/LLVM"
@@ -174,7 +174,7 @@ AC_DEFUN([TOOLCHAIN_SETUP_FILENAME_PATTERNS],
     LIBRARY_PREFIX=
     SHARED_LIBRARY_SUFFIX='.dll'
     STATIC_LIBRARY_SUFFIX='.lib'
-    OBJ_SUFFIX='.obj'
+    OBJ_SUFFIX='.o'
     EXECUTABLE_SUFFIX='.exe'
   else
     LIBRARY_PREFIX=lib
@@ -307,7 +307,7 @@ AC_DEFUN_ONCE([TOOLCHAIN_POST_DETECTION],
 [
   # Restore old path, except for the microsoft toolchain, which requires the
   # toolchain path to remain in place. Otherwise the compiler will not work in
-  # some siutations in later configure checks.
+  # some situations in later configure checks.
   if test "x$TOOLCHAIN_TYPE" != "xmicrosoft"; then
     PATH="$OLD_PATH"
   fi
@@ -316,10 +316,6 @@ AC_DEFUN_ONCE([TOOLCHAIN_POST_DETECTION],
   # This is necessary since AC_PROG_CC defaults CFLAGS to "-g -O2"
   CFLAGS="$ORG_CFLAGS"
   CXXFLAGS="$ORG_CXXFLAGS"
-
-  # filter out some unwanted additions autoconf may add to CXX; we saw this on macOS with autoconf 2.72
-  UTIL_GET_NON_MATCHING_VALUES(cxx_filtered, $CXX, -std=c++11 -std=gnu++11)
-  CXX="$cxx_filtered"
 ])
 
 # Check if a compiler is of the toolchain type we expect, and save the version
@@ -431,7 +427,7 @@ AC_DEFUN([TOOLCHAIN_FIND_COMPILER],
     if test "x`basename [$]$1`" = "x[$]$1"; then
       # A command without a complete path is provided, search $PATH.
 
-      UTIL_LOOKUP_PROGS(POTENTIAL_$1, [$]$1)
+      UTIL_LOOKUP_PROGS(POTENTIAL_$1, [$]$1, , NOFIXPATH)
       if test "x$POTENTIAL_$1" != x; then
         $1=$POTENTIAL_$1
       else
@@ -453,7 +449,7 @@ AC_DEFUN([TOOLCHAIN_FIND_COMPILER],
     # If we are not cross compiling, then the default compiler name will be
     # used.
 
-    UTIL_LOOKUP_TOOLCHAIN_PROGS(POTENTIAL_$1, $SEARCH_LIST)
+    UTIL_LOOKUP_TOOLCHAIN_PROGS(POTENTIAL_$1, $SEARCH_LIST, , NOFIXPATH)
     if test "x$POTENTIAL_$1" != x; then
       $1=$POTENTIAL_$1
     else
@@ -575,10 +571,12 @@ AC_DEFUN_ONCE([TOOLCHAIN_DETECT_TOOLCHAIN_CORE],
   # Setup the compilers (CC and CXX)
   #
   TOOLCHAIN_FIND_COMPILER([CC], [C], $TOOLCHAIN_CC_BINARY)
+  UTIL_ADD_FIXPATH_IF(CC, [test "x$TOOLCHAIN_TYPE" = xmicrosoft])
   # Now that we have resolved CC ourself, let autoconf have its go at it
   AC_PROG_CC([$CC])
 
   TOOLCHAIN_FIND_COMPILER([CXX], [C++], $TOOLCHAIN_CXX_BINARY)
+  UTIL_ADD_FIXPATH_IF(CXX, [test "x$TOOLCHAIN_TYPE" = xmicrosoft])
   # Now that we have resolved CXX ourself, let autoconf have its go at it
   AC_PROG_CXX([$CXX])
 
@@ -600,9 +598,12 @@ AC_DEFUN_ONCE([TOOLCHAIN_DETECT_TOOLCHAIN_CORE],
   # Setup the preprocessor (CPP and CXXCPP)
   #
   AC_PROG_CPP
-  UTIL_FIXUP_EXECUTABLE(CPP)
+  UTIL_FIXUP_EXECUTABLE(CPP, , NOFIXPATH)
   AC_PROG_CXXCPP
-  UTIL_FIXUP_EXECUTABLE(CXXCPP)
+  UTIL_FIXUP_EXECUTABLE(CXXCPP, , NOFIXPATH)
+
+  UTIL_ADD_FIXPATH_IF(CPP, [test "x$TOOLCHAIN_TYPE" = xmicrosoft])
+  UTIL_ADD_FIXPATH_IF(CXXCPP, [test "x$TOOLCHAIN_TYPE" = xmicrosoft])
 
   #
   # Setup the linker (LD)
@@ -613,9 +614,15 @@ AC_DEFUN_ONCE([TOOLCHAIN_DETECT_TOOLCHAIN_CORE],
     TOOLCHAIN_VERIFY_LINK_BINARY(LD)
     LDCXX="$LD"
   else
-    # All other toolchains use the compiler to link.
-    LD="$CC"
-    LDCXX="$CXX"
+    if test "x$OPENJDK_TARGET_OS" = xwindows && test "x$TOOLCHAIN_TYPE" = xgcc; then
+      # Special case needed here if we're on Windows as the gcc linker needs mixed paths
+      LD="$FIXPATH_BASE -m exec $CC"
+      LDCXX="$FIXPATH_BASE -m exec $CXX"
+    else
+      # All other toolchains use the compiler to link.
+      LD="$CC"
+      LDCXX="$CXX"
+    fi
   fi
   AC_SUBST(LD)
   # FIXME: it should be CXXLD, according to standard (cf CXXCPP)
@@ -655,7 +662,7 @@ AC_DEFUN_ONCE([TOOLCHAIN_DETECT_TOOLCHAIN_CORE],
   if test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     UTIL_LOOKUP_TOOLCHAIN_PROGS(LIB, lib)
   elif test "x$TOOLCHAIN_TYPE" = xgcc; then
-    UTIL_LOOKUP_TOOLCHAIN_PROGS(AR, ar gcc-ar)
+    UTIL_LOOKUP_TOOLCHAIN_PROGS(AR, ar gcc-ar, , NOFIXPATH)
   else
     UTIL_LOOKUP_TOOLCHAIN_PROGS(AR, ar)
   fi
@@ -704,12 +711,15 @@ AC_DEFUN_ONCE([TOOLCHAIN_DETECT_TOOLCHAIN_EXTRA],
     # Setup the resource compiler (RC)
     UTIL_LOOKUP_TOOLCHAIN_PROGS(RC, rc)
     UTIL_LOOKUP_TOOLCHAIN_PROGS(DUMPBIN, dumpbin)
-  fi
-
-  if test "x$OPENJDK_TARGET_OS" != xwindows; then
-    UTIL_LOOKUP_TOOLCHAIN_PROGS(STRIP, strip)
+  else
+    UTIL_LOOKUP_TOOLCHAIN_PROGS(STRIP, strip, , NOFIXPATH)
     if test "x$TOOLCHAIN_TYPE" = xgcc; then
-      UTIL_LOOKUP_TOOLCHAIN_PROGS(NM, nm gcc-nm)
+      UTIL_LOOKUP_TOOLCHAIN_PROGS(NM, nm gcc-nm, , NOFIXPATH)
+      if test "x$OPENJDK_TARGET_OS" = xwindows; then
+        # Setup the resource compiler
+        UTIL_LOOKUP_TOOLCHAIN_PROGS(RC, windres, , NOFIXPATH)
+        UTIL_LOOKUP_TOOLCHAIN_PROGS(OBJCOPY, gobjcopy objcopy, , NOFIXPATH)
+      fi
     else
       UTIL_LOOKUP_TOOLCHAIN_PROGS(NM, nm)
     fi
@@ -850,7 +860,7 @@ AC_DEFUN_ONCE([TOOLCHAIN_SETUP_BUILD_COMPILERS],
         UTIL_REQUIRE_PROGS(BUILD_CXX, clang++)
       else
         UTIL_REQUIRE_PROGS(BUILD_CC, cc gcc)
-        UTIL_REQUIRE_PROGS(BUILD_CXX, CC g++)
+        UTIL_REQUIRE_PROGS(BUILD_CXX, c++ g++)
       fi
       UTIL_LOOKUP_PROGS(BUILD_NM, nm gcc-nm)
       UTIL_LOOKUP_PROGS(BUILD_AR, ar gcc-ar lib)

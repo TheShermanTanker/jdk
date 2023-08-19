@@ -164,7 +164,7 @@ static SID* getFileOwner(JNIEnv* env, SECURITY_DESCRIPTOR* sd) {
     SID* owner;
     BOOL defaulted;
 
-    if (!GetSecurityDescriptorOwner(sd, &owner, &defaulted)) {
+    if (!GetSecurityDescriptorOwner(sd, (PSID*) &owner, &defaulted)) {
         JNU_ThrowIOExceptionWithLastError(env, "GetSecurityDescriptorOwner failed");
         return NULL;
     }

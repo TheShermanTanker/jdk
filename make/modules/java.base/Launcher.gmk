@@ -51,6 +51,10 @@ $(eval $(call SetupBuildLauncher, java, \
 ifeq ($(call isTargetOs, windows), true)
   $(eval $(call SetupBuildLauncher, javaw, \
       CFLAGS := -DJAVAW -DEXPAND_CLASSPATH_WILDCARDS -DENABLE_ARG_FILES, \
+      LDFLAGS := $(if $(filter $(TOOLCHAIN_TYPE), microsoft), \
+                 -subsystem:windows -entry:mainCRTStartup, \
+                 $(if $(filter $(TOOLCHAIN_TYPE), gcc), \
+                 -Wl$(COMMA)--subsystem$(COMMA)windows)), \
       EXTRA_RCFLAGS := $(JAVA_RCFLAGS), \
       VERSION_INFO_RESOURCE := $(JAVA_VERSION_INFO_RESOURCE), \
   ))

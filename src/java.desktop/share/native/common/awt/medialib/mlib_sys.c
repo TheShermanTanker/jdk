@@ -70,7 +70,7 @@ __typeof__ ( __mlib_sincosf) mlib_sincosf
 
 void *__mlib_malloc(mlib_u32 size)
 {
-#if defined(_MSC_VER) || defined(AIX)
+#if defined(_MSC_VER) || defined(AIX) || defined(_WIN32)
   /*
    * Currently, all MS C compilers for Win32 platforms default to 8 byte
    * alignment. -- from stdlib.h of MS VC++5.0.
@@ -82,7 +82,7 @@ void *__mlib_malloc(mlib_u32 size)
 #elif defined(MACOSX)
   return valloc(size);
 #else
-  return (void *) memalign(8, size);
+  return (void *) aligned_alloc(8, size);
 #endif /* _MSC_VER */
 }
 

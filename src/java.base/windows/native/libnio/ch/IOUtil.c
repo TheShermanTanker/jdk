@@ -23,8 +23,8 @@
  * questions.
  */
 
-#include <windows.h>
 #include <winsock2.h>
+#include <windows.h>
 #include <io.h>
 #include "jni.h"
 #include "jni_util.h"

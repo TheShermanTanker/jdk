@@ -33,6 +33,8 @@ ifeq ($(call isTargetOs, windows), true)
   $(eval $(call SetupJdkLibrary, BUILD_LIBDT_SHMEM, \
       NAME := dt_shmem, \
       OPTIMIZATION := LOW, \
+      DISABLED_WARNINGS_gcc := pointer-sign sign-compare \
+          incompatible-pointer-types format, \
       EXTRA_HEADER_DIRS := \
           jdk.jdwp.agent:include \
           jdk.jdwp.agent:libjdwp/export, \

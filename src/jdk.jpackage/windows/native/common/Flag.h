@@ -36,7 +36,7 @@ public:
         return val == other.val;
     }
     bool operator != (const Flag& other) const {
-        return ! *this == other;
+        return !(*this == other);
     }
 
     T2 value() const {

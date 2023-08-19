@@ -64,7 +64,11 @@ void operator delete[](void *ptr, const char*, int) {
     DASSERTMSG(FALSE, "This version of 'delete' should never get called!!!");
 }
 
-void operator delete(void *ptr) throw() {
+void operator delete(void *ptr) noexcept {
+    DMem_FreeBlock(ptr);
+}
+
+void operator delete(void *ptr, std::size_t size) noexcept {
     DMem_FreeBlock(ptr);
 }
 

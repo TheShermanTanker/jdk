@@ -156,7 +156,7 @@ public:
 
 };
 
-extern VMRegImpl all_VMRegs[ConcreteRegisterImpl::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern VMRegImpl all_VMRegs[ConcreteRegisterImpl::number_of_registers + 1];
 inline constexpr VMReg VMRegImpl::first() { return all_VMRegs + 1; }
 
 //---------------------------VMRegPair-------------------------------------------

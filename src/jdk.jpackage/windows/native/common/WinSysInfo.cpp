@@ -52,7 +52,7 @@ tstring getSystemDirImpl(Func func, const std::string& label) {
     for (int i=0; i<2; i++) {
         DWORD res = func(buffer.data(), static_cast<DWORD>(buffer.size()));
         if (!res) {
-            JP_THROW(SysError(label + " failed", func));
+            JP_THROW(SysError(label + " failed", reinterpret_cast<uintptr_t>(func)));
         }
         if (res < buffer.size()) {
             return FileUtils::removeTrailingSlash(buffer.data());
@@ -89,7 +89,7 @@ tstring getModulePath(HMODULE h)
 
     if (len == 0) {
         // error occurred
-        JP_THROW(SysError("GetModuleFileName failed", GetModuleFileName));
+        JP_THROW(SysError("GetModuleFileName failed", reinterpret_cast<uintptr_t>(GetModuleFileName)));
     }
     return tstring(buf.begin(), buf.begin() + len);
 }
@@ -109,7 +109,7 @@ HMODULE getCurrentModuleHandle()
             | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, address, &hmodule))
     {
         JP_THROW(SysError(tstrings::any() << "GetModuleHandleExW failed",
-                GetModuleHandleExW));
+                reinterpret_cast<uintptr_t>(GetModuleHandleExW)));
     }
     return hmodule;
 }
@@ -120,7 +120,7 @@ void setEnvVariable(const tstring& name, const tstring& value)
         JP_THROW(SysError(tstrings::any()
                 << "SetEnvironmentVariable("
                 << name << ", " << value
-                << ") failed", SetEnvironmentVariable));
+                << ") failed", reinterpret_cast<uintptr_t>(SetEnvironmentVariable)));
     }
 }
 
@@ -136,7 +136,7 @@ tstring_array getCommandArgs(CommandArgProgramNameMode progNameMode)
 
     LPWSTR *parsedArgs = CommandLineToArgvW(GetCommandLineW(), &argc);
     if (parsedArgs == NULL) {
-        JP_THROW(SysError("CommandLineToArgvW failed", CommandLineToArgvW));
+        JP_THROW(SysError("CommandLineToArgvW failed", reinterpret_cast<uintptr_t>(CommandLineToArgvW)));
     }
     // the 1st element contains program name
     for (int i = progNameMode == ExcludeProgramName ? 1 : 0; i < argc; i++) {
@@ -160,7 +160,7 @@ tstring getEnvVariableImpl(const tstring& name, bool* errorOccured=0) {
             return tstring();
         }
         JP_THROW(SysError(tstrings::any() << "GetEnvironmentVariable("
-            << name << ") failed. Variable not set", GetEnvironmentVariable));
+            << name << ") failed. Variable not set", reinterpret_cast<uintptr_t>(GetEnvironmentVariable)));
     }
 
     if (size > buf.size()) {
@@ -172,7 +172,7 @@ tstring getEnvVariableImpl(const tstring& name, bool* errorOccured=0) {
                 return tstring();
             }
             JP_THROW(SysError(tstrings::any() << "GetEnvironmentVariable("
-                            << name << ") failed", GetEnvironmentVariable));
+                            << name << ") failed", reinterpret_cast<uintptr_t>(GetEnvironmentVariable)));
         }
     }
 

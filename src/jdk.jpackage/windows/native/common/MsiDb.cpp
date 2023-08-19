@@ -212,7 +212,7 @@ void DatabaseRecord::saveStreamToFile(unsigned idx,
 
 
 DatabaseView::DatabaseView(const Database& db, const tstring& sqlQuery,
-            const DatabaseRecord& queryParam): db(db), sqlQuery(sqlQuery) {
+            const DatabaseRecord& queryParam): sqlQuery(sqlQuery), db(db) {
     MSIHANDLE h = 0;
 
     // Create SQL query.

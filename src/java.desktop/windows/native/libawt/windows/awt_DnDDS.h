@@ -158,10 +158,10 @@ class AwtDragSource : virtual public IDropSource, virtual public IDataObject {
 
                 // IEnumFORMATETC
 
-                virtual HRESULT _stdcall Next(ULONG celt, FORMATETC __RPC_FAR *rgelt, ULONG __RPC_FAR *pceltFetched);
-                virtual HRESULT _stdcall Skip(ULONG celt);
-                virtual HRESULT _stdcall Reset();
-                virtual HRESULT _stdcall Clone(IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenum);
+                virtual HRESULT __stdcall Next(ULONG celt, FORMATETC __RPC_FAR *rgelt, ULONG __RPC_FAR *pceltFetched);
+                virtual HRESULT __stdcall Skip(ULONG celt);
+                virtual HRESULT __stdcall Reset();
+                virtual HRESULT __stdcall Clone(IEnumFORMATETC __RPC_FAR *__RPC_FAR *ppenum);
 
             private:
                 AwtDragSource*  m_parent;
