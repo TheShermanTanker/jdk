@@ -24,6 +24,13 @@
 #include "jni.h"
 
 #ifdef _WIN32
+#ifdef __GNUC__
+#define WIN32_TRY
+#define WIN32_EXCEPT(filter) if (false)
+#elif defined(_MSC_VER)
+#define WIN32_TRY __try
+#define WIN32_EXCEPT(filter) __except(filter)
+#endif
 #include <windows.h>
 #include <excpt.h>
 extern LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo);
@@ -35,11 +42,11 @@ extern "C" {
 
 int main(int argc, char** argv) {
 #ifdef _WIN32
-  __try {
+  WIN32_TRY {
 #endif
   runUnitTests(argc, argv);
 #ifdef _WIN32
-  } __except(topLevelExceptionFilter(GetExceptionInformation())) {}
+  } WIN32_EXCEPT (topLevelExceptionFilter(GetExceptionInformation())) {}
 #endif
   return 0;
 }

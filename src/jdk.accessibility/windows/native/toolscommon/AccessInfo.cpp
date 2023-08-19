@@ -228,7 +228,7 @@ char *getAccessibleInfo(long vmID, AccessibleContext ac, int x, int y,
 
         /*  top-level window info */
         AccessibleContext topAC  = getTopLevelObject(vmID, ac);
-        if (topAC == NULL) {
+        if (topAC == 0) {
             appendToBuffer( buffer, bufsize,
                             "\r\nERROR: getTopLevelObject failed", bufsize );
         } else {
@@ -260,7 +260,7 @@ char *getAccessibleInfo(long vmID, AccessibleContext ac, int x, int y,
         /* ===== AccessibleParent information ===== */
 
         AccessibleContext parentAC = GetAccessibleParentFromContext(vmID, ac);
-        if (parentAC == NULL) {
+        if (parentAC == 0) {
             appendToBuffer(buffer, bufsize, "\r\n    No parent", bufsize);
         } else {
             AccessibleContextInfo parentInfo;
@@ -349,7 +349,7 @@ char *getAccessibleInfo(long vmID, AccessibleContext ac, int x, int y,
 
                 for (i = 0; i < selCount; i++) {
                     if ( ( selectedAC =
-                            GetAccessibleSelectionFromContext(vmID, ac, i) ) == NULL ) {
+                            GetAccessibleSelectionFromContext(vmID, ac, i) ) == 0 ) {
                         appendToBuffer( buffer, bufsize,
                             "\r\nERROR: GetAccessibleSelectionFromContext failed forselection %d",
                             i );

@@ -27,7 +27,7 @@
 
   typedef void* HANDLE;
  public:
-  typedef unsigned long thread_id_t;
+  typedef unsigned int thread_id_t;
 
  private:
   // Win32-specific thread information

@@ -73,14 +73,14 @@
 #endif
 
 #define read_csr(csr)                                           \
-({                                                              \
+[]() noexcept -> unsigned long {                                \
         unsigned long __v;                                      \
         __asm__ __volatile__ ("csrr %0, %1"                     \
                               : "=r" (__v)                      \
                               : "i" (csr)                       \
                               : "memory");                      \
-        __v;                                                    \
-})
+        return __v;                                             \
+}()
 
 uint32_t VM_Version::cpu_vector_length() {
   assert(ext_V.enabled(), "should not call this");

@@ -34,7 +34,7 @@ ResourceEditor::FileLock::FileLock(const std::wstring& binaryPath) {
     h = BeginUpdateResource(binaryPath.c_str(), FALSE);
     if (NULL == h) {
         JP_THROW(SysError(tstrings::any() << "BeginUpdateResource("
-                    << binaryPath << ") failed", BeginUpdateResource));
+                    << binaryPath << ") failed", reinterpret_cast<uintptr_t>(BeginUpdateResource)));
     }
 
     ownHandle(true);
@@ -56,7 +56,7 @@ ResourceEditor::FileLock::~FileLock() {
             *unlockFailed = true;
         }
         JP_NO_THROW(JP_THROW(SysError(tstrings::any()
-            << "EndUpdateResource(" << h << ") failed.", EndUpdateResource)));
+            << "EndUpdateResource(" << h << ") failed.", reinterpret_cast<uintptr_t>(EndUpdateResource))));
     } else if (unlockFailed) {
         *unlockFailed = false;
     }
@@ -122,7 +122,7 @@ ResourceEditor& ResourceEditor::apply(const FileLock& dstBinary,
     auto reply = UpdateResource(dstBinary.get(), theTypePtr, theIdPtr, lang,
                                 buf.data(), static_cast<DWORD>(buf.size()));
     if (reply == FALSE) {
-        JP_THROW(SysError("UpdateResource() failed", UpdateResource));
+        JP_THROW(SysError("UpdateResource() failed", reinterpret_cast<uintptr_t>(UpdateResource)));
     }
 
     return *this;
@@ -131,7 +131,7 @@ ResourceEditor& ResourceEditor::apply(const FileLock& dstBinary,
 
 ResourceEditor& ResourceEditor::apply(const FileLock& dstBinary,
                                                 const std::wstring& srcFile) {
-    std::ifstream input(srcFile, std::ios_base::binary);
+    std::ifstream input(tstrings::toUtf8(srcFile), std::ios_base::binary);
     input.exceptions(std::ios::failbit | std::ios::badbit);
     return apply(dstBinary, input);
 }

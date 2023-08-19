@@ -129,4 +129,7 @@ inline int g_isfinite(jdouble f)                 { return _finite(f); }
 #endif
 #endif // SSIZE_MAX missing
 
+#define WIN32_TRY __try
+#define WIN32_EXCEPT(filter) __except(filter)
+
 #endif // SHARE_UTILITIES_GLOBALDEFINITIONS_VISCPP_HPP

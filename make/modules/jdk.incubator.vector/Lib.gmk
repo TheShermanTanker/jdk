@@ -30,10 +30,12 @@ include LibCommon.gmk
 ################################################################################
 
 ifeq ($(call isTargetOs, linux windows)+$(call isTargetCpu, x86_64)+$(INCLUDE_COMPILER2), true+true+true)
+  ifneq ($(TOOLCHAIN_TYPE)+$(call isTargetOs, windows), gcc+true)
   $(eval $(call SetupJdkLibrary, BUILD_LIBJSVML, \
       NAME := jsvml, \
-      LDFLAGS_windows := -defaultlib:msvcrt, \
+      LDFLAGS_microsoft_windows := -defaultlib:msvcrt, \
   ))
 
   TARGETS += $(BUILD_LIBJSVML)
+  endif
 endif

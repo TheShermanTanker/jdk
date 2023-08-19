@@ -105,6 +105,12 @@ DEFINE_INTRINSIC_XCHG(InterlockedExchange64, __int64)
                     PrimitiveConversions::cast<IntrinsicType>(compare_value))); \
   }
 
+#ifdef __GNUC__
+inline char _InterlockedCompareExchange8(char volatile * destination, char exchange, char comperand) {
+  return __sync_val_compare_and_swap(destination, comperand, exchange);
+}
+#endif
+
 DEFINE_INTRINSIC_CMPXCHG(_InterlockedCompareExchange8, char) // Use the intrinsic as InterlockedCompareExchange8 does not exist
 DEFINE_INTRINSIC_CMPXCHG(InterlockedCompareExchange,   long)
 DEFINE_INTRINSIC_CMPXCHG(InterlockedCompareExchange64, __int64)

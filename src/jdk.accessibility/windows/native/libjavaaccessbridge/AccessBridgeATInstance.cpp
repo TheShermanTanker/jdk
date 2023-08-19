@@ -144,10 +144,10 @@ typedef struct EVENT_STRUCT
 #define THREAD_PROC unsigned int __stdcall
 typedef unsigned int (__stdcall *THREAD_ROUTINE)(LPVOID lpThreadParameter);
 
-static HANDLE BeginThread(THREAD_ROUTINE thread_func,DWORD *id,DWORD param)
+static HANDLE BeginThread(THREAD_ROUTINE thread_func,DWORD *id,void *param)
 {
     HANDLE ret;
-    ret = (HANDLE) _beginthreadex(NULL,0,thread_func,(void *)param,0,(unsigned int *)id);
+    ret = (HANDLE) _beginthreadex(NULL,0,thread_func,param,0,(unsigned int *)id);
     if(ret == INVALID_HANDLE_VALUE)
         ret = NULL;
     return(ret);
@@ -197,7 +197,7 @@ static void do_event(char *buffer, int bufsize,HWND ourAccessBridgeWindow,HWND w
     event_struct->winAccessBridgeWindow = ABHandleToLong(winAccessBridgeWindow);
     if(!JavaBridgeThreadId)
         {
-            HANDLE JavaBridgeThreadHandle = BeginThread(JavaBridgeThread,&JavaBridgeThreadId,(DWORD)event_struct);
+            HANDLE JavaBridgeThreadHandle = BeginThread(JavaBridgeThread,&JavaBridgeThreadId,event_struct);
             CloseHandle(JavaBridgeThreadHandle);
         }
     PostThreadMessage(JavaBridgeThreadId,WM_USER,(WPARAM)event_struct,0);
