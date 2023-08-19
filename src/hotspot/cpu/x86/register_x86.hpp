@@ -31,6 +31,11 @@
 #include "utilities/count_leading_zeros.hpp"
 #include "utilities/powerOfTwo.hpp"
 
+#ifdef _WIN32
+#undef INTERNAL_VISIBILITY
+#define INTERNAL_VISIBILITY
+#endif
+
 class VMRegImpl;
 typedef VMRegImpl* VMReg;
 
@@ -88,7 +93,7 @@ public:
   }
 };
 
-extern const Register::RegisterImpl all_RegisterImpls[Register::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern const Register::RegisterImpl all_RegisterImpls[Register::number_of_registers + 1];
 
 inline constexpr const Register::RegisterImpl* Register::RegisterImpl::first() {
   return all_RegisterImpls + 1;
@@ -186,7 +191,7 @@ public:
   const FloatRegisterImpl* operator->() const { return FloatRegisterImpl::first() + _encoding; }
 };
 
-extern const FloatRegister::FloatRegisterImpl all_FloatRegisterImpls[FloatRegister::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern const FloatRegister::FloatRegisterImpl all_FloatRegisterImpls[FloatRegister::number_of_registers + 1];
 
 inline constexpr const FloatRegister::FloatRegisterImpl* FloatRegister::FloatRegisterImpl::first() {
   return all_FloatRegisterImpls + 1;
@@ -259,7 +264,7 @@ public:
   }
 };
 
-extern const XMMRegister::XMMRegisterImpl all_XMMRegisterImpls[XMMRegister::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern const XMMRegister::XMMRegisterImpl all_XMMRegisterImpls[XMMRegister::number_of_registers + 1];
 
 inline constexpr const XMMRegister::XMMRegisterImpl* XMMRegister::XMMRegisterImpl::first() {
   return all_XMMRegisterImpls + 1;
@@ -360,7 +365,7 @@ public:
   const KRegisterImpl* operator->() const { return KRegisterImpl::first() + _encoding; }
 };
 
-extern const KRegister::KRegisterImpl all_KRegisterImpls[KRegister::number_of_registers + 1] INTERNAL_VISIBILITY;
+INTERNAL_VISIBILITY extern const KRegister::KRegisterImpl all_KRegisterImpls[KRegister::number_of_registers + 1];
 
 inline constexpr const KRegister::KRegisterImpl* KRegister::KRegisterImpl::first() {
   return all_KRegisterImpls + 1;

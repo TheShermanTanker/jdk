@@ -179,12 +179,12 @@ char* os::iso8601_time(jlong milliseconds_since_19700101, char* buffer, size_t b
   // No offset when dealing with UTC
   time_t UTC_to_local = 0;
   if (!utc) {
-#if (defined(_ALLBSD_SOURCE) || defined(_GNU_SOURCE)) && !defined(AIX)
-    UTC_to_local = -(time_struct.tm_gmtoff);
-#elif defined(_WINDOWS)
+#ifdef _WINDOWS
     long zone;
     _get_timezone(&zone);
     UTC_to_local = static_cast<time_t>(zone);
+#elif (defined(_ALLBSD_SOURCE) || defined(_GNU_SOURCE)) && !defined(AIX)
+    UTC_to_local = -(time_struct.tm_gmtoff);
 #else
     UTC_to_local = timezone;
 #endif

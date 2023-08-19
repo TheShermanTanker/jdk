@@ -71,7 +71,7 @@ extern LONG WINAPI topLevelExceptionFilter(_EXCEPTION_POINTERS* );
 
 // Install a win32 structured exception handler around thread.
 void os::os_exception_wrapper(java_call_t f, JavaValue* value, const methodHandle& method, JavaCallArguments* args, JavaThread* thread) {
-  __try {
+  WIN32_TRY {
 
 #ifndef AMD64
     // We store the current thread in this wrapperthread location
@@ -111,7 +111,7 @@ void os::os_exception_wrapper(java_call_t f, JavaValue* value, const methodHandl
 #endif // !AMD64
 
     f(value, method, args, thread);
-  } __except(topLevelExceptionFilter((_EXCEPTION_POINTERS*)_exception_info())) {
+  } WIN32_EXCEPT (topLevelExceptionFilter(GetExceptionInformation())) {
       // Nothing to do.
   }
 }

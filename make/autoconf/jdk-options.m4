@@ -259,9 +259,9 @@ AC_DEFUN_ONCE([JDKOPT_SETUP_DEBUG_SYMBOLS],
       [AS_HELP_STRING([--with-native-debug-symbols],
       [set the native debug symbol configuration (none, internal, external, zipped) @<:@varying@:>@])],
       [
-        if test "x$OPENJDK_TARGET_OS" = xwindows; then
+        if test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
           if test "x$withval" = xinternal; then
-            AC_MSG_ERROR([Windows does not support the parameter 'internal' for --with-native-debug-symbols])
+            AC_MSG_ERROR([Microsoft does not support the parameter 'internal' for --with-native-debug-symbols])
           fi
         fi
       ],

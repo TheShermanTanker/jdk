@@ -31,23 +31,22 @@
 
 // On windows, we use structured exception handling to implement SafeFetch
 
-template <class T>
-ATTRIBUTE_NO_ASAN inline T SafeFetchXX(const T* adr, T errValue) {
+template <typename T>
+ATTRIBUTE_NO_ASAN inline T SafeFetchXX(const T* adr, T errValue) noexcept {
   T v = 0;
-  __try {
+  WIN32_TRY {
     v = *adr;
-  }
-  __except(EXCEPTION_EXECUTE_HANDLER) {
+  } WIN32_EXCEPT (EXCEPTION_EXECUTE_HANDLER) {
     v = errValue;
   }
   return v;
 }
 
-inline int SafeFetch32_impl(const int* adr, int errValue) {
+inline int SafeFetch32_impl(const int* adr, int errValue) noexcept {
   return SafeFetchXX<int>(adr, errValue);
 }
 
-inline intptr_t SafeFetchN_impl(const intptr_t* adr, intptr_t errValue) {
+inline intptr_t SafeFetchN_impl(const intptr_t* adr, intptr_t errValue) noexcept {
   return SafeFetchXX<intptr_t>(adr, errValue);
 }
 

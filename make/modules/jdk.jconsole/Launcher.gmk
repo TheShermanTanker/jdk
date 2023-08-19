@@ -37,4 +37,8 @@ $(eval $(call SetupBuildLauncher, jconsole, \
         -Djconsole.showOutputViewer \
         -Djdk.attach.allowAttachSelf=true, \
     CFLAGS_windows := -DJAVAW, \
+    LDFLAGS := $(if $(filter $(TOOLCHAIN_TYPE)-$(OPENJDK_TARGET_OS), microsoft-windows), \
+               -subsystem:windows -entry:mainCRTStartup, \
+               $(if $(filter $(TOOLCHAIN_TYPE)-$(OPENJDK_TARGET_OS), gcc-windows), \
+               -Wl$(COMMA)--subsystem$(COMMA)windows)), \
 ))

@@ -35,14 +35,24 @@
 AC_DEFUN([FLAGS_SETUP_SHARED_LIBS],
 [
   if test "x$TOOLCHAIN_TYPE" = xgcc; then
-    # Default works for linux, might work on other platforms as well.
-    SHARED_LIBRARY_FLAGS='-shared'
-    # --disable-new-dtags forces use of RPATH instead of RUNPATH for rpaths.
-    # This protects internal library dependencies within the JDK from being
-    # overridden using LD_LIBRARY_PATH. See JDK-8326891 for more information.
-    SET_EXECUTABLE_ORIGIN='-Wl,-rpath,\$$ORIGIN[$]1 -Wl,--disable-new-dtags'
-    SET_SHARED_LIBRARY_ORIGIN="-Wl,-z,origin $SET_EXECUTABLE_ORIGIN"
-    SET_SHARED_LIBRARY_NAME='-Wl,-soname=[$]1'
+    if test "x$OPENJDK_TARGET_OS" = xwindows; then
+      # Linking is different on Windows
+      SHARED_LIBRARY_FLAGS='-shared'
+      SET_EXECUTABLE_ORIGIN=''
+      SET_SHARED_LIBRARY_ORIGIN=""
+      SET_SHARED_LIBRARY_NAME='-Wl,-soname=[$]1'
+
+    elif test "x$OPENJDK_TARGET_OS" = xlinux; then
+      # Default works for linux, might work on other platforms as well.
+      SHARED_LIBRARY_FLAGS='-shared'
+      # --disable-new-dtags forces use of RPATH instead of RUNPATH for rpaths.
+      # This protects internal library dependencies within the JDK from being
+      # overridden using LD_LIBRARY_PATH. See JDK-8326891 for more information.
+      SET_EXECUTABLE_ORIGIN='-Wl,-rpath,\$$ORIGIN[$]1 -Wl,--disable-new-dtags'
+      SET_SHARED_LIBRARY_ORIGIN="-Wl,-z,origin $SET_EXECUTABLE_ORIGIN"
+      SET_SHARED_LIBRARY_NAME='-Wl,-soname=[$]1'
+
+    fi
 
   elif test "x$TOOLCHAIN_TYPE" = xclang; then
     if test "x$OPENJDK_TARGET_OS" = xmacosx; then
@@ -124,7 +134,11 @@ AC_DEFUN([FLAGS_SETUP_DEBUG_SYMBOLS],
       )
     fi
 
-    CFLAGS_DEBUG_SYMBOLS="-g -gdwarf-4"
+    GDWARF_FLAGS="-gcodeview"
+    FLAGS_COMPILER_CHECK_ARGUMENTS(ARGUMENT: [${GDWARF_FLAGS}],
+        IF_FALSE: [GDWARF_FLAGS="-gdwarf-4"])
+
+    CFLAGS_DEBUG_SYMBOLS="-g ${GDWARF_FLAGS}"
     ASFLAGS_DEBUG_SYMBOLS="-g"
   elif test "x$TOOLCHAIN_TYPE" = xclang; then
     if test "x$ALLOW_ABSOLUTE_PATHS_IN_OUTPUT" = "xfalse"; then
@@ -453,7 +467,7 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
 [
   #### OS DEFINES, these should be independent on toolchain
   if test "x$OPENJDK_TARGET_OS" = xlinux; then
-    CFLAGS_OS_DEF_JVM="-DLINUX -D_FILE_OFFSET_BITS=64"
+    CFLAGS_OS_DEF_JVM="-DLINUX -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_REENTRANT"
     CFLAGS_OS_DEF_JDK="-D_GNU_SOURCE -D_REENTRANT -D_FILE_OFFSET_BITS=64"
   elif test "x$OPENJDK_TARGET_OS" = xmacosx; then
     CFLAGS_OS_DEF_JVM="-D_ALLBSD_SOURCE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE"
@@ -464,7 +478,12 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
   elif test "x$OPENJDK_TARGET_OS" = xbsd; then
     CFLAGS_OS_DEF_JDK="-D_ALLBSD_SOURCE"
   elif test "x$OPENJDK_TARGET_OS" = xwindows; then
-    CFLAGS_OS_DEF_JVM="-D_WINDOWS -DWIN32 -D_JNI_IMPLEMENTATION_"
+    CFLAGS_OS_DEF_JVM="-D_WINDOWS -DWIN32 -D_JNI_IMPLEMENTATION_ \
+        -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0602"
+    # _WIN32_WINNT=0x0602 means access APIs for Windows 8 and above. See
+    # https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170
+    CFLAGS_OS_DEF_JDK="-DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0602 \
+        -DWIN32 -DIAL"
   fi
 
   CFLAGS_OS_DEF_JDK="$CFLAGS_OS_DEF_JDK -D$OPENJDK_TARGET_OS_UPPERCASE"
@@ -497,17 +516,11 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
 
   #### TOOLCHAIN DEFINES
 
-  if test "x$TOOLCHAIN_TYPE" = xgcc; then
-    ALWAYS_DEFINES_JVM="-D_GNU_SOURCE -D_REENTRANT"
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
+  if test "x$TOOLCHAIN_TYPE" = xclang; then
     ALWAYS_DEFINES_JVM="-D_GNU_SOURCE"
   elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
-    # _WIN32_WINNT=0x0602 means access APIs for Windows 8 and above. See
-    # https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170
-    ALWAYS_DEFINES="-DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0602 \
-        -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS"
-    ALWAYS_DEFINES_JDK="$ALWAYS_DEFINES -DWIN32 -DIAL"
-    ALWAYS_DEFINES_JVM="$ALWAYS_DEFINES -DNOMINMAX"
+    ALWAYS_DEFINES_JDK="-D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS"
+    ALWAYS_DEFINES_JVM="-D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS"
   fi
 
   ###############################################################################
@@ -529,7 +542,7 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
   if test "x$TOOLCHAIN_TYPE" = xgcc; then
     TOOLCHAIN_CFLAGS_JVM="$TOOLCHAIN_CFLAGS_JVM -fstack-protector"
     TOOLCHAIN_CFLAGS_JDK="-fvisibility=hidden -pipe -fstack-protector"
-    # reduce lib size on linux in link step, this needs also special compile flags
+    # reduce lib size for gcc in link step, this needs also special compile flags
     # do this on s390x also for libjvm (where serviceability agent is not supported)
     if test "x$ENABLE_LINKTIME_GC" = xtrue; then
       TOOLCHAIN_CFLAGS_JDK="$TOOLCHAIN_CFLAGS_JDK -ffunction-sections -fdata-sections"
@@ -570,6 +583,14 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
     # compilation of all source files regardless of the active code page on Windows.
     TOOLCHAIN_CFLAGS_JVM="-nologo -MD -Zc:preprocessor -Zc:inline -permissive- -utf-8 -MP"
     TOOLCHAIN_CFLAGS_JDK="-nologo -MD -Zc:preprocessor -Zc:inline -permissive- -utf-8 -Zc:wchar_t-"
+  fi
+
+  if test "x$TOOLCHAIN_TYPE" = xgcc && test "x$OPENJDK_TARGET_OS" = xwindows; then
+    # gcc compiler on windows needs -fno-stack-protector
+    UTIL_GET_NON_MATCHING_VALUES(TOOLCHAIN_CFLAGS_JVM, $TOOLCHAIN_CFLAGS_JVM, -fvisibility=hidden -fstack-protector)
+    UTIL_GET_NON_MATCHING_VALUES(TOOLCHAIN_CFLAGS_JDK, $TOOLCHAIN_CFLAGS_JDK, -fstack-protector)
+    TOOLCHAIN_CFLAGS_JVM="$TOOLCHAIN_CFLAGS_JVM -fno-stack-protector"
+    TOOLCHAIN_CFLAGS_JDK="$TOOLCHAIN_CFLAGS_JDK -fno-stack-protector"
   fi
 
   # CFLAGS C language level for JDK sources (hotspot only uses C++)
@@ -631,6 +652,11 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
     PIEFLAG="-fPIE"
   elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     PICFLAG=""
+  fi
+
+  if test "x$TOOLCHAIN_TYPE" = xgcc && test "x$OPENJDK_TARGET_OS" = xwindows; then
+    PICFLAG=""
+    PIEFLAG=""
   fi
 
   if test "x$TOOLCHAIN_TYPE" = xclang && test "x$OPENJDK_TARGET_OS" = xaix; then
