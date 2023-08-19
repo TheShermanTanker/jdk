@@ -179,7 +179,7 @@ static void throwNewDebuggerException(JNIEnv* env, const char* errMsg) {
 // Verifies COM call result is S_OK, throws DebuggerException and exits otherwise.
 // Note: other success results (like S_FALSE) are considered errors.
 #define COM_VERIFY_OK_(v, str, retValue) \
-  do { \
+  { \
     const HRESULT hr = (v); \
     if (hr != S_OK) { \
       size_t errmsg_size = strlen(str) + 32; \
@@ -187,11 +187,12 @@ static void throwNewDebuggerException(JNIEnv* env, const char* errMsg) {
       if (errmsg == nullptr) { \
         THROW_NEW_DEBUGGER_EXCEPTION_(str, retValue); \
       } else { \
-        snprintf(errmsg, errmsg_size, "%s (hr: 0x%08X)", str, hr); \
+        snprintf(errmsg, errmsg_size, "%s (hr: 0x%08lX)", str, hr); \
         THROW_NEW_DEBUGGER_EXCEPTION_(errmsg, retValue); \
       } \
     } \
-  } while (false)
+  } \
+  static_cast<void>(0)
 
 /*
  * Class:     sun_jvm_hotspot_debugger_windbg_WindbgDebuggerLocal
@@ -790,7 +791,7 @@ JNIEXPORT jlong JNICALL Java_sun_jvm_hotspot_debugger_windbg_WindbgDebuggerLocal
     // 0x80004002 "No such interface supported". The root cause is not fully understood,
     // but by ignoring this error and returning NULL, stacking walking code will get
     // null registers and fallback to using the "last java frame" if setup.
-   printf("WARNING: GetThreadIdBySystemId failed with 0x%x for sysId (%" PRIu64 ")\n",
+   printf("WARNING: GetThreadIdBySystemId failed with 0x%lx for sysId (%" PRIu64 ")\n",
            hr, sysId);
     return -1;
   }

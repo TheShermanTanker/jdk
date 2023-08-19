@@ -32,7 +32,7 @@
 namespace {
 
 std::string makeMessage(const std::string& msg, const char* label,
-                                            const void* c, DWORD errorCode) {
+                                            const uintptr_t c, DWORD errorCode) {
     std::ostringstream err;
     err << (label ? label : "Some error") << " [" << errorCode << "]";
 
@@ -103,7 +103,7 @@ std::wstring getSystemMessageDescription(DWORD messageId, HMODULE moduleHandle) 
 } // namespace
 
 
-SysError::SysError(const tstrings::any& msg, const void* caller, DWORD ec,
+SysError::SysError(const tstrings::any& msg, const uintptr_t caller, DWORD ec,
             const char* label):
         std::runtime_error(makeMessage(msg.str(), label, caller, ec)) {
 }

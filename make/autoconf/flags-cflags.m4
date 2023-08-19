@@ -82,6 +82,19 @@ AC_DEFUN([FLAGS_SETUP_DEBUG_SYMBOLS],
       RESULT=""
     ])
 
+  UTIL_ARG_WITH(NAME: native-debug-symbols-format, TYPE: literal, VALID_VALUES: [codeview dwarf-4],
+      DEFAULT: codeview, CHECK_AVAILABLE: [
+        AC_MSG_CHECKING([if alternate debugging information formats are supported])
+        if test x$OPENJDK_TARGET_OS = xwindows && test x$TOOLCHAIN_TYPE = xgcc; then
+          AC_MSG_RESULT([yes])
+        else
+          AC_MSG_RESULT([no])
+          AVAILABLE=false
+        fi
+      ], DESC: [which debugging information format to use on Windows when not compiling with Visual C],
+      DEFAULT_DESC: [toolchain default])
+  AC_SUBST(NATIVE_DEBUG_SYMBOLS_FORMAT)
+
   # Debug symbols
   if test "x$TOOLCHAIN_TYPE" = xgcc; then
     if test "x$ALLOW_ABSOLUTE_PATHS_IN_OUTPUT" = "xfalse"; then
@@ -107,7 +120,7 @@ AC_DEFUN([FLAGS_SETUP_DEBUG_SYMBOLS],
     fi
 
     # Debug info level should follow the debug format to be effective.
-    CFLAGS_DEBUG_SYMBOLS="-gdwarf-4 -g${NATIVE_DEBUG_SYMBOLS_LEVEL}"
+    CFLAGS_DEBUG_SYMBOLS="-g -g${NATIVE_DEBUG_SYMBOLS_FORMAT:-dwarf-4} ${NATIVE_DEBUG_SYMBOLS_LEVEL:+-g}${NATIVE_DEBUG_SYMBOLS_LEVEL}"
     ASFLAGS_DEBUG_SYMBOLS="-g${NATIVE_DEBUG_SYMBOLS_LEVEL}"
   elif test "x$TOOLCHAIN_TYPE" = xclang; then
     if test "x$ALLOW_ABSOLUTE_PATHS_IN_OUTPUT" = "xfalse"; then
@@ -128,7 +141,7 @@ AC_DEFUN([FLAGS_SETUP_DEBUG_SYMBOLS],
         IF_FALSE: [GDWARF_FLAGS=""])
 
     # Debug info level should follow the debug format to be effective.
-    CFLAGS_DEBUG_SYMBOLS="${GDWARF_FLAGS} -g${NATIVE_DEBUG_SYMBOLS_LEVEL}"
+    CFLAGS_DEBUG_SYMBOLS="-g ${GDWARF_FLAGS} ${NATIVE_DEBUG_SYMBOLS_LEVEL:+-g}${NATIVE_DEBUG_SYMBOLS_LEVEL}"
     ASFLAGS_DEBUG_SYMBOLS="-g${NATIVE_DEBUG_SYMBOLS_LEVEL}"
   elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     CFLAGS_DEBUG_SYMBOLS="-Z7"
@@ -139,6 +152,7 @@ AC_DEFUN([FLAGS_SETUP_DEBUG_SYMBOLS],
     ASFLAGS_DEBUG_SYMBOLS="$ASFLAGS_DEBUG_SYMBOLS $DEBUG_PREFIX_CFLAGS"
   fi
 
+  AC_SUBST(DEBUG_PREFIX_CFLAGS)
   AC_SUBST(CFLAGS_DEBUG_SYMBOLS)
   AC_SUBST(ASFLAGS_DEBUG_SYMBOLS)
 ])
@@ -314,17 +328,10 @@ AC_DEFUN([FLAGS_SETUP_OPTIMIZATION],
     C_O_FLAG_DEBUG_JVM="-O0"
     C_O_FLAG_NONE="-O0"
 
-    if test "x$TOOLCHAIN_TYPE" = xgcc; then
-      C_O_FLAG_LTO="-flto=auto -fuse-linker-plugin -fno-strict-aliasing -fno-fat-lto-objects"
-    else
-      C_O_FLAG_LTO="-flto -fno-strict-aliasing"
-    fi
-
     if test "x$TOOLCHAIN_TYPE" = xclang && test "x$OPENJDK_TARGET_OS" = xaix; then
       C_O_FLAG_HIGHEST_JVM="${C_O_FLAG_HIGHEST_JVM} -finline-functions"
       C_O_FLAG_HIGHEST="${C_O_FLAG_HIGHEST} -finline-functions"
       C_O_FLAG_HI="${C_O_FLAG_HI} -finline-functions"
-      C_O_FLAG_LTO="${C_O_FLAG_LTO} -ffat-lto-objects"
     fi
 
     # -D_FORTIFY_SOURCE=2 hardening option needs optimization (at least -O1) enabled
@@ -356,7 +363,6 @@ AC_DEFUN([FLAGS_SETUP_OPTIMIZATION],
     C_O_FLAG_DEBUG_JVM=""
     C_O_FLAG_NONE="-Od"
     C_O_FLAG_SIZE="-O1"
-    C_O_FLAG_LTO="-GL"
   fi
 
   # Now copy to C++ flags
@@ -368,7 +374,6 @@ AC_DEFUN([FLAGS_SETUP_OPTIMIZATION],
   CXX_O_FLAG_DEBUG_JVM="$C_O_FLAG_DEBUG_JVM"
   CXX_O_FLAG_NONE="$C_O_FLAG_NONE"
   CXX_O_FLAG_SIZE="$C_O_FLAG_SIZE"
-  CXX_O_FLAG_LTO="$C_O_FLAG_LTO"
 
   # Adjust optimization flags according to debug level.
   case $DEBUG_LEVEL in
@@ -401,15 +406,12 @@ AC_DEFUN([FLAGS_SETUP_OPTIMIZATION],
   AC_SUBST(C_O_FLAG_NORM)
   AC_SUBST(C_O_FLAG_NONE)
   AC_SUBST(C_O_FLAG_SIZE)
-  AC_SUBST(C_O_FLAG_LTO)
-
   AC_SUBST(CXX_O_FLAG_HIGHEST_JVM)
   AC_SUBST(CXX_O_FLAG_HIGHEST)
   AC_SUBST(CXX_O_FLAG_HI)
   AC_SUBST(CXX_O_FLAG_NORM)
   AC_SUBST(CXX_O_FLAG_NONE)
   AC_SUBST(CXX_O_FLAG_SIZE)
-  AC_SUBST(CXX_O_FLAG_LTO)
 ])
 
 AC_DEFUN([FLAGS_SETUP_CFLAGS],
@@ -463,7 +465,7 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
 [
   #### OS DEFINES, these should be independent on toolchain
   if test "x$OPENJDK_TARGET_OS" = xlinux; then
-    CFLAGS_OS_DEF_JVM="-DLINUX -D_FILE_OFFSET_BITS=64"
+    CFLAGS_OS_DEF_JVM="-DLINUX -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_REENTRANT"
     CFLAGS_OS_DEF_JDK="-D_GNU_SOURCE -D_REENTRANT -D_FILE_OFFSET_BITS=64"
   elif test "x$OPENJDK_TARGET_OS" = xmacosx; then
     CFLAGS_OS_DEF_JVM="-D_ALLBSD_SOURCE -D_DARWIN_C_SOURCE -D_XOPEN_SOURCE"
@@ -474,7 +476,12 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
   elif test "x$OPENJDK_TARGET_OS" = xbsd; then
     CFLAGS_OS_DEF_JDK="-D_ALLBSD_SOURCE"
   elif test "x$OPENJDK_TARGET_OS" = xwindows; then
-    CFLAGS_OS_DEF_JVM="-D_WINDOWS -DWIN32 -D_JNI_IMPLEMENTATION_"
+    CFLAGS_OS_DEF_JVM="-D_WINDOWS -DWIN32 -D_JNI_IMPLEMENTATION_ \
+        -DNOMINMAX -DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0602"
+    # _WIN32_WINNT=0x0602 means access APIs for Windows 8 and above. See
+    # https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170
+    CFLAGS_OS_DEF_JDK="-DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0602 \
+        -DWIN32 -DIAL"
   fi
 
   CFLAGS_OS_DEF_JDK="$CFLAGS_OS_DEF_JDK -D$OPENJDK_TARGET_OS_UPPERCASE"
@@ -517,17 +524,11 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
 
   #### TOOLCHAIN DEFINES
 
-  if test "x$TOOLCHAIN_TYPE" = xgcc; then
-    ALWAYS_DEFINES_JVM="-D_GNU_SOURCE -D_REENTRANT"
-  elif test "x$TOOLCHAIN_TYPE" = xclang; then
+  if test "x$TOOLCHAIN_TYPE" = xclang; then
     ALWAYS_DEFINES_JVM="-D_GNU_SOURCE"
   elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
-    # _WIN32_WINNT=0x0602 means access APIs for Windows 8 and above. See
-    # https://docs.microsoft.com/en-us/cpp/porting/modifying-winver-and-win32-winnt?view=msvc-170
-    ALWAYS_DEFINES="-DWIN32_LEAN_AND_MEAN -D_WIN32_WINNT=0x0602 \
-        -D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS"
-    ALWAYS_DEFINES_JDK="$ALWAYS_DEFINES -DWIN32 -DIAL"
-    ALWAYS_DEFINES_JVM="$ALWAYS_DEFINES -DNOMINMAX"
+    ALWAYS_DEFINES_JDK="-D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS"
+    ALWAYS_DEFINES_JVM="-D_CRT_DECLARE_NONSTDC_NAMES -D_CRT_NONSTDC_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS"
   fi
 
   ##############################################################################
@@ -535,14 +536,24 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
   #
   # CFLAGS BASIC
   if test "x$TOOLCHAIN_TYPE" = xgcc || test "x$TOOLCHAIN_TYPE" = xclang; then
-    # COMMON to gcc and clang
-    TOOLCHAIN_CFLAGS_JVM="-pipe -fno-rtti -fno-exceptions \
-        -fvisibility=hidden -fno-strict-aliasing -fno-omit-frame-pointer"
+    if test "x$OPENJDK_TARGET_OS" = xwindows; then
+      TOOLCHAIN_CFLAGS_JVM="-pipe -fno-rtti -fno-exceptions \
+          -fno-strict-aliasing -fno-omit-frame-pointer"
+    else
+      # COMMON to gcc and clang
+      TOOLCHAIN_CFLAGS_JVM="-pipe -fno-rtti -fno-exceptions \
+          -fvisibility=hidden -fno-strict-aliasing -fno-omit-frame-pointer"
+    fi
   fi
 
   if test "x$TOOLCHAIN_TYPE" = xgcc; then
-    TOOLCHAIN_CFLAGS_JVM="$TOOLCHAIN_CFLAGS_JVM -fstack-protector"
-    TOOLCHAIN_CFLAGS_JDK="-fvisibility=hidden -pipe -fstack-protector"
+    if test "x$OPENJDK_TARGET_OS" = xwindows; then
+      TOOLCHAIN_CFLAGS_JVM="$TOOLCHAIN_CFLAGS_JVM -fno-stack-protector"
+      TOOLCHAIN_CFLAGS_JDK="-pipe -fno-stack-protector"
+    else
+      TOOLCHAIN_CFLAGS_JVM="$TOOLCHAIN_CFLAGS_JVM -fstack-protector"
+      TOOLCHAIN_CFLAGS_JDK="-fvisibility=hidden -pipe -fstack-protector"
+    fi
     # reduce lib size on linux in link step, this needs also special compile flags
     if test "x$ENABLE_LINKTIME_GC" = xtrue; then
       TOOLCHAIN_CFLAGS_JDK="$TOOLCHAIN_CFLAGS_JDK -ffunction-sections -fdata-sections"
@@ -588,8 +599,8 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
     TOOLCHAIN_CFLAGS_JDK="$TOOLCHAIN_CFLAGS_JDK -fvisibility=hidden -fstack-protector"
 
   elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
-    TOOLCHAIN_CFLAGS_JVM="-nologo -MD -Zc:preprocessor -Zc:inline -Zc:throwingNew -permissive- -MP"
-    TOOLCHAIN_CFLAGS_JDK="-nologo -MD -Zc:preprocessor -Zc:inline -Zc:throwingNew -permissive- -Zc:wchar_t-"
+    TOOLCHAIN_CFLAGS_JVM="-nologo -MD -Zc:preprocessor -Zc:inline -Zc:throwingNew -permissive- -volatile:iso -MP"
+    TOOLCHAIN_CFLAGS_JDK="-nologo -MD -Zc:preprocessor -Zc:inline -Zc:throwingNew -permissive- -volatile:iso -Zc:wchar_t-"
   fi
 
   # Set character encoding in source
@@ -647,8 +658,13 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
 
   # Where does this really belong??
   if test "x$TOOLCHAIN_TYPE" = xgcc || test "x$TOOLCHAIN_TYPE" = xclang; then
-    PICFLAG="-fPIC"
-    PIEFLAG="-fPIE"
+    if test "x$OPENJDK_TARGET_OS" = xwindows; then
+      PICFLAG=""
+      PIEFLAG=""
+    else
+      PICFLAG="-fPIC"
+      PIEFLAG="-fPIE"
+    fi
   elif test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
     PICFLAG=""
   fi

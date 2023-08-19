@@ -230,6 +230,7 @@ extern "C" {
             }
             return TRUE;
         }
+        ((void) error);
         return FALSE;
     }
 

@@ -26,12 +26,17 @@
 #ifndef TSTRINGS_H
 #define TSTRINGS_H
 
-#ifdef _MSC_VER
+#ifdef _WIN32
+#   include <windows.h>
 #   define TSTRINGS_WITH_WCHAR
 #endif
 
+#if defined(_WIN32) && defined(__GNUC__)
+// gcc cannot temporarily disable the warnings once the header is included
+#   define STRSAFE_NO_DEPRECATE
+#endif
+
 #ifdef TSTRINGS_WITH_WCHAR
-#include <windows.h>
 #include <tchar.h>
 // Want compiler issue C4995 warnings for encounters of deprecated functions.
 #include <strsafe.h>
@@ -51,6 +56,10 @@
 
 #ifdef _MSC_VER
 #   pragma warning(pop)
+#endif
+
+#if defined(_WIN32) && defined(__GNUC__)
+#   undef STRSAFE_NO_DEPRECATE
 #endif
 
 

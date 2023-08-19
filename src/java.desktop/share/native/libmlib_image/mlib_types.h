@@ -62,7 +62,7 @@ typedef double             mlib_d64;
 #include <stdint.h>
 #include <stddef.h>
 
-#if defined(MLIB_OS64BIT) || (defined(MACOSX) && defined(_LP64))
+#if (defined(MLIB_OS64BIT) || (defined(MACOSX) && defined(_LP64))) && !defined(_WIN32)
 
 typedef long               mlib_s64;
 typedef unsigned long      mlib_u64;

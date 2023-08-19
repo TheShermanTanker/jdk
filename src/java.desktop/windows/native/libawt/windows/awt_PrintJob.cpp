@@ -539,12 +539,9 @@ Java_sun_awt_windows_WPageDialogPeer__1show(JNIEnv *env, jobject peer)
       parentless dialogs we use NULL to show them in the taskbar,
       and for all other dialogs AwtToolkit's HWND is used.
     */
-    else if (awtParent != NULL)
-    {
+    else if (awtParent != NULL) {
         setup.hwndOwner = AwtToolkit::GetInstance().GetHWnd();
-    }
-    else
-    {
+    } else {
         setup.hwndOwner = NULL;
     }
 
@@ -1767,7 +1764,7 @@ JNIEXPORT void JNICALL Java_sun_awt_windows_WEmbeddedFrame_printBand
    jint offset, jint srcX,  jint srcY,  jint srcWidth,  jint srcHeight,
    jint destX, jint destY, jint destWidth, jint destHeight) {
 
-    if (theHDC == NULL || imageArray == NULL ||
+    if (theHDC == reinterpret_cast<jlong>(nullptr) || imageArray == NULL ||
         srcWidth <= 0 || srcHeight == 0 || destWidth == 0 || destHeight <=0) {
         return;
     }
@@ -2949,7 +2946,7 @@ JNIEXPORT void JNICALL Java_sun_awt_windows_WPrinterJob_drawDIBImage
 
     int result = 0;
 
-    assert(printDC != NULL);
+    assert(printDC != reinterpret_cast<jlong>(nullptr));
     assert(image != NULL);
     assert(srcX >= 0);
     assert(srcY >= 0);

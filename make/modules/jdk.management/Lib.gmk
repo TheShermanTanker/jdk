@@ -34,10 +34,12 @@ include LibCommon.gmk
 $(eval $(call SetupJdkLibrary, BUILD_LIBMANAGEMENT_EXT, \
     NAME := management_ext, \
     OPTIMIZATION := HIGH, \
+    DISABLED_WARNINGS_gcc_windows_OperatingSystemImpl.c := unknown-pragmas sign-compare \
+        cast-function-type format-nonliteral, \
     DISABLED_WARNINGS_clang_UnixOperatingSystem.c := format-nonliteral, \
     JDK_LIBS := java.base:libjava java.base:libjvm, \
     LIBS_aix := -lperfstat, \
-    LIBS_windows := advapi32.lib, \
+    LIBS_microsoft_windows := advapi32.lib, \
 ))
 
 TARGETS += $(BUILD_LIBMANAGEMENT_EXT)

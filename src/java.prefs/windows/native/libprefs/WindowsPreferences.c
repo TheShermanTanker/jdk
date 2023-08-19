@@ -187,10 +187,10 @@ Java_java_util_prefs_WindowsPreferences_WindowsRegDeleteValue(JNIEnv* env,
 JNIEXPORT jlongArray JNICALL
 Java_java_util_prefs_WindowsPreferences_WindowsRegQueryInfoKey(JNIEnv* env,
     jclass this_class, jlong hKey) {
-    int subKeysNumber;
-    int maxSubKeyLength;
-    int valuesNumber;
-    int maxValueNameLength;
+    DWORD subKeysNumber;
+    DWORD maxSubKeyLength;
+    DWORD valuesNumber;
+    DWORD maxValueNameLength;
     int errorCode = RegQueryInfoKey((HKEY) hKey, NULL, NULL, NULL,
         &subKeysNumber, &maxSubKeyLength, NULL,
         &valuesNumber, &maxValueNameLength,
@@ -212,7 +212,7 @@ Java_java_util_prefs_WindowsPreferences_WindowsRegQueryInfoKey(JNIEnv* env,
 JNIEXPORT jbyteArray JNICALL
 Java_java_util_prefs_WindowsPreferences_WindowsRegEnumKeyEx(JNIEnv* env,
     jclass this_class, jlong hKey, jint subKeyIndex, jint maxKeyLength) {
-    int size = maxKeyLength;
+    DWORD size = maxKeyLength;
     char* buffer = (char*) malloc(maxKeyLength);
     if (buffer == NULL) {
         JNU_ThrowOutOfMemoryError(env, "native memory allocation failed");
@@ -235,7 +235,7 @@ Java_java_util_prefs_WindowsPreferences_WindowsRegEnumKeyEx(JNIEnv* env,
 JNIEXPORT jbyteArray JNICALL
 Java_java_util_prefs_WindowsPreferences_WindowsRegEnumValue(JNIEnv* env,
     jclass this_class, jlong hKey, jint valueIndex, jint maxValueNameLength) {
-    int size = maxValueNameLength;
+    DWORD size = maxValueNameLength;
     char* buffer = (char*) malloc(maxValueNameLength);
     if (buffer == NULL) {
         JNU_ThrowOutOfMemoryError(env, "native memory allocation failed");

@@ -41,6 +41,13 @@
 #include <java_awt_Toolkit.h>
 #include <java_awt_event_InputEvent.h>
 
+#ifndef min
+#define min(a,b) ((a) <= (b)? (a):(b))
+#endif
+#ifndef max
+#define max(a,b) ((a) >= (b)? (a):(b))
+#endif
+
 /* IMPORTANT! Read the README.JNI file for notes on JNI converted AWT code.
  */
 

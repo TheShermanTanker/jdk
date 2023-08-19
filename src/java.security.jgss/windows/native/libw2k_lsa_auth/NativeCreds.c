@@ -413,7 +413,7 @@ JNIEXPORT jobject JNICALL Java_sun_security_krb5_Credentials_acquireDefaultNativ
                         PackageId,
                         &CacheRequest,
                         sizeof(CacheRequest),
-                        &TktCacheResponse,
+                        (PVOID*)&TktCacheResponse,
                         &rspSize,
                         &SubStatus
                         );
@@ -486,7 +486,7 @@ JNIEXPORT jobject JNICALL Java_sun_security_krb5_Credentials_acquireDefaultNativ
                             PackageId,
                             pTicketRequest,
                             requestSize,
-                            &pTicketResponse,
+                            (PVOID*)&pTicketResponse,
                             &responseSize,
                             &SubStatus
                             );

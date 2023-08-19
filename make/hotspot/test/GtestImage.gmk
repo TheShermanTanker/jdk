@@ -38,7 +38,7 @@ $(foreach v, $(JVM_VARIANTS), \
   $(eval TARGETS += $$(COPY_GTEST_$v)) \
 )
 
-ifeq ($(call isTargetOs, windows), true)
+ifeq ($(call isTargetOs, windows)+$(TOOLCHAIN_TYPE), true+microsoft)
   $(foreach v, $(JVM_VARIANTS), \
     $(eval $(call SetupCopyFiles, COPY_GTEST_MSVCR_$v, \
         DEST := $(TEST_IMAGE_DIR)/hotspot/gtest/$v, \

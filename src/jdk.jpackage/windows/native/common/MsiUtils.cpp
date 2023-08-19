@@ -244,7 +244,7 @@ std::string makeMessage(const std::string& msg, UINT errorCode) {
                                                 LOAD_LIBRARY_AS_DATAFILE));
     if (!lib.get()) {
         JP_THROW(SysError(tstrings::any() << "LoadLibraryExW(" <<
-                                            msimsg_dll << ") failed", LoadLibraryExW));
+                                            msimsg_dll << ") failed", reinterpret_cast<uintptr_t>(LoadLibraryExW)));
     } else {
         tstring descr;
         try {

@@ -23,8 +23,8 @@
  * questions.
  */
 
-#include <new.h>
-#include <stdio.h>
+#include <new>
+#include <cstdio>
 #include "awt_new.h"
 #include "awt_Toolkit.h"
 #include "Hashtable.h"
@@ -59,12 +59,9 @@ NewHandler::init() {
     DASSERT(thread_seeded != TLS_OUT_OF_INDEXES);
 #endif
 
-    // use new handler for operator new and malloc
-    _set_new_mode(1);
-
-    // set the function which will be called when operator new or
-    // malloc runs out of memory
-    _set_new_handler((_PNH)NewHandler::handler);
+    // set the function which will be called when operator new
+    // runs out of memory
+    // std::set_new_handler((std::new_handler) NewHandler::handler);
 }
 
 // Called when malloc or operator new runs out of memory. We try to

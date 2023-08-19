@@ -106,7 +106,9 @@ inline bool JfrBigEndian::platform_supports_unaligned_reads(void) {
 #elif defined(ARM) || defined(AARCH64) || defined(RISCV)
   return false;
 #else
-  #warning "Unconfigured platform"
+#ifdef __GNUC__
+  #pragma GCC warning "Unconfigured platform"
+#endif
   return false;
 #endif
 }

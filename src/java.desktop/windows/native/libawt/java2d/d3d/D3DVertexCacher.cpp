@@ -29,6 +29,13 @@
 #include "D3DVertexCacher.h"
 #include "D3DPaints.h"
 
+#ifndef min
+#define min(a,b) ((a) <= (b)? (a):(b))
+#endif
+#ifndef max
+#define max(a,b) ((a) >= (b)? (a):(b))
+#endif
+
 // non-texturized macros
 
 #define ADD_VERTEX_XYC(X, Y, VCOLOR) \

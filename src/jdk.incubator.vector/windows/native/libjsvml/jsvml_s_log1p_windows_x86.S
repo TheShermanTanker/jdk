@@ -1,56 +1,56 @@
-;
-; Copyright (c) 2018, 2021, Intel Corporation. All rights reserved.
-; Intel Short Vector Math Library (SVML) Source Code
-;
-; DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-;
-; This code is free software; you can redistribute it and/or modify it
-; under the terms of the GNU General Public License version 2 only, as
-; published by the Free Software Foundation.  Oracle designates this
-; particular file as subject to the "Classpath" exception as provided
-; by Oracle in the LICENSE file that accompanied this code.
-;
-; This code is distributed in the hope that it will be useful, but WITHOUT
-; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-; version 2 for more details (a copy is included in the LICENSE file that
-; accompanied this code).
-;
-; You should have received a copy of the GNU General Public License version
-; 2 along with this work; if not, write to the Free Software Foundation,
-; Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-;
-; Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
-; or visit www.oracle.com if you need additional information or have any
-; questions.
-;
+/*
+ * Copyright (c) 2018, 2021, Intel Corporation. All rights reserved.
+ * Intel Short Vector Math Library (SVML) Source Code
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Oracle designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Oracle in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
+ * or visit www.oracle.com if you need additional information or have any
+ * questions.
+ */
 
-INCLUDE globals_vectorApiSupport_windows.S.inc
-IFNB __VECTOR_API_MATH_INTRINSICS_WINDOWS
-        OPTION DOTNAME
+#include "globals_vectorApiSupport_windows.S.inc"
+#ifdef __VECTOR_API_MATH_INTRINSICS_WINDOWS
+        .intel_syntax noprefix
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST0:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1pf4_ha_e9
+        .align    16, 0x90
+        .globl __jsvml_log1pf4_ha_e9
 
-__jsvml_log1pf4_ha_e9   PROC    EXPORT
+__jsvml_log1pf4_ha_e9:
 
-_B1_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L1::
+.L_B1_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L1:
 
         sub       rsp, 280
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         vmovups   XMMWORD PTR [192+rsp], xmm15
         vmovups   XMMWORD PTR [208+rsp], xmm14
         vmovaps   xmm14, xmm0
@@ -58,31 +58,31 @@ L1::
         vmovups   XMMWORD PTR [240+rsp], xmm9
         mov       QWORD PTR [256+rsp], r13
         lea       r13, QWORD PTR [111+rsp]
-        vmovups   xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1984]
+        vmovups   xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1984]
         and       r13, -64
         vmaxps    xmm3, xmm2, xmm14
         vminps    xmm4, xmm2, xmm14
-        vmovups   xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1088]
+        vmovups   xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1088]
         vaddps    xmm5, xmm3, xmm4
         vandps    xmm15, xmm14, xmm1
         vandnps   xmm10, xmm1, xmm14
-        vcmpltps  xmm9, xmm15, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1152]
-        vorps     xmm0, xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1216]
+        vcmpltps  xmm9, xmm15, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1152]
+        vorps     xmm0, xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1216]
         vandps    xmm1, xmm5, xmm0
-        vmovups   xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1344]
+        vmovups   xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1344]
         vsubps    xmm3, xmm3, xmm1
         mov       QWORD PTR [264+rsp], r13
         vaddps    xmm0, xmm4, xmm3
-        vandps    xmm4, xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1536]
-        vorps     xmm15, xmm4, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1600]
+        vandps    xmm4, xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1536]
+        vorps     xmm15, xmm4, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1600]
         vrcpps    xmm5, xmm15
-        vcmpnleps xmm4, xmm14, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1728]
-        vandps    xmm3, xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1280]
+        vcmpnleps xmm4, xmm14, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1728]
+        vandps    xmm3, xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1280]
         vroundps  xmm5, xmm5, 0
         vpsubd    xmm15, xmm9, xmm3
         vmulps    xmm15, xmm5, xmm15
         vpsrld    xmm9, xmm1, 23
-        vcmpltps  xmm3, xmm14, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1664]
+        vcmpltps  xmm3, xmm14, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1664]
         vcvtdq2ps xmm9, xmm9
         vmulps    xmm1, xmm1, xmm15
         vmulps    xmm15, xmm0, xmm15
@@ -101,20 +101,20 @@ L1::
         movsxd    r8, r8d
         movsxd    r9, r9d
         movsxd    r10, r10d
-        vmovq     xmm3, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        vmovq     xmm4, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
-        vmovq     xmm15, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
-        vmovq     xmm5, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r10]
+        vmovq     xmm3, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        vmovq     xmm4, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
+        vmovq     xmm15, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
+        vmovq     xmm5, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r10]
         vunpcklps xmm1, xmm3, xmm4
         vunpcklps xmm15, xmm15, xmm5
         vmovlhps  xmm3, xmm1, xmm15
         vshufps   xmm15, xmm1, xmm15, 238
-        vmulps    xmm4, xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1856]
-        vmulps    xmm1, xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1408]
-        vmulps    xmm9, xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1920]
+        vmulps    xmm4, xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1856]
+        vmulps    xmm1, xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1408]
+        vmulps    xmm9, xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1920]
         vaddps    xmm5, xmm3, xmm4
         vmulps    xmm4, xmm2, xmm2
-        vaddps    xmm3, xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1472]
+        vaddps    xmm3, xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1472]
         vaddps    xmm9, xmm15, xmm9
         vmulps    xmm15, xmm3, xmm4
         vaddps    xmm1, xmm0, xmm15
@@ -126,9 +126,9 @@ L1::
         vaddps    xmm3, xmm15, xmm2
         vorps     xmm0, xmm3, xmm10
         test      edx, edx
-        jne       _B1_3
+        jne       .L_B1_3
 
-_B1_2::
+.L_B1_2:
 
         vmovups   xmm9, XMMWORD PTR [240+rsp]
         vmovups   xmm10, XMMWORD PTR [224+rsp]
@@ -138,12 +138,12 @@ _B1_2::
         add       rsp, 280
         ret
 
-_B1_3::
+.L_B1_3:
 
         vmovups   XMMWORD PTR [r13], xmm14
         vmovups   XMMWORD PTR [64+r13], xmm0
 
-_B1_6::
+.L_B1_6:
 
         xor       eax, eax
         mov       QWORD PTR [40+rsp], rbx
@@ -151,106 +151,101 @@ _B1_6::
         mov       QWORD PTR [32+rsp], rsi
         mov       esi, edx
 
-_B1_7::
+.L_B1_7:
 
         bt        esi, ebx
-        jc        _B1_10
+        jc        .L_B1_10
 
-_B1_8::
+.L_B1_8:
 
         inc       ebx
         cmp       ebx, 4
-        jl        _B1_7
+        jl        .L_B1_7
 
-_B1_9::
+.L_B1_9:
 
         mov       rbx, QWORD PTR [40+rsp]
         mov       rsi, QWORD PTR [32+rsp]
         vmovups   xmm0, XMMWORD PTR [64+r13]
-        jmp       _B1_2
+        jmp       .L_B1_2
 
-_B1_10::
+.L_B1_10:
 
         lea       rcx, QWORD PTR [r13+rbx*4]
         lea       rdx, QWORD PTR [64+r13+rbx*4]
 
         call      __jsvml_slog1p_ha_cout_rare_internal
-        jmp       _B1_8
-        ALIGN     16
+        jmp       .L_B1_8
+        .align    16, 0x90
 
-_B1_11::
+.L_B1_11:
 
-__jsvml_log1pf4_ha_e9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1pf4_ha_e9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf4_ha_e9_B1_B3:
-        DD      803329
-        DD      2151490
-        DD      1022010
-        DD      960561
-        DD      911396
-        DD      849947
-        DD      2294027
+        .long   803329
+        .long   2151490
+        .long   1022010
+        .long   960561
+        .long   911396
+        .long   849947
+        .long   2294027
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B1_1
-        DD      imagerel _B1_6
-        DD      imagerel _unwind___jsvml_log1pf4_ha_e9_B1_B3
+        .rva    .L_B1_1
+        .rva    .L_B1_6
+        .rva    _unwind___jsvml_log1pf4_ha_e9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf4_ha_e9_B6_B10:
-        DD      265761
-        DD      287758
-        DD      340999
-        DD      imagerel _B1_1
-        DD      imagerel _B1_6
-        DD      imagerel _unwind___jsvml_log1pf4_ha_e9_B1_B3
+        .long   265761
+        .long   287758
+        .long   340999
+        .rva    .L_B1_1
+        .rva    .L_B1_6
+        .rva    _unwind___jsvml_log1pf4_ha_e9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B1_6
-        DD      imagerel _B1_11
-        DD      imagerel _unwind___jsvml_log1pf4_ha_e9_B6_B10
+        .rva    .L_B1_6
+        .rva    .L_B1_11
+        .rva    _unwind___jsvml_log1pf4_ha_e9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST1:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1pf8_ha_l9
+        .align    16, 0x90
+        .globl __jsvml_log1pf8_ha_l9
 
-__jsvml_log1pf8_ha_l9   PROC    EXPORT
+__jsvml_log1pf8_ha_l9:
 
-_B2_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L16::
+.L_B2_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L16:
 
         sub       rsp, 552
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         vmovups   YMMWORD PTR [304+rsp], ymm15
         vmovups   YMMWORD PTR [336+rsp], ymm14
         vmovups   YMMWORD PTR [368+rsp], ymm11
@@ -260,29 +255,29 @@ L16::
         vmovups   YMMWORD PTR [496+rsp], ymm7
         mov       QWORD PTR [528+rsp], r13
         lea       r13, QWORD PTR [207+rsp]
-        vmovups   ymm11, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1984]
+        vmovups   ymm11, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1984]
         and       r13, -64
-        vmovups   ymm4, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1088]
-        vmovups   ymm8, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1344]
+        vmovups   ymm4, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1088]
+        vmovups   ymm8, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1344]
         vmovaps   ymm7, ymm0
         vmaxps    ymm14, ymm11, ymm7
         vminps    ymm15, ymm11, ymm7
         vandps    ymm1, ymm7, ymm4
         vandnps   ymm5, ymm4, ymm7
-        vcmplt_oqps ymm4, ymm1, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1152]
+        vcmplt_oqps ymm4, ymm1, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1152]
         vaddps    ymm3, ymm14, ymm15
-        vorps     ymm2, ymm4, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1216]
+        vorps     ymm2, ymm4, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1216]
         vandps    ymm2, ymm3, ymm2
-        vandps    ymm0, ymm2, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1536]
-        vorps     ymm1, ymm0, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1600]
+        vandps    ymm0, ymm2, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1536]
+        vorps     ymm1, ymm0, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1600]
         vrcpps    ymm4, ymm1
         vsubps    ymm9, ymm14, ymm2
-        vcmplt_oqps ymm0, ymm7, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1664]
-        vcmpnle_uqps ymm1, ymm7, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1728]
+        vcmplt_oqps ymm0, ymm7, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1664]
+        vcmpnle_uqps ymm1, ymm7, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1728]
         vaddps    ymm3, ymm15, ymm9
         vroundps  ymm9, ymm4, 0
         vpsrld    ymm15, ymm2, 23
-        vandps    ymm10, ymm2, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1280]
+        vandps    ymm10, ymm2, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1280]
         vpsubd    ymm14, ymm8, ymm10
         vcvtdq2ps ymm4, ymm15
         vmulps    ymm10, ymm9, ymm14
@@ -303,10 +298,10 @@ L16::
         movsxd    r8, r8d
         movsxd    r9, r9d
         vmovd     r11d, xmm11
-        vmovq     xmm14, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        vmovq     xmm0, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
+        vmovq     xmm14, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        vmovq     xmm0, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
         vpextrd   r10d, xmm9, 3
-        vmovq     xmm15, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
+        vmovq     xmm15, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
         vpextrd   ecx, xmm11, 1
         vpextrd   r8d, xmm11, 2
         vpextrd   r9d, xmm11, 3
@@ -315,25 +310,25 @@ L16::
         movsxd    rcx, ecx
         movsxd    r8, r8d
         movsxd    r9, r9d
-        vmovq     xmm1, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r10]
-        vmovq     xmm8, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r11]
-        vmovq     xmm9, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        vmovq     xmm10, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
-        vmovq     xmm11, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
+        vmovq     xmm1, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r10]
+        vmovq     xmm8, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r11]
+        vmovq     xmm9, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        vmovq     xmm10, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
+        vmovq     xmm11, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
         vunpcklps xmm15, xmm14, xmm15
         vunpcklps xmm14, xmm0, xmm1
         vunpcklps xmm0, xmm8, xmm10
         vunpcklps xmm1, xmm9, xmm11
         vinsertf128 ymm8, ymm15, xmm0, 1
         vinsertf128 ymm10, ymm14, xmm1, 1
-        vmovups   ymm1, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1408]
+        vmovups   ymm1, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1408]
         vunpcklps ymm0, ymm8, ymm10
-        vfmadd231ps ymm0, ymm4, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1856]
-        vfmadd213ps ymm1, ymm3, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1472]
+        vfmadd231ps ymm0, ymm4, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1856]
+        vfmadd213ps ymm1, ymm3, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1472]
         vaddps    ymm9, ymm3, ymm0
         vunpckhps ymm8, ymm8, ymm10
         vmulps    ymm10, ymm3, ymm3
-        vfmadd132ps ymm4, ymm8, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1920]
+        vfmadd132ps ymm4, ymm8, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1920]
         vfmadd213ps ymm1, ymm10, ymm2
         vsubps    ymm2, ymm9, ymm0
         vsubps    ymm3, ymm3, ymm2
@@ -342,9 +337,9 @@ L16::
         vaddps    ymm1, ymm9, ymm0
         vorps     ymm0, ymm1, ymm5
         test      edx, edx
-        jne       _B2_3
+        jne       .L_B2_3
 
-_B2_2::
+.L_B2_2:
 
         vmovups   ymm7, YMMWORD PTR [496+rsp]
         vmovups   ymm8, YMMWORD PTR [432+rsp]
@@ -357,12 +352,12 @@ _B2_2::
         add       rsp, 552
         ret
 
-_B2_3::
+.L_B2_3:
 
         vmovups   YMMWORD PTR [r13], ymm7
         vmovups   YMMWORD PTR [64+r13], ymm0
 
-_B2_6::
+.L_B2_6:
 
         xor       eax, eax
         vmovups   YMMWORD PTR [96+rsp], ymm6
@@ -373,18 +368,18 @@ _B2_6::
         mov       QWORD PTR [128+rsp], rsi
         mov       esi, edx
 
-_B2_7::
+.L_B2_7:
 
         bt        esi, ebx
-        jc        _B2_10
+        jc        .L_B2_10
 
-_B2_8::
+.L_B2_8:
 
         inc       ebx
         cmp       ebx, 8
-        jl        _B2_7
+        jl        .L_B2_7
 
-_B2_9::
+.L_B2_9:
 
         vmovups   ymm6, YMMWORD PTR [96+rsp]
         vmovups   ymm12, YMMWORD PTR [64+rsp]
@@ -392,97 +387,92 @@ _B2_9::
         vmovups   ymm0, YMMWORD PTR [64+r13]
         mov       rbx, QWORD PTR [136+rsp]
         mov       rsi, QWORD PTR [128+rsp]
-        jmp       _B2_2
+        jmp       .L_B2_2
 
-_B2_10::
+.L_B2_10:
 
         vzeroupper
         lea       rcx, QWORD PTR [r13+rbx*4]
         lea       rdx, QWORD PTR [64+r13+rbx*4]
 
         call      __jsvml_slog1p_ha_cout_rare_internal
-        jmp       _B2_8
-        ALIGN     16
+        jmp       .L_B2_8
+        .align    16, 0x90
 
-_B2_11::
+.L_B2_11:
 
-__jsvml_log1pf8_ha_l9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1pf8_ha_l9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf8_ha_l9_B1_B3:
-        DD      1202433
-        DD      4379737
-        DD      2062417
-        DD      1804360
-        DD      1677375
-        DD      1943606
-        DD      1554477
-        DD      1435684
-        DD      1308699
-        DD      4522251
+        .long   1202433
+        .long   4379737
+        .long   2062417
+        .long   1804360
+        .long   1677375
+        .long   1943606
+        .long   1554477
+        .long   1435684
+        .long   1308699
+        .long   4522251
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B2_1
-        DD      imagerel _B2_6
-        DD      imagerel _unwind___jsvml_log1pf8_ha_l9_B1_B3
+        .rva    .L_B2_1
+        .rva    .L_B2_6
+        .rva    _unwind___jsvml_log1pf8_ha_l9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf8_ha_l9_B6_B10:
-        DD      665121
-        DD      1074214
-        DD      1127452
-        DD      186388
-        DD      313358
-        DD      419848
-        DD      imagerel _B2_1
-        DD      imagerel _B2_6
-        DD      imagerel _unwind___jsvml_log1pf8_ha_l9_B1_B3
+        .long   665121
+        .long   1074214
+        .long   1127452
+        .long   186388
+        .long   313358
+        .long   419848
+        .rva    .L_B2_1
+        .rva    .L_B2_6
+        .rva    _unwind___jsvml_log1pf8_ha_l9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B2_6
-        DD      imagerel _B2_11
-        DD      imagerel _unwind___jsvml_log1pf8_ha_l9_B6_B10
+        .rva    .L_B2_6
+        .rva    .L_B2_11
+        .rva    _unwind___jsvml_log1pf8_ha_l9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST2:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1pf4_ha_l9
+        .align    16, 0x90
+        .globl __jsvml_log1pf4_ha_l9
 
-__jsvml_log1pf4_ha_l9   PROC    EXPORT
+__jsvml_log1pf4_ha_l9:
 
-_B3_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L43::
+.L_B3_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L43:
 
         sub       rsp, 280
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         vmovups   XMMWORD PTR [192+rsp], xmm15
         vmovaps   xmm15, xmm0
         vmovups   XMMWORD PTR [208+rsp], xmm14
@@ -490,27 +480,27 @@ L43::
         vmovups   XMMWORD PTR [224+rsp], xmm9
         mov       QWORD PTR [256+rsp], r13
         lea       r13, QWORD PTR [111+rsp]
-        vmovups   xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1984]
+        vmovups   xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1984]
         and       r13, -64
         vmaxps    xmm13, xmm1, xmm15
         vminps    xmm2, xmm1, xmm15
-        vmovups   xmm3, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1088]
+        vmovups   xmm3, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1088]
         vaddps    xmm5, xmm13, xmm2
         vandps    xmm9, xmm15, xmm3
         vandnps   xmm14, xmm3, xmm15
-        vcmpltps  xmm4, xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1152]
-        vorps     xmm0, xmm4, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1216]
+        vcmpltps  xmm4, xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1152]
+        vorps     xmm0, xmm4, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1216]
         vandps    xmm4, xmm5, xmm0
-        vandps    xmm5, xmm4, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1280]
+        vandps    xmm5, xmm4, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1280]
         vsubps    xmm13, xmm13, xmm4
         mov       QWORD PTR [264+rsp], r13
         vaddps    xmm0, xmm2, xmm13
-        vandps    xmm2, xmm4, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1536]
-        vorps     xmm3, xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1600]
+        vandps    xmm2, xmm4, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1536]
+        vorps     xmm3, xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1600]
         vrcpps    xmm9, xmm3
-        vcmpltps  xmm2, xmm15, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1664]
-        vcmpnleps xmm3, xmm15, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1728]
-        vmovups   xmm13, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1344]
+        vcmpltps  xmm2, xmm15, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1664]
+        vcmpnleps xmm3, xmm15, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1728]
+        vmovups   xmm13, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1344]
         vorps     xmm2, xmm2, xmm3
         vroundps  xmm9, xmm9, 0
         vpsubd    xmm13, xmm13, xmm5
@@ -532,18 +522,18 @@ L43::
         movsxd    r8, r8d
         movsxd    r9, r9d
         movsxd    r10, r10d
-        vmovq     xmm2, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        vmovq     xmm3, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
-        vmovq     xmm9, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
-        vmovq     xmm4, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r10]
+        vmovq     xmm2, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        vmovq     xmm3, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
+        vmovq     xmm9, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
+        vmovq     xmm4, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r10]
         vunpcklps xmm2, xmm2, xmm3
         vunpcklps xmm9, xmm9, xmm4
         vmovlhps  xmm1, xmm2, xmm9
-        vfmadd231ps xmm1, xmm13, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1856]
+        vfmadd231ps xmm1, xmm13, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1856]
         vshufps   xmm9, xmm2, xmm9, 238
-        vmovups   xmm4, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1408]
-        vfmadd213ps xmm4, xmm5, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1472]
-        vfmadd132ps xmm13, xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1920]
+        vmovups   xmm4, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1408]
+        vfmadd213ps xmm4, xmm5, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1472]
+        vfmadd132ps xmm13, xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1920]
         vmulps    xmm2, xmm5, xmm5
         vaddps    xmm9, xmm5, xmm1
         vfmadd213ps xmm4, xmm2, xmm0
@@ -554,9 +544,9 @@ L43::
         vaddps    xmm1, xmm9, xmm0
         vorps     xmm0, xmm1, xmm14
         test      edx, edx
-        jne       _B3_3
+        jne       .L_B3_3
 
-_B3_2::
+.L_B3_2:
 
         vmovups   xmm9, XMMWORD PTR [224+rsp]
         vmovups   xmm13, XMMWORD PTR [240+rsp]
@@ -566,12 +556,12 @@ _B3_2::
         add       rsp, 280
         ret
 
-_B3_3::
+.L_B3_3:
 
         vmovups   XMMWORD PTR [r13], xmm15
         vmovups   XMMWORD PTR [64+r13], xmm0
 
-_B3_6::
+.L_B3_6:
 
         xor       eax, eax
         mov       QWORD PTR [40+rsp], rbx
@@ -579,106 +569,101 @@ _B3_6::
         mov       QWORD PTR [32+rsp], rsi
         mov       esi, edx
 
-_B3_7::
+.L_B3_7:
 
         bt        esi, ebx
-        jc        _B3_10
+        jc        .L_B3_10
 
-_B3_8::
+.L_B3_8:
 
         inc       ebx
         cmp       ebx, 4
-        jl        _B3_7
+        jl        .L_B3_7
 
-_B3_9::
+.L_B3_9:
 
         mov       rbx, QWORD PTR [40+rsp]
         mov       rsi, QWORD PTR [32+rsp]
         vmovups   xmm0, XMMWORD PTR [64+r13]
-        jmp       _B3_2
+        jmp       .L_B3_2
 
-_B3_10::
+.L_B3_10:
 
         lea       rcx, QWORD PTR [r13+rbx*4]
         lea       rdx, QWORD PTR [64+r13+rbx*4]
 
         call      __jsvml_slog1p_ha_cout_rare_internal
-        jmp       _B3_8
-        ALIGN     16
+        jmp       .L_B3_8
+        .align    16, 0x90
 
-_B3_11::
+.L_B3_11:
 
-__jsvml_log1pf4_ha_l9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1pf4_ha_l9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf4_ha_l9_B1_B3:
-        DD      803329
-        DD      2151490
-        DD      956474
-        DD      1038385
-        DD      911400
-        DD      849947
-        DD      2294027
+        .long   803329
+        .long   2151490
+        .long   956474
+        .long   1038385
+        .long   911400
+        .long   849947
+        .long   2294027
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B3_1
-        DD      imagerel _B3_6
-        DD      imagerel _unwind___jsvml_log1pf4_ha_l9_B1_B3
+        .rva    .L_B3_1
+        .rva    .L_B3_6
+        .rva    _unwind___jsvml_log1pf4_ha_l9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf4_ha_l9_B6_B10:
-        DD      265761
-        DD      287758
-        DD      340999
-        DD      imagerel _B3_1
-        DD      imagerel _B3_6
-        DD      imagerel _unwind___jsvml_log1pf4_ha_l9_B1_B3
+        .long   265761
+        .long   287758
+        .long   340999
+        .rva    .L_B3_1
+        .rva    .L_B3_6
+        .rva    _unwind___jsvml_log1pf4_ha_l9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B3_6
-        DD      imagerel _B3_11
-        DD      imagerel _unwind___jsvml_log1pf4_ha_l9_B6_B10
+        .rva    .L_B3_6
+        .rva    .L_B3_11
+        .rva    _unwind___jsvml_log1pf4_ha_l9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST3:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1pf4_ha_ex
+        .align    16, 0x90
+        .globl __jsvml_log1pf4_ha_ex
 
-__jsvml_log1pf4_ha_ex   PROC    EXPORT
+__jsvml_log1pf4_ha_ex:
 
-_B4_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L58::
+.L_B4_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L58:
 
         sub       rsp, 280
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         movups    XMMWORD PTR [240+rsp], xmm15
         movups    XMMWORD PTR [208+rsp], xmm9
         movups    XMMWORD PTR [224+rsp], xmm7
@@ -686,40 +671,40 @@ L58::
         movaps    xmm6, xmm0
         mov       QWORD PTR [256+rsp], r13
         lea       r13, QWORD PTR [111+rsp]
-        movups    xmm15, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1984]
+        movups    xmm15, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1984]
         and       r13, -64
         movaps    xmm1, xmm15
         movaps    xmm4, xmm15
         maxps     xmm1, xmm6
         minps     xmm4, xmm6
-        movups    xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1088]
+        movups    xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1088]
         movaps    xmm0, xmm1
         movaps    xmm5, xmm2
         andps     xmm2, xmm6
-        cmpltps   xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1152]
+        cmpltps   xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1152]
         addps     xmm0, xmm4
-        orps      xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1216]
+        orps      xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1216]
         andnps    xmm5, xmm6
         andps     xmm0, xmm2
-        movups    xmm3, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1536]
+        movups    xmm3, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1536]
         subps     xmm1, xmm0
         andps     xmm3, xmm0
         addps     xmm4, xmm1
-        orps      xmm3, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1600]
+        orps      xmm3, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1600]
         rcpps     xmm1, xmm3
-        movups    xmm2, XMMWORD PTR [_2il0floatpacket_23]
+        movups    xmm2, XMMWORD PTR [rip+_2il0floatpacket_23]
         movaps    xmm3, xmm6
-        movdqu    xmm7, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1280]
+        movdqu    xmm7, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1280]
         addps     xmm1, xmm2
-        cmpltps   xmm3, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1664]
+        cmpltps   xmm3, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1664]
         subps     xmm1, xmm2
-        movdqu    xmm9, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1344]
+        movdqu    xmm9, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1344]
         pand      xmm7, xmm0
         psubd     xmm9, xmm7
         movaps    xmm2, xmm0
         mulps     xmm9, xmm1
         movaps    xmm7, xmm6
-        cmpnleps  xmm7, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1728]
+        cmpnleps  xmm7, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1728]
         mulps     xmm0, xmm9
         mulps     xmm4, xmm9
         subps     xmm0, xmm15
@@ -739,22 +724,22 @@ L58::
         subps     xmm15, xmm0
         movd      r9d, xmm7
         movd      r10d, xmm1
-        movups    xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1408]
+        movups    xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1408]
         subps     xmm4, xmm15
         mulps     xmm1, xmm3
         movsxd    rcx, ecx
-        addps     xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1472]
+        addps     xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1472]
         movsxd    r8, r8d
         movsxd    r9, r9d
         movsxd    r10, r10d
-        movq      xmm0, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        movq      xmm15, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
+        movq      xmm0, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        movq      xmm15, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
         unpcklps  xmm0, xmm15
-        movups    xmm15, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1856]
+        movups    xmm15, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1856]
         mulps     xmm15, xmm2
-        mulps     xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1920]
-        movq      xmm9, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
-        movq      xmm7, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r10]
+        mulps     xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1920]
+        movq      xmm9, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
+        movq      xmm7, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r10]
         unpcklps  xmm9, xmm7
         movaps    xmm7, xmm0
         shufps    xmm0, xmm9, 238
@@ -776,9 +761,9 @@ L58::
         addps     xmm1, xmm4
         orps      xmm1, xmm5
         test      edx, edx
-        jne       _B4_3
+        jne       .L_B4_3
 
-_B4_2::
+.L_B4_2:
 
         movups    xmm6, XMMWORD PTR [192+rsp]
         movaps    xmm0, xmm1
@@ -789,12 +774,12 @@ _B4_2::
         add       rsp, 280
         ret
 
-_B4_3::
+.L_B4_3:
 
         movups    XMMWORD PTR [r13], xmm6
         movups    XMMWORD PTR [64+r13], xmm1
 
-_B4_6::
+.L_B4_6:
 
         xor       ecx, ecx
         mov       QWORD PTR [40+rsp], rbx
@@ -802,113 +787,108 @@ _B4_6::
         mov       QWORD PTR [32+rsp], rsi
         mov       esi, edx
 
-_B4_7::
+.L_B4_7:
 
         mov       ecx, ebx
         mov       eax, 1
         shl       eax, cl
         test      esi, eax
-        jne       _B4_10
+        jne       .L_B4_10
 
-_B4_8::
+.L_B4_8:
 
         inc       ebx
         cmp       ebx, 4
-        jl        _B4_7
+        jl        .L_B4_7
 
-_B4_9::
+.L_B4_9:
 
         mov       rbx, QWORD PTR [40+rsp]
         mov       rsi, QWORD PTR [32+rsp]
         movups    xmm1, XMMWORD PTR [64+r13]
-        jmp       _B4_2
+        jmp       .L_B4_2
 
-_B4_10::
+.L_B4_10:
 
         lea       rcx, QWORD PTR [r13+rbx*4]
         lea       rdx, QWORD PTR [64+r13+rbx*4]
 
         call      __jsvml_slog1p_ha_cout_rare_internal
-        jmp       _B4_8
-        ALIGN     16
+        jmp       .L_B4_8
+        .align    16, 0x90
 
-_B4_11::
+.L_B4_11:
 
-__jsvml_log1pf4_ha_ex ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1pf4_ha_ex\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf4_ha_ex_B1_B3:
-        DD      802561
-        DD      2151487
-        DD      813108
-        DD      948268
-        DD      890916
-        DD      1046555
-        DD      2294027
+        .long   802561
+        .long   2151487
+        .long   813108
+        .long   948268
+        .long   890916
+        .long   1046555
+        .long   2294027
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B4_1
-        DD      imagerel _B4_6
-        DD      imagerel _unwind___jsvml_log1pf4_ha_ex_B1_B3
+        .rva    .L_B4_1
+        .rva    .L_B4_6
+        .rva    _unwind___jsvml_log1pf4_ha_ex_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf4_ha_ex_B6_B10:
-        DD      265761
-        DD      287758
-        DD      340999
-        DD      imagerel _B4_1
-        DD      imagerel _B4_6
-        DD      imagerel _unwind___jsvml_log1pf4_ha_ex_B1_B3
+        .long   265761
+        .long   287758
+        .long   340999
+        .rva    .L_B4_1
+        .rva    .L_B4_6
+        .rva    _unwind___jsvml_log1pf4_ha_ex_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B4_6
-        DD      imagerel _B4_11
-        DD      imagerel _unwind___jsvml_log1pf4_ha_ex_B6_B10
+        .rva    .L_B4_6
+        .rva    .L_B4_11
+        .rva    _unwind___jsvml_log1pf4_ha_ex_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST4:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1pf16_ha_z0
+        .align    16, 0x90
+        .globl __jsvml_log1pf16_ha_z0
 
-__jsvml_log1pf16_ha_z0  PROC    EXPORT
+__jsvml_log1pf16_ha_z0:
 
-_B5_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L73::
+.L_B5_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L73:
 
         sub       rsp, 1336
         mov       QWORD PTR [1320+rsp], r13
         lea       r13, QWORD PTR [1183+rsp]
-        vmovups   zmm3, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+256]
+        vmovups   zmm3, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+256]
         and       r13, -64
-        vmovups   zmm4, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+320]
+        vmovups   zmm4, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+320]
         vmovaps   zmm5, zmm0
         vmaxps    zmm22, zmm3, zmm5 {sae}
         vminps    zmm24, zmm3, zmm5 {sae}
@@ -920,27 +900,27 @@ L73::
         vsubps    zmm27, zmm24, zmm25 {rn-sae}
         vxorps    zmm28, zmm30, zmm4
         vrndscaleps zmm22, zmm26, 104 {sae}
-        vmovups   zmm24, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+128]
-        vmovups   zmm26, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+448]
+        vmovups   zmm24, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+128]
+        vmovups   zmm26, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+448]
         vscalefps zmm29, zmm27, zmm28 {rn-sae}
         vfmsub213ps zmm2, zmm22, zmm3 {rn-sae}
         vgetexpps zmm23, zmm22 {sae}
-        vmovups   zmm27, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+576]
-        vmovups   zmm28, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+704]
+        vmovups   zmm27, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+576]
+        vmovups   zmm28, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+704]
         vmulps    zmm31, zmm22, zmm29 {rn-sae}
         vaddps    zmm1, zmm2, zmm31 {rn-sae}
         vsubps    zmm0, zmm1, zmm2 {rn-sae}
         vsubps    zmm2, zmm30, zmm3 {rn-sae}
-        vmovups   zmm3, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+640]
+        vmovups   zmm3, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+640]
         vmulps    zmm30, zmm1, zmm1 {rn-sae}
         vsubps    zmm25, zmm31, zmm0 {rn-sae}
         vsubps    zmm2, zmm2, zmm23 {rn-sae}
-        vmovups   zmm0, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512]
+        vmovups   zmm0, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512]
         vpsrld    zmm31, zmm22, 18
-        vpermt2ps zmm0, zmm31, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+64]
-        vpermt2ps zmm24, zmm31, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+192]
+        vpermt2ps zmm0, zmm31, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+64]
+        vpermt2ps zmm24, zmm31, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+192]
         vfmadd231ps zmm0, zmm3, zmm2 {rn-sae}
-        vmovups   zmm3, ZMMWORD PTR [__jsvml_slog1p_ha_data_internal_avx512+512]
+        vmovups   zmm3, ZMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal_avx512+512]
         vaddps    zmm29, zmm24, zmm25 {rn-sae}
         vaddps    zmm22, zmm0, zmm1 {rn-sae}
         vfmadd231ps zmm3, zmm26, zmm1 {rn-sae}
@@ -956,57 +936,57 @@ L73::
         mov       QWORD PTR [1328+rsp], r13
         vpternlogd zmm0, zmm5, zmm4, 248
         test      r8d, r8d
-        jne       _B5_3
+        jne       .L_B5_3
 
-_B5_2::
+.L_B5_2:
 
         mov       r13, QWORD PTR [1320+rsp]
         add       rsp, 1336
         ret
 
-_B5_3::
+.L_B5_3:
 
         vstmxcsr  DWORD PTR [1312+rsp]
 
-_B5_4::
+.L_B5_4:
 
         movzx     edx, WORD PTR [1312+rsp]
         mov       eax, edx
         or        eax, 8064
         cmp       edx, eax
-        je        _B5_6
+        je        .L_B5_6
 
-_B5_5::
+.L_B5_5:
 
         mov       DWORD PTR [1312+rsp], eax
         vldmxcsr  DWORD PTR [1312+rsp]
 
-_B5_6::
+.L_B5_6:
 
         vmovups   ZMMWORD PTR [r13], zmm5
         vmovups   ZMMWORD PTR [64+r13], zmm0
         test      r8d, r8d
-        jne       _B5_11
+        jne       .L_B5_11
 
-_B5_7::
+.L_B5_7:
 
         cmp       edx, eax
-        je        _B5_2
+        je        .L_B5_2
 
-_B5_8::
+.L_B5_8:
 
         vstmxcsr  DWORD PTR [1312+rsp]
         mov       eax, DWORD PTR [1312+rsp]
 
-_B5_9::
+.L_B5_9:
 
         and       eax, -8065
         or        eax, edx
         mov       DWORD PTR [1312+rsp], eax
         vldmxcsr  DWORD PTR [1312+rsp]
-        jmp       _B5_2
+        jmp       .L_B5_2
 
-_B5_11::
+.L_B5_11:
 
         xor       ecx, ecx
         kmovw     WORD PTR [1080+rsp], k4
@@ -1038,18 +1018,18 @@ _B5_11::
         mov       QWORD PTR [1112+rsp], rbp
         mov       ebp, eax
 
-_B5_12::
+.L_B5_12:
 
         bt        edi, ebx
-        jc        _B5_15
+        jc        .L_B5_15
 
-_B5_13::
+.L_B5_13:
 
         inc       ebx
         cmp       ebx, 16
-        jl        _B5_12
+        jl        .L_B5_12
 
-_B5_14::
+.L_B5_14:
 
         kmovw     k4, WORD PTR [1080+rsp]
         mov       eax, ebp
@@ -1078,104 +1058,99 @@ _B5_14::
         mov       rsi, QWORD PTR [1096+rsp]
         mov       rdi, QWORD PTR [1088+rsp]
         mov       rbp, QWORD PTR [1112+rsp]
-        jmp       _B5_7
+        jmp       .L_B5_7
 
-_B5_15::
+.L_B5_15:
 
         vzeroupper
         lea       rcx, QWORD PTR [r13+rbx*4]
         lea       rdx, QWORD PTR [64+r13+rbx*4]
 
         call      __jsvml_slog1p_ha_cout_rare_internal
-        jmp       _B5_13
-        ALIGN     16
+        jmp       .L_B5_13
+        .align    16, 0x90
 
-_B5_16::
+.L_B5_16:
 
-__jsvml_log1pf16_ha_z0 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1pf16_ha_z0\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf16_ha_z0_B1_B9:
-        DD      267009
-        DD      10867731
-        DD      10944779
+        .long   267009
+        .long   10867731
+        .long   10944779
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B5_1
-        DD      imagerel _B5_11
-        DD      imagerel _unwind___jsvml_log1pf16_ha_z0_B1_B9
+        .rva    .L_B5_1
+        .rva    .L_B5_11
+        .rva    _unwind___jsvml_log1pf16_ha_z0_B1_B9
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf16_ha_z0_B11_B15:
-        DD      2948353
-        DD      9131261
-        DD      8942834
-        DD      9004264
-        DD      9057502
-        DD      153814
-        DD      411851
-        DD      669888
-        DD      927925
-        DD      1185962
-        DD      1443999
-        DD      1767572
-        DD      2025609
-        DD      2283646
-        DD      2541683
-        DD      2799720
-        DD      3057757
-        DD      3315794
-        DD      3573831
-        DD      3831868
-        DD      4089905
-        DD      10867712
-        DD      10944768
+        .long   2948353
+        .long   9131261
+        .long   8942834
+        .long   9004264
+        .long   9057502
+        .long   153814
+        .long   411851
+        .long   669888
+        .long   927925
+        .long   1185962
+        .long   1443999
+        .long   1767572
+        .long   2025609
+        .long   2283646
+        .long   2541683
+        .long   2799720
+        .long   3057757
+        .long   3315794
+        .long   3573831
+        .long   3831868
+        .long   4089905
+        .long   10867712
+        .long   10944768
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B5_11
-        DD      imagerel _B5_16
-        DD      imagerel _unwind___jsvml_log1pf16_ha_z0_B11_B15
+        .rva    .L_B5_11
+        .rva    .L_B5_16
+        .rva    _unwind___jsvml_log1pf16_ha_z0_B11_B15
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST5:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1pf8_ha_e9
+        .align    16, 0x90
+        .globl __jsvml_log1pf8_ha_e9
 
-__jsvml_log1pf8_ha_e9   PROC    EXPORT
+__jsvml_log1pf8_ha_e9:
 
-_B6_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L124::
+.L_B6_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L124:
 
         sub       rsp, 552
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         vmovups   YMMWORD PTR [304+rsp], ymm14
         vmovups   YMMWORD PTR [336+rsp], ymm13
         vmovups   YMMWORD PTR [496+rsp], ymm12
@@ -1185,28 +1160,28 @@ L124::
         vmovups   YMMWORD PTR [368+rsp], ymm7
         mov       QWORD PTR [528+rsp], r13
         lea       r13, QWORD PTR [207+rsp]
-        vmovups   ymm8, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1984]
+        vmovups   ymm8, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1984]
         and       r13, -64
-        vmovups   ymm2, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1088]
+        vmovups   ymm2, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1088]
         vmovaps   ymm4, ymm0
         vmaxps    ymm12, ymm8, ymm4
         vminps    ymm7, ymm8, ymm4
         vandps    ymm1, ymm4, ymm2
-        vcmplt_oqps ymm14, ymm1, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1152]
+        vcmplt_oqps ymm14, ymm1, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1152]
         vaddps    ymm0, ymm12, ymm7
-        vmovups   xmm1, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1344]
-        vorps     ymm13, ymm14, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1216]
+        vmovups   xmm1, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1344]
+        vorps     ymm13, ymm14, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1216]
         vandps    ymm5, ymm0, ymm13
-        vandps    ymm11, ymm5, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1536]
-        vorps     ymm14, ymm11, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1600]
+        vandps    ymm11, ymm5, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1536]
+        vorps     ymm14, ymm11, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1600]
         vrcpps    ymm0, ymm14
         vsubps    ymm9, ymm12, ymm5
-        vcmplt_oqps ymm11, ymm4, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1664]
+        vcmplt_oqps ymm11, ymm4, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1664]
         vroundps  ymm13, ymm0, 0
         vaddps    ymm9, ymm7, ymm9
-        vcmpnle_uqps ymm12, ymm4, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1728]
+        vcmpnle_uqps ymm12, ymm4, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1728]
         vandnps   ymm3, ymm2, ymm4
-        vmovups   xmm2, XMMWORD PTR [__jsvml_slog1p_ha_data_internal+1280]
+        vmovups   xmm2, XMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1280]
         vorps     ymm12, ymm11, ymm12
         mov       QWORD PTR [536+rsp], r13
         vpand     xmm14, xmm5, xmm2
@@ -1241,36 +1216,36 @@ L124::
         movsxd    r9, r9d
         movsxd    r8, r8d
         vmovd     r11d, xmm12
-        vmovq     xmm14, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        vmovq     xmm13, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
+        vmovq     xmm14, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        vmovq     xmm13, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
         vpextrd   r10d, xmm7, 3
         vpextrd   ecx, xmm12, 1
         vpextrd   r9d, xmm12, 3
         movsxd    r10, r10d
-        vmovq     xmm9, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
+        vmovq     xmm9, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
         movsxd    rcx, ecx
         vpextrd   r8d, xmm12, 2
         movsxd    r9, r9d
         movsxd    r11, r11d
         movsxd    r8, r8d
-        vmovq     xmm8, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r10]
-        vmovq     xmm7, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+rcx]
-        vmovq     xmm12, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r9]
+        vmovq     xmm8, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r10]
+        vmovq     xmm7, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+rcx]
+        vmovq     xmm12, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r9]
         vunpcklps xmm13, xmm14, xmm13
         vunpcklps xmm14, xmm9, xmm8
-        vmovq     xmm5, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r11]
-        vmovq     xmm11, QWORD PTR [imagerel(__jsvml_slog1p_ha_data_internal)-137216+rax+r8]
+        vmovq     xmm5, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r11]
+        vmovq     xmm11, QWORD PTR ["__jsvml_slog1p_ha_data_internal"@imgrel-137216+rax+r8]
         vunpcklps xmm8, xmm7, xmm12
         vunpcklps xmm5, xmm5, xmm11
         vinsertf128 ymm11, ymm14, xmm8, 1
-        vmulps    ymm8, ymm1, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1408]
+        vmulps    ymm8, ymm1, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1408]
         vinsertf128 ymm9, ymm13, xmm5, 1
-        vmulps    ymm5, ymm2, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1856]
-        vmulps    ymm2, ymm2, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1920]
+        vmulps    ymm5, ymm2, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1856]
+        vmulps    ymm2, ymm2, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1920]
         vunpcklps ymm14, ymm9, ymm11
         vunpckhps ymm7, ymm9, ymm11
         vmulps    ymm11, ymm1, ymm1
-        vaddps    ymm9, ymm8, YMMWORD PTR [__jsvml_slog1p_ha_data_internal+1472]
+        vaddps    ymm9, ymm8, YMMWORD PTR [rip+__jsvml_slog1p_ha_data_internal+1472]
         vaddps    ymm14, ymm14, ymm5
         vaddps    ymm2, ymm7, ymm2
         vmulps    ymm12, ymm9, ymm11
@@ -1283,9 +1258,9 @@ L124::
         vaddps    ymm2, ymm5, ymm1
         vorps     ymm0, ymm2, ymm3
         test      dl, dl
-        jne       _B6_3
+        jne       .L_B6_3
 
-_B6_2::
+.L_B6_2:
 
         vmovups   ymm7, YMMWORD PTR [368+rsp]
         vmovups   ymm8, YMMWORD PTR [432+rsp]
@@ -1298,14 +1273,14 @@ _B6_2::
         add       rsp, 552
         ret
 
-_B6_3::
+.L_B6_3:
 
         vmovups   YMMWORD PTR [r13], ymm4
         vmovups   YMMWORD PTR [64+r13], ymm0
         test      edx, edx
-        je        _B6_2
+        je        .L_B6_2
 
-_B6_6::
+.L_B6_6:
 
         xor       eax, eax
         vmovups   YMMWORD PTR [96+rsp], ymm6
@@ -1316,18 +1291,18 @@ _B6_6::
         mov       QWORD PTR [128+rsp], rsi
         mov       esi, edx
 
-_B6_7::
+.L_B6_7:
 
         bt        esi, ebx
-        jc        _B6_10
+        jc        .L_B6_10
 
-_B6_8::
+.L_B6_8:
 
         inc       ebx
         cmp       ebx, 8
-        jl        _B6_7
+        jl        .L_B6_7
 
-_B6_9::
+.L_B6_9:
 
         vmovups   ymm6, YMMWORD PTR [96+rsp]
         vmovups   ymm10, YMMWORD PTR [64+rsp]
@@ -1335,94 +1310,88 @@ _B6_9::
         vmovups   ymm0, YMMWORD PTR [64+r13]
         mov       rbx, QWORD PTR [136+rsp]
         mov       rsi, QWORD PTR [128+rsp]
-        jmp       _B6_2
+        jmp       .L_B6_2
 
-_B6_10::
+.L_B6_10:
 
         vzeroupper
         lea       rcx, QWORD PTR [r13+rbx*4]
         lea       rdx, QWORD PTR [64+r13+rbx*4]
 
         call      __jsvml_slog1p_ha_cout_rare_internal
-        jmp       _B6_8
-        ALIGN     16
+        jmp       .L_B6_8
+        .align    16, 0x90
 
-_B6_11::
+.L_B6_11:
 
-__jsvml_log1pf8_ha_e9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1pf8_ha_e9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf8_ha_e9_B1_B3:
-        DD      1202433
-        DD      4379737
-        DD      1538129
-        DD      1804360
-        DD      1677375
-        DD      1947702
-        DD      2082861
-        DD      1431588
-        DD      1304603
-        DD      4522251
+        .long   1202433
+        .long   4379737
+        .long   1538129
+        .long   1804360
+        .long   1677375
+        .long   1947702
+        .long   2082861
+        .long   1431588
+        .long   1304603
+        .long   4522251
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B6_1
-        DD      imagerel _B6_6
-        DD      imagerel _unwind___jsvml_log1pf8_ha_e9_B1_B3
+        .rva    .L_B6_1
+        .rva    .L_B6_6
+        .rva    _unwind___jsvml_log1pf8_ha_e9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1pf8_ha_e9_B6_B10:
-        DD      665121
-        DD      1074214
-        DD      1127452
-        DD      194580
-        DD      305166
-        DD      419848
-        DD      imagerel _B6_1
-        DD      imagerel _B6_6
-        DD      imagerel _unwind___jsvml_log1pf8_ha_e9_B1_B3
+        .long   665121
+        .long   1074214
+        .long   1127452
+        .long   194580
+        .long   305166
+        .long   419848
+        .rva    .L_B6_1
+        .rva    .L_B6_6
+        .rva    _unwind___jsvml_log1pf8_ha_e9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B6_6
-        DD      imagerel _B6_11
-        DD      imagerel _unwind___jsvml_log1pf8_ha_e9_B6_B10
+        .rva    .L_B6_6
+        .rva    .L_B6_11
+        .rva    _unwind___jsvml_log1pf8_ha_e9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST6:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_slog1p_ha_cout_rare_internal
+        .align    16, 0x90
+        .globl __jsvml_slog1p_ha_cout_rare_internal
 
-__jsvml_slog1p_ha_cout_rare_internal    PROC
+__jsvml_slog1p_ha_cout_rare_internal:
 
-_B7_1::
+.L_B7_1:
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L151::
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L151:
 
         sub       rsp, 72
         mov       r8, rdx
@@ -1430,45 +1399,45 @@ L151::
         xor       eax, eax
         movups    XMMWORD PTR [48+rsp], xmm7
         xor       dl, dl
-        addss     xmm0, DWORD PTR [_2il0floatpacket_107]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_107]
         movss     DWORD PTR [36+rsp], xmm0
         movzx     r9d, WORD PTR [38+rsp]
         and       r9d, 32640
         cmp       r9d, 32640
-        je        _B7_15
+        je        .L_B7_15
 
-_B7_2::
+.L_B7_2:
 
         movss     DWORD PTR [40+rsp], xmm0
         xor       r9d, r9d
         movzx     ecx, WORD PTR [42+rsp]
         test      ecx, 32640
-        jne       _B7_4
+        jne       .L_B7_4
 
-_B7_3::
+.L_B7_3:
 
-        mulss     xmm0, DWORD PTR [_2il0floatpacket_92]
+        mulss     xmm0, DWORD PTR [rip+_2il0floatpacket_92]
         mov       dl, 1
         movss     DWORD PTR [40+rsp], xmm0
         mov       r9d, -40
 
-_B7_4::
+.L_B7_4:
 
         pxor      xmm1, xmm1
         comiss    xmm0, xmm1
-        jbe       _B7_10
+        jbe       .L_B7_10
 
-_B7_5::
+.L_B7_5:
 
         movaps    xmm3, xmm0
-        subss     xmm3, DWORD PTR [_2il0floatpacket_107]
+        subss     xmm3, DWORD PTR [rip+_2il0floatpacket_107]
         movss     DWORD PTR [36+rsp], xmm3
         and       BYTE PTR [39+rsp], 127
         movss     xmm2, DWORD PTR [36+rsp]
-        comiss    xmm2, DWORD PTR [_2il0floatpacket_93]
-        jbe       _B7_9
+        comiss    xmm2, DWORD PTR [rip+_2il0floatpacket_93]
+        jbe       .L_B7_9
 
-_B7_6::
+.L_B7_6:
 
         movzx     ecx, WORD PTR [42+rsp]
         pxor      xmm4, xmm4
@@ -1477,20 +1446,20 @@ _B7_6::
         lea       r9d, DWORD PTR [-127+r9+rcx]
         cvtsi2ss  xmm4, r9d
         cmp       dl, 1
-        je        _B7_13
+        je        .L_B7_13
 
-_B7_7::
+.L_B7_7:
 
-        movss     xmm3, DWORD PTR [_2il0floatpacket_103]
-        movss     xmm1, DWORD PTR [_2il0floatpacket_104]
+        movss     xmm3, DWORD PTR [rip+_2il0floatpacket_103]
+        movss     xmm1, DWORD PTR [rip+_2il0floatpacket_104]
         mulss     xmm3, xmm4
         mulss     xmm4, xmm1
         movaps    xmm1, xmm4
 
-_B7_8::
+.L_B7_8:
 
         movss     DWORD PTR [36+rsp], xmm0
-        lea       r10, QWORD PTR [__ImageBase]
+        lea       r10, QWORD PTR [rip+__ImageBase]
         movzx     edx, WORD PTR [38+rsp]
         movaps    xmm2, xmm3
         and       edx, -32641
@@ -1499,15 +1468,15 @@ _B7_8::
         mov       WORD PTR [38+rsp], dx
         movss     xmm0, DWORD PTR [36+rsp]
         movaps    xmm4, xmm0
-        addss     xmm4, DWORD PTR [_2il0floatpacket_105]
+        addss     xmm4, DWORD PTR [rip+_2il0floatpacket_105]
         movss     DWORD PTR [32+rsp], xmm4
         mov       ecx, DWORD PTR [32+rsp]
         and       ecx, 127
         lea       r9d, DWORD PTR [rcx+rcx*2]
-        movss     xmm5, DWORD PTR [imagerel(_vmldLnHATab)+4+r11+r9*4]
-        movss     xmm4, DWORD PTR [imagerel(_vmldLnHATab)+r10+r9*4]
+        movss     xmm5, DWORD PTR ["_vmldLnHATab"@imgrel+4+r11+r9*4]
+        movss     xmm4, DWORD PTR ["_vmldLnHATab"@imgrel+r10+r9*4]
         addss     xmm2, xmm5
-        addss     xmm1, DWORD PTR [imagerel(_vmldLnHATab)+8+r10+r9*4]
+        addss     xmm1, DWORD PTR ["_vmldLnHATab"@imgrel+8+r10+r9*4]
         movaps    xmm7, xmm2
         subss     xmm7, xmm3
         movss     DWORD PTR [32+rsp], xmm7
@@ -1515,7 +1484,7 @@ _B7_8::
         subss     xmm5, xmm3
         movss     DWORD PTR [32+rsp], xmm5
         movss     xmm3, DWORD PTR [32+rsp]
-        movss     xmm5, DWORD PTR [_2il0floatpacket_106]
+        movss     xmm5, DWORD PTR [rip+_2il0floatpacket_106]
         addss     xmm3, xmm1
         movaps    xmm1, xmm5
         addss     xmm1, xmm0
@@ -1523,10 +1492,10 @@ _B7_8::
         movaps    xmm1, xmm3
         movss     xmm7, DWORD PTR [32+rsp]
         subss     xmm7, xmm5
-        movss     xmm5, DWORD PTR [_2il0floatpacket_94]
+        movss     xmm5, DWORD PTR [rip+_2il0floatpacket_94]
         subss     xmm0, xmm7
         mulss     xmm7, xmm4
-        subss     xmm7, DWORD PTR [_2il0floatpacket_107]
+        subss     xmm7, DWORD PTR [rip+_2il0floatpacket_107]
         mulss     xmm4, xmm0
         movaps    xmm0, xmm7
         addss     xmm1, xmm4
@@ -1534,19 +1503,19 @@ _B7_8::
         addss     xmm7, xmm2
         mulss     xmm5, xmm0
         movaps    xmm2, xmm1
-        addss     xmm5, DWORD PTR [_2il0floatpacket_95]
+        addss     xmm5, DWORD PTR [rip+_2il0floatpacket_95]
         subss     xmm2, xmm3
         mulss     xmm5, xmm0
         movss     DWORD PTR [32+rsp], xmm2
-        addss     xmm5, DWORD PTR [_2il0floatpacket_96]
+        addss     xmm5, DWORD PTR [rip+_2il0floatpacket_96]
         mulss     xmm5, xmm0
-        addss     xmm5, DWORD PTR [_2il0floatpacket_97]
+        addss     xmm5, DWORD PTR [rip+_2il0floatpacket_97]
         mulss     xmm5, xmm0
-        addss     xmm5, DWORD PTR [_2il0floatpacket_98]
+        addss     xmm5, DWORD PTR [rip+_2il0floatpacket_98]
         mulss     xmm5, xmm0
-        addss     xmm5, DWORD PTR [_2il0floatpacket_99]
+        addss     xmm5, DWORD PTR [rip+_2il0floatpacket_99]
         mulss     xmm5, xmm0
-        addss     xmm5, DWORD PTR [_2il0floatpacket_100]
+        addss     xmm5, DWORD PTR [rip+_2il0floatpacket_100]
         mulss     xmm5, xmm0
         mulss     xmm5, xmm0
         movss     xmm0, DWORD PTR [32+rsp]
@@ -1568,1316 +1537,1326 @@ _B7_8::
         movss     xmm4, DWORD PTR [32+rsp]
         addss     xmm4, DWORD PTR [r8]
         movss     DWORD PTR [r8], xmm4
-        jmp       _B7_12
+        jmp       .L_B7_12
 
-_B7_9::
+.L_B7_9:
 
-        movss     xmm0, DWORD PTR [_2il0floatpacket_94]
+        movss     xmm0, DWORD PTR [rip+_2il0floatpacket_94]
         mulss     xmm0, xmm3
-        addss     xmm0, DWORD PTR [_2il0floatpacket_95]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_95]
         mulss     xmm0, xmm3
-        addss     xmm0, DWORD PTR [_2il0floatpacket_96]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_96]
         mulss     xmm0, xmm3
-        addss     xmm0, DWORD PTR [_2il0floatpacket_97]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_97]
         mulss     xmm0, xmm3
-        addss     xmm0, DWORD PTR [_2il0floatpacket_98]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_98]
         mulss     xmm0, xmm3
-        addss     xmm0, DWORD PTR [_2il0floatpacket_99]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_99]
         mulss     xmm0, xmm3
-        addss     xmm0, DWORD PTR [_2il0floatpacket_100]
+        addss     xmm0, DWORD PTR [rip+_2il0floatpacket_100]
         mulss     xmm0, xmm3
         mulss     xmm0, xmm3
         addss     xmm3, xmm0
         movss     DWORD PTR [r8], xmm3
-        jmp       _B7_12
+        jmp       .L_B7_12
 
-_B7_10::
+.L_B7_10:
 
         ucomiss   xmm0, xmm1
-        jp        _B7_11
-        je        _B7_14
+        jp        .L_B7_11
+        je        .L_B7_14
 
-_B7_11::
+.L_B7_11:
 
         divss     xmm1, xmm1
         movss     DWORD PTR [r8], xmm1
         mov       eax, 1
 
-_B7_12::
+.L_B7_12:
 
         movups    xmm7, XMMWORD PTR [48+rsp]
         add       rsp, 72
         ret
 
-_B7_13::
+.L_B7_13:
 
-        movss     xmm2, DWORD PTR [_2il0floatpacket_102]
+        movss     xmm2, DWORD PTR [rip+_2il0floatpacket_102]
         mulss     xmm4, xmm2
         movaps    xmm3, xmm4
-        jmp       _B7_8
+        jmp       .L_B7_8
 
-_B7_14::
+.L_B7_14:
 
-        movss     xmm0, DWORD PTR [_2il0floatpacket_101]
+        movss     xmm0, DWORD PTR [rip+_2il0floatpacket_101]
         mov       eax, 2
         divss     xmm0, xmm1
         movss     DWORD PTR [r8], xmm0
-        jmp       _B7_12
+        jmp       .L_B7_12
 
-_B7_15::
+.L_B7_15:
 
         mov       dl, BYTE PTR [39+rsp]
         and       dl, -128
         cmp       dl, -128
-        je        _B7_17
+        je        .L_B7_17
 
-_B7_16::
+.L_B7_16:
 
         mulss     xmm0, xmm0
         movss     DWORD PTR [r8], xmm0
-        jmp       _B7_12
+        jmp       .L_B7_12
 
-_B7_17::
+.L_B7_17:
 
         test      DWORD PTR [36+rsp], 8388607
-        jne       _B7_16
+        jne       .L_B7_16
 
-_B7_18::
+.L_B7_18:
 
         mov       eax, 1
         pxor      xmm1, xmm1
         pxor      xmm0, xmm0
         divss     xmm1, xmm0
         movss     DWORD PTR [r8], xmm1
-        jmp       _B7_12
-        ALIGN     16
+        jmp       .L_B7_12
+        .align    16, 0x90
 
-_B7_19::
+.L_B7_19:
 
-__jsvml_slog1p_ha_cout_rare_internal ENDP
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_slog1p_ha_cout_rare_internal_B1_B18:
-        DD      202241
-        DD      227350
-        DD      33288
+        .long   202241
+        .long   227350
+        .long   33288
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B7_1
-        DD      imagerel _B7_19
-        DD      imagerel _unwind___jsvml_slog1p_ha_cout_rare_internal_B1_B18
+        .rva    .L_B7_1
+        .rva    .L_B7_19
+        .rva    _unwind___jsvml_slog1p_ha_cout_rare_internal_B1_B18
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_RDATA  SEGMENT     READONLY PAGE   'DATA'
-        ALIGN  32
-        PUBLIC __jsvml_slog1p_ha_data_internal_avx512
-__jsvml_slog1p_ha_data_internal_avx512  DD      1060205056
-        DD      1059688960
-        DD      1059187712
-        DD      1058701824
-        DD      1058229248
-        DD      1057769472
-        DD      1057321984
-        DD      1056807936
-        DD      1055958016
-        DD      1055129600
-        DD      1054320640
-        DD      1053531136
-        DD      1052760064
-        DD      1052006400
-        DD      1051268096
-        DD      1050547200
-        DD      1049840640
-        DD      1049148416
-        DD      1048365056
-        DD      1047035904
-        DD      1045733376
-        DD      1044455424
-        DD      1043200000
-        DD      1041969152
-        DD      1040760832
-        DD      1038958592
-        DD      1036623872
-        DD      1034330112
-        DD      1032073216
-        DD      1027907584
-        DD      1023541248
-        DD      1015087104
-        DD      901758606
-        DD      3071200204
-        DD      931108809
-        DD      3074069268
-        DD      3077535321
-        DD      3071146094
-        DD      3063010043
-        DD      3072147991
-        DD      908173938
-        DD      3049723733
-        DD      925190435
-        DD      923601997
-        DD      3048768765
-        DD      3076457870
-        DD      926424291
-        DD      3073778483
-        DD      3069146713
-        DD      912794238
-        DD      912483742
-        DD      920635797
-        DD      3054902185
-        DD      3069864633
-        DD      922801832
-        DD      3033791132
-        DD      3076717488
-        DD      3076037756
-        DD      3072434855
-        DD      3077481184
-        DD      3066991812
-        DD      917116064
-        DD      925811956
-        DD      900509991
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      2147483648
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3212836864
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      3196061712
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      1051373854
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        PUBLIC __jsvml_slog1p_ha_data_internal
-__jsvml_slog1p_ha_data_internal DD      3266227256
-        DD      3107766024
-        DD      3266228276
-        DD      3107776882
-        DD      3266229284
-        DD      3109949545
-        DD      3266230292
-        DD      3108055846
-        DD      3266231292
-        DD      3106351937
-        DD      3266232276
-        DD      3109092567
-        DD      3266233260
-        DD      3107948216
-        DD      3266234236
-        DD      3107170960
-        DD      3266235204
-        DD      3106817287
-        DD      3266236164
-        DD      3106942449
-        DD      3266237116
-        DD      3107600489
-        DD      3266238060
-        DD      3108844279
-        DD      3266239004
-        DD      3106531253
-        DD      3266239932
-        DD      3109100650
-        DD      3266240860
-        DD      3108213420
-        DD      3266241780
-        DD      3108112381
-        DD      3266242692
-        DD      3108845034
-        DD      3266243604
-        DD      3106263589
-        DD      3266244500
-        DD      3108802209
-        DD      3266245396
-        DD      3108116909
-        DD      3266246284
-        DD      3108445707
-        DD      3266247164
-        DD      3109831435
-        DD      3266248044
-        DD      3108121760
-        DD      3266248916
-        DD      3107552123
-        DD      3266249780
-        DD      3108162844
-        DD      3266250644
-        DD      3105799146
-        DD      3266251492
-        DD      3108888393
-        DD      3266252340
-        DD      3109079979
-        DD      3266253188
-        DD      3106411173
-        DD      3266254020
-        DD      3109307139
-        DD      3266254852
-        DD      3109415127
-        DD      3266255684
-        DD      3106770317
-        DD      3266256500
-        DD      3109795834
-        DD      3266257324
-        DD      3105942641
-        DD      3266258132
-        DD      3107826892
-        DD      3266258940
-        DD      3107092610
-        DD      3266259740
-        DD      3107966131
-        DD      3266260540
-        DD      3106284596
-        DD      3266261332
-        DD      3106273188
-        DD      3266262116
-        DD      3107962226
-        DD      3266262900
-        DD      3107187186
-        DD      3266263676
-        DD      3108171617
-        DD      3266264452
-        DD      3106749947
-        DD      3266265220
-        DD      3107144703
-        DD      3266265980
-        DD      3109383615
-        DD      3266266740
-        DD      3109299629
-        DD      3266267500
-        DD      3106919521
-        DD      3266268252
-        DD      3106463913
-        DD      3266268996
-        DD      3107958670
-        DD      3266269740
-        DD      3107234917
-        DD      3266270476
-        DD      3108511954
-        DD      3266271212
-        DD      3107620056
-        DD      3266271940
-        DD      3108777693
-        DD      3266272668
-        DD      3107814325
-        DD      3266273388
-        DD      3108947630
-        DD      3266274108
-        DD      3108006290
-        DD      3266274820
-        DD      3109207222
-        DD      3266275532
-        DD      3108378366
-        DD      3266276236
-        DD      3109735912
-        DD      3266276940
-        DD      3109107087
-        DD      3266277644
-        DD      3106513079
-        DD      3266278340
-        DD      3106169044
-        DD      3266279028
-        DD      3108095503
-        DD      3266279716
-        DD      3108118349
-        DD      3266280404
-        DD      3106257463
-        DD      3266281084
-        DD      3106726720
-        DD      3266281756
-        DD      3109545389
-        DD      3266282436
-        DD      3106343833
-        DD      3266283100
-        DD      3109723642
-        DD      3266283772
-        DD      3107120300
-        DD      3266284436
-        DD      3106940529
-        DD      3266285092
-        DD      3109202170
-        DD      3266285748
-        DD      3109728494
-        DD      3266286404
-        DD      3108536808
-        DD      3266287052
-        DD      3109838471
-        DD      3266287700
-        DD      3109455977
-        DD      3266288348
-        DD      3107405879
-        DD      3266288988
-        DD      3107898790
-        DD      3266289628
-        DD      3106756477
-        DD      3266290260
-        DD      3108189081
-        DD      3266290892
-        DD      3108017907
-        DD      3266291524
-        DD      3106258339
-        DD      3266292148
-        DD      3107119845
-        DD      3266292772
-        DD      3106423069
-        DD      3266293388
-        DD      3108377050
-        DD      3266294004
-        DD      3108802011
-        DD      3266294620
-        DD      3107712277
-        DD      3266295228
-        DD      3109316274
-        DD      3266295836
-        DD      3109433625
-        DD      3266296444
-        DD      3108078064
-        DD      3266297044
-        DD      3109457438
-        DD      3266297644
-        DD      3109390801
-        DD      3266298244
-        DD      3107891329
-        DD      3266298836
-        DD      3109166323
-        DD      3266299428
-        DD      3109034299
-        DD      3266300020
-        DD      3107507904
-        DD      3266300604
-        DD      3108793919
-        DD      3266301188
-        DD      3108710352
-        DD      3266301772
-        DD      3107269350
-        DD      3266302348
-        DD      3108677203
-        DD      3266302924
-        DD      3108751436
-        DD      3266303500
-        DD      3107503720
-        DD      3266304068
-        DD      3109139881
-        DD      3266304636
-        DD      3109476985
-        DD      3266305204
-        DD      3108526254
-        DD      3266305772
-        DD      3106298768
-        DD      3266306332
-        DD      3106999765
-        DD      3266306892
-        DD      3106445739
-        DD      3266307444
-        DD      3108841650
-        DD      3266308004
-        DD      3105809415
-        DD      3266308548
-        DD      3109942336
-        DD      3266309100
-        DD      3108667760
-        DD      3266309652
-        DD      3106190122
-        DD      3266310196
-        DD      3106713732
-        DD      3266310740
-        DD      3106054165
-        DD      3266311276
-        DD      3108415484
-        DD      3266311812
-        DD      3109613023
-        DD      3266312348
-        DD      3109656301
-        DD      3266312884
-        DD      3108554723
-        DD      3266313420
-        DD      3106317576
-        DD      3266313948
-        DD      3107148341
-        DD      3266314476
-        DD      3106861780
-        DD      3266314996
-        DD      3109661153
-        DD      3266315524
-        DD      3107166702
-        DD      3266316044
-        DD      3107775778
-        DD      3266316564
-        DD      3107302717
-        DD      3266317076
-        DD      3109950361
-        DD      3266317596
-        DD      3107338539
-        DD      3266318108
-        DD      3107864196
-        DB 0
-        ORG $+54
-        DB      0
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      2147483647
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      964689920
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2139095040
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      2063597568
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      1051372345
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      3204448310
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      998244352
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      3212836863
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      2055208960
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      4294967040
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      901758464
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      1065353216
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      3204448256
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      1051372203
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      3196059527
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      1045220287
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      3190475908
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      1041398342
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      3187262718
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      1037844266
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      3187902610
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      1039525906
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      16777216
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      25165824
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      1059760811
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      8388607
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      1060205056
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      901758606
-        DD      2139095040
-        DD      4286578688
-        DB 0
-        ORG $+54
-        DB      0
-        DD      1065353216
-        DD      3212836864
-        DB 0
-        ORG $+54
-        DB      0
-        DD      0
-        DD      2147483648
-        DB 0
-        ORG $+54
-        DB      0
-_vmldLnHATab    DD      1065353216
-        DD      0
-        DD      0
-        DD      1065091072
-        DD      1015087104
-        DD      900509991
-        DD      1064828928
-        DD      1023541248
-        DD      925811956
-        DD      1064566784
-        DD      1027915776
-        DD      3084221144
-        DD      1064304640
-        DD      1032073216
-        DD      3066991812
-        DD      1064173568
-        DD      1033195520
-        DD      882149603
-        DD      1063911424
-        DD      1035468800
-        DD      928189163
-        DD      1063649280
-        DD      1037783040
-        DD      927501741
-        DD      1063518208
-        DD      1038958592
-        DD      3076037756
-        DD      1063256064
-        DD      1040759808
-        DD      904405630
-        DD      1063124992
-        DD      1041361920
-        DD      3052231524
-        DD      1062862848
-        DD      1042581504
-        DD      922094799
-        DD      1062731776
-        DD      1043201024
-        DD      3070120623
-        DD      1062469632
-        DD      1044455424
-        DD      3069864633
-        DD      1062338560
-        DD      1045091328
-        DD      3063188516
-        DD      1062207488
-        DD      1045733376
-        DD      3054902185
-        DD      1061945344
-        DD      1047035904
-        DD      920635797
-        DD      1061814272
-        DD      1047697408
-        DD      904920689
-        DD      1061683200
-        DD      1048365056
-        DD      912483742
-        DD      1061552128
-        DD      1048807936
-        DD      3052664405
-        DD      1061421056
-        DD      1049148416
-        DD      912794238
-        DD      1061158912
-        DD      1049840384
-        DD      889474359
-        DD      1061027840
-        DD      1050191872
-        DD      3059868362
-        DD      1060896768
-        DD      1050546944
-        DD      3059256525
-        DD      1060765696
-        DD      1050905600
-        DD      912008988
-        DD      1060634624
-        DD      1051268352
-        DD      912290698
-        DD      1060503552
-        DD      1051635200
-        DD      3037211048
-        DD      1060372480
-        DD      1052005888
-        DD      906226119
-        DD      1060241408
-        DD      1052380928
-        DD      3052480305
-        DD      1060110336
-        DD      1052760064
-        DD      3048768765
-        DD      1059979264
-        DD      1053143552
-        DD      3049975450
-        DD      1059848192
-        DD      1053531392
-        DD      894485718
-        DD      1059717120
-        DD      1053923840
-        DD      897598623
-        DD      1059586048
-        DD      1054320896
-        DD      907355277
-        DD      1059586048
-        DD      1054320896
-        DD      907355277
-        DD      1059454976
-        DD      1054722816
-        DD      881705073
-        DD      1059323904
-        DD      1055129600
-        DD      3049723733
-        DD      1059192832
-        DD      1055541248
-        DD      890353599
-        DD      1059061760
-        DD      1055958016
-        DD      908173938
-        DD      1059061760
-        DD      1055958016
-        DD      908173938
-        DD      1058930688
-        DD      1056380160
-        DD      883644938
-        DD      1058799616
-        DD      1056807680
-        DD      3052015799
-        DD      1058668544
-        DD      1057102592
-        DD      884897284
-        DD      1058668544
-        DD      1057102592
-        DD      884897284
-        DD      1058537472
-        DD      1057321920
-        DD      3037632470
-        DD      1058406400
-        DD      1057544128
-        DD      865017195
-        DD      1058275328
-        DD      1057769344
-        DD      3042936546
-        DD      1058275328
-        DD      1057769344
-        DD      3042936546
-        DD      1058144256
-        DD      1057997568
-        DD      903344518
-        DD      1058013184
-        DD      1058228992
-        DD      897862967
-        DD      1058013184
-        DD      1058228992
-        DD      897862967
-        DD      1057882112
-        DD      1058463680
-        DD      3047822280
-        DD      1057882112
-        DD      1058463680
-        DD      3047822280
-        DD      1057751040
-        DD      1058701632
-        DD      883793293
-        DD      1057619968
-        DD      1058943040
-        DD      851667963
-        DD      1057619968
-        DD      1058943040
-        DD      851667963
-        DD      1057488896
-        DD      1059187968
-        DD      3000004036
-        DD      1057488896
-        DD      1059187968
-        DD      3000004036
-        DD      1057357824
-        DD      1059436544
-        DD      3047430717
-        DD      1057357824
-        DD      1059436544
-        DD      3047430717
-        DD      1057226752
-        DD      1059688832
-        DD      3043802308
-        DD      1057226752
-        DD      1059688832
-        DD      3043802308
-        DD      1057095680
-        DD      1059944960
-        DD      876113044
-        DD      1057095680
-        DD      1059944960
-        DD      876113044
-        DD      1056964608
-        DD      1060205056
-        DD      901758606
-        DD      1060205056
-        DD      901758606
-        DD      1207959616
-        DD      1174405120
-        DD      1008730112
-        DD      1400897536
-        DD      0
-        DD      1065353216
-        DD      3204448256
-        DD      1051372203
-        DD      3196059648
-        DD      1045220557
-        DD      3190467243
-        DD      1041387009
-        DD      3187672480
-        DD 2 DUP (0H)
-_2il0floatpacket_23     DD      04b400000H,04b400000H,04b400000H,04b400000H
-_2il0floatpacket_92     DD      053800000H
-_2il0floatpacket_93     DD      03c200000H
-_2il0floatpacket_94     DD      0be0005a0H
-_2il0floatpacket_95     DD      03e124e01H
-_2il0floatpacket_96     DD      0be2aaaabH
-_2il0floatpacket_97     DD      03e4ccccdH
-_2il0floatpacket_98     DD      0be800000H
-_2il0floatpacket_99     DD      03eaaaaabH
-_2il0floatpacket_100    DD      0bf000000H
-_2il0floatpacket_101    DD      0bf800000H
-_2il0floatpacket_102    DD      03f317218H
-_2il0floatpacket_103    DD      03f317200H
-_2il0floatpacket_104    DD      035bfbe8eH
-_2il0floatpacket_105    DD      048000040H
-_2il0floatpacket_106    DD      046000000H
-_2il0floatpacket_107    DD      03f800000H
-_RDATA  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
-EXTRN   __ImageBase:PROC
-EXTRN   _fltused:BYTE
-ENDIF
-        END
+        .section .rdata, "dr"
+        .align 32
+        .globl __jsvml_slog1p_ha_data_internal_avx512
+__jsvml_slog1p_ha_data_internal_avx512:
+        .long   1060205056
+        .long   1059688960
+        .long   1059187712
+        .long   1058701824
+        .long   1058229248
+        .long   1057769472
+        .long   1057321984
+        .long   1056807936
+        .long   1055958016
+        .long   1055129600
+        .long   1054320640
+        .long   1053531136
+        .long   1052760064
+        .long   1052006400
+        .long   1051268096
+        .long   1050547200
+        .long   1049840640
+        .long   1049148416
+        .long   1048365056
+        .long   1047035904
+        .long   1045733376
+        .long   1044455424
+        .long   1043200000
+        .long   1041969152
+        .long   1040760832
+        .long   1038958592
+        .long   1036623872
+        .long   1034330112
+        .long   1032073216
+        .long   1027907584
+        .long   1023541248
+        .long   1015087104
+        .long   901758606
+        .long   3071200204
+        .long   931108809
+        .long   3074069268
+        .long   3077535321
+        .long   3071146094
+        .long   3063010043
+        .long   3072147991
+        .long   908173938
+        .long   3049723733
+        .long   925190435
+        .long   923601997
+        .long   3048768765
+        .long   3076457870
+        .long   926424291
+        .long   3073778483
+        .long   3069146713
+        .long   912794238
+        .long   912483742
+        .long   920635797
+        .long   3054902185
+        .long   3069864633
+        .long   922801832
+        .long   3033791132
+        .long   3076717488
+        .long   3076037756
+        .long   3072434855
+        .long   3077481184
+        .long   3066991812
+        .long   917116064
+        .long   925811956
+        .long   900509991
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   2147483648
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3212836864
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   3196061712
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   1051373854
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .globl __jsvml_slog1p_ha_data_internal
+__jsvml_slog1p_ha_data_internal:
+        .long   3266227256
+        .long   3107766024
+        .long   3266228276
+        .long   3107776882
+        .long   3266229284
+        .long   3109949545
+        .long   3266230292
+        .long   3108055846
+        .long   3266231292
+        .long   3106351937
+        .long   3266232276
+        .long   3109092567
+        .long   3266233260
+        .long   3107948216
+        .long   3266234236
+        .long   3107170960
+        .long   3266235204
+        .long   3106817287
+        .long   3266236164
+        .long   3106942449
+        .long   3266237116
+        .long   3107600489
+        .long   3266238060
+        .long   3108844279
+        .long   3266239004
+        .long   3106531253
+        .long   3266239932
+        .long   3109100650
+        .long   3266240860
+        .long   3108213420
+        .long   3266241780
+        .long   3108112381
+        .long   3266242692
+        .long   3108845034
+        .long   3266243604
+        .long   3106263589
+        .long   3266244500
+        .long   3108802209
+        .long   3266245396
+        .long   3108116909
+        .long   3266246284
+        .long   3108445707
+        .long   3266247164
+        .long   3109831435
+        .long   3266248044
+        .long   3108121760
+        .long   3266248916
+        .long   3107552123
+        .long   3266249780
+        .long   3108162844
+        .long   3266250644
+        .long   3105799146
+        .long   3266251492
+        .long   3108888393
+        .long   3266252340
+        .long   3109079979
+        .long   3266253188
+        .long   3106411173
+        .long   3266254020
+        .long   3109307139
+        .long   3266254852
+        .long   3109415127
+        .long   3266255684
+        .long   3106770317
+        .long   3266256500
+        .long   3109795834
+        .long   3266257324
+        .long   3105942641
+        .long   3266258132
+        .long   3107826892
+        .long   3266258940
+        .long   3107092610
+        .long   3266259740
+        .long   3107966131
+        .long   3266260540
+        .long   3106284596
+        .long   3266261332
+        .long   3106273188
+        .long   3266262116
+        .long   3107962226
+        .long   3266262900
+        .long   3107187186
+        .long   3266263676
+        .long   3108171617
+        .long   3266264452
+        .long   3106749947
+        .long   3266265220
+        .long   3107144703
+        .long   3266265980
+        .long   3109383615
+        .long   3266266740
+        .long   3109299629
+        .long   3266267500
+        .long   3106919521
+        .long   3266268252
+        .long   3106463913
+        .long   3266268996
+        .long   3107958670
+        .long   3266269740
+        .long   3107234917
+        .long   3266270476
+        .long   3108511954
+        .long   3266271212
+        .long   3107620056
+        .long   3266271940
+        .long   3108777693
+        .long   3266272668
+        .long   3107814325
+        .long   3266273388
+        .long   3108947630
+        .long   3266274108
+        .long   3108006290
+        .long   3266274820
+        .long   3109207222
+        .long   3266275532
+        .long   3108378366
+        .long   3266276236
+        .long   3109735912
+        .long   3266276940
+        .long   3109107087
+        .long   3266277644
+        .long   3106513079
+        .long   3266278340
+        .long   3106169044
+        .long   3266279028
+        .long   3108095503
+        .long   3266279716
+        .long   3108118349
+        .long   3266280404
+        .long   3106257463
+        .long   3266281084
+        .long   3106726720
+        .long   3266281756
+        .long   3109545389
+        .long   3266282436
+        .long   3106343833
+        .long   3266283100
+        .long   3109723642
+        .long   3266283772
+        .long   3107120300
+        .long   3266284436
+        .long   3106940529
+        .long   3266285092
+        .long   3109202170
+        .long   3266285748
+        .long   3109728494
+        .long   3266286404
+        .long   3108536808
+        .long   3266287052
+        .long   3109838471
+        .long   3266287700
+        .long   3109455977
+        .long   3266288348
+        .long   3107405879
+        .long   3266288988
+        .long   3107898790
+        .long   3266289628
+        .long   3106756477
+        .long   3266290260
+        .long   3108189081
+        .long   3266290892
+        .long   3108017907
+        .long   3266291524
+        .long   3106258339
+        .long   3266292148
+        .long   3107119845
+        .long   3266292772
+        .long   3106423069
+        .long   3266293388
+        .long   3108377050
+        .long   3266294004
+        .long   3108802011
+        .long   3266294620
+        .long   3107712277
+        .long   3266295228
+        .long   3109316274
+        .long   3266295836
+        .long   3109433625
+        .long   3266296444
+        .long   3108078064
+        .long   3266297044
+        .long   3109457438
+        .long   3266297644
+        .long   3109390801
+        .long   3266298244
+        .long   3107891329
+        .long   3266298836
+        .long   3109166323
+        .long   3266299428
+        .long   3109034299
+        .long   3266300020
+        .long   3107507904
+        .long   3266300604
+        .long   3108793919
+        .long   3266301188
+        .long   3108710352
+        .long   3266301772
+        .long   3107269350
+        .long   3266302348
+        .long   3108677203
+        .long   3266302924
+        .long   3108751436
+        .long   3266303500
+        .long   3107503720
+        .long   3266304068
+        .long   3109139881
+        .long   3266304636
+        .long   3109476985
+        .long   3266305204
+        .long   3108526254
+        .long   3266305772
+        .long   3106298768
+        .long   3266306332
+        .long   3106999765
+        .long   3266306892
+        .long   3106445739
+        .long   3266307444
+        .long   3108841650
+        .long   3266308004
+        .long   3105809415
+        .long   3266308548
+        .long   3109942336
+        .long   3266309100
+        .long   3108667760
+        .long   3266309652
+        .long   3106190122
+        .long   3266310196
+        .long   3106713732
+        .long   3266310740
+        .long   3106054165
+        .long   3266311276
+        .long   3108415484
+        .long   3266311812
+        .long   3109613023
+        .long   3266312348
+        .long   3109656301
+        .long   3266312884
+        .long   3108554723
+        .long   3266313420
+        .long   3106317576
+        .long   3266313948
+        .long   3107148341
+        .long   3266314476
+        .long   3106861780
+        .long   3266314996
+        .long   3109661153
+        .long   3266315524
+        .long   3107166702
+        .long   3266316044
+        .long   3107775778
+        .long   3266316564
+        .long   3107302717
+        .long   3266317076
+        .long   3109950361
+        .long   3266317596
+        .long   3107338539
+        .long   3266318108
+        .long   3107864196
+        .byte 0
+        .org .+54
+        .byte   0
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   2147483647
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   964689920
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2139095040
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   2063597568
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   1051372345
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   3204448310
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   998244352
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   3212836863
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   2055208960
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   4294967040
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   901758464
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   1065353216
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   3204448256
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   1051372203
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   3196059527
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   1045220287
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   3190475908
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   1041398342
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   3187262718
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   1037844266
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   3187902610
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   1039525906
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   16777216
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   25165824
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   1059760811
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   8388607
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   1060205056
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   901758606
+        .long   2139095040
+        .long   4286578688
+        .byte 0
+        .org .+54
+        .byte   0
+        .long   1065353216
+        .long   3212836864
+        .byte 0
+        .org .+54
+        .byte   0
+        .long   0
+        .long   2147483648
+        .byte 0
+        .org .+54
+        .byte   0
+_vmldLnHATab:
+        .long   1065353216
+        .long   0
+        .long   0
+        .long   1065091072
+        .long   1015087104
+        .long   900509991
+        .long   1064828928
+        .long   1023541248
+        .long   925811956
+        .long   1064566784
+        .long   1027915776
+        .long   3084221144
+        .long   1064304640
+        .long   1032073216
+        .long   3066991812
+        .long   1064173568
+        .long   1033195520
+        .long   882149603
+        .long   1063911424
+        .long   1035468800
+        .long   928189163
+        .long   1063649280
+        .long   1037783040
+        .long   927501741
+        .long   1063518208
+        .long   1038958592
+        .long   3076037756
+        .long   1063256064
+        .long   1040759808
+        .long   904405630
+        .long   1063124992
+        .long   1041361920
+        .long   3052231524
+        .long   1062862848
+        .long   1042581504
+        .long   922094799
+        .long   1062731776
+        .long   1043201024
+        .long   3070120623
+        .long   1062469632
+        .long   1044455424
+        .long   3069864633
+        .long   1062338560
+        .long   1045091328
+        .long   3063188516
+        .long   1062207488
+        .long   1045733376
+        .long   3054902185
+        .long   1061945344
+        .long   1047035904
+        .long   920635797
+        .long   1061814272
+        .long   1047697408
+        .long   904920689
+        .long   1061683200
+        .long   1048365056
+        .long   912483742
+        .long   1061552128
+        .long   1048807936
+        .long   3052664405
+        .long   1061421056
+        .long   1049148416
+        .long   912794238
+        .long   1061158912
+        .long   1049840384
+        .long   889474359
+        .long   1061027840
+        .long   1050191872
+        .long   3059868362
+        .long   1060896768
+        .long   1050546944
+        .long   3059256525
+        .long   1060765696
+        .long   1050905600
+        .long   912008988
+        .long   1060634624
+        .long   1051268352
+        .long   912290698
+        .long   1060503552
+        .long   1051635200
+        .long   3037211048
+        .long   1060372480
+        .long   1052005888
+        .long   906226119
+        .long   1060241408
+        .long   1052380928
+        .long   3052480305
+        .long   1060110336
+        .long   1052760064
+        .long   3048768765
+        .long   1059979264
+        .long   1053143552
+        .long   3049975450
+        .long   1059848192
+        .long   1053531392
+        .long   894485718
+        .long   1059717120
+        .long   1053923840
+        .long   897598623
+        .long   1059586048
+        .long   1054320896
+        .long   907355277
+        .long   1059586048
+        .long   1054320896
+        .long   907355277
+        .long   1059454976
+        .long   1054722816
+        .long   881705073
+        .long   1059323904
+        .long   1055129600
+        .long   3049723733
+        .long   1059192832
+        .long   1055541248
+        .long   890353599
+        .long   1059061760
+        .long   1055958016
+        .long   908173938
+        .long   1059061760
+        .long   1055958016
+        .long   908173938
+        .long   1058930688
+        .long   1056380160
+        .long   883644938
+        .long   1058799616
+        .long   1056807680
+        .long   3052015799
+        .long   1058668544
+        .long   1057102592
+        .long   884897284
+        .long   1058668544
+        .long   1057102592
+        .long   884897284
+        .long   1058537472
+        .long   1057321920
+        .long   3037632470
+        .long   1058406400
+        .long   1057544128
+        .long   865017195
+        .long   1058275328
+        .long   1057769344
+        .long   3042936546
+        .long   1058275328
+        .long   1057769344
+        .long   3042936546
+        .long   1058144256
+        .long   1057997568
+        .long   903344518
+        .long   1058013184
+        .long   1058228992
+        .long   897862967
+        .long   1058013184
+        .long   1058228992
+        .long   897862967
+        .long   1057882112
+        .long   1058463680
+        .long   3047822280
+        .long   1057882112
+        .long   1058463680
+        .long   3047822280
+        .long   1057751040
+        .long   1058701632
+        .long   883793293
+        .long   1057619968
+        .long   1058943040
+        .long   851667963
+        .long   1057619968
+        .long   1058943040
+        .long   851667963
+        .long   1057488896
+        .long   1059187968
+        .long   3000004036
+        .long   1057488896
+        .long   1059187968
+        .long   3000004036
+        .long   1057357824
+        .long   1059436544
+        .long   3047430717
+        .long   1057357824
+        .long   1059436544
+        .long   3047430717
+        .long   1057226752
+        .long   1059688832
+        .long   3043802308
+        .long   1057226752
+        .long   1059688832
+        .long   3043802308
+        .long   1057095680
+        .long   1059944960
+        .long   876113044
+        .long   1057095680
+        .long   1059944960
+        .long   876113044
+        .long   1056964608
+        .long   1060205056
+        .long   901758606
+        .long   1060205056
+        .long   901758606
+        .long   1207959616
+        .long   1174405120
+        .long   1008730112
+        .long   1400897536
+        .long   0
+        .long   1065353216
+        .long   3204448256
+        .long   1051372203
+        .long   3196059648
+        .long   1045220557
+        .long   3190467243
+        .long   1041387009
+        .long   3187672480
+        .space 8, 0x0
+_2il0floatpacket_23:
+        .long   0x4b400000, 0x4b400000, 0x4b400000, 0x4b400000
+_2il0floatpacket_92:
+        .long   0x53800000
+_2il0floatpacket_93:
+        .long   0x3c200000
+_2il0floatpacket_94:
+        .long   0xbe0005a0
+_2il0floatpacket_95:
+        .long   0x3e124e01
+_2il0floatpacket_96:
+        .long   0xbe2aaaab
+_2il0floatpacket_97:
+        .long   0x3e4ccccd
+_2il0floatpacket_98:
+        .long   0xbe800000
+_2il0floatpacket_99:
+        .long   0x3eaaaaab
+_2il0floatpacket_100:
+        .long   0xbf000000
+_2il0floatpacket_101:
+        .long   0xbf800000
+_2il0floatpacket_102:
+        .long   0x3f317218
+_2il0floatpacket_103:
+        .long   0x3f317200
+_2il0floatpacket_104:
+        .long   0x35bfbe8e
+_2il0floatpacket_105:
+        .long   0x48000040
+_2il0floatpacket_106:
+        .long   0x46000000
+_2il0floatpacket_107:
+        .long   0x3f800000
+        .data
+#endif

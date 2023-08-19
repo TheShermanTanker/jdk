@@ -47,7 +47,7 @@ typedef struct {
  * factors) used in SetRenderState(), indexed by the rule constants from the
  * AlphaComposite class.
  */
-D3DBlendRule StdBlendRules[] = {
+static D3DBlendRule StdBlendRules[] = {
     { D3DBLEND_ZERO,         D3DBLEND_ZERO        }, /* 0 - Nothing      */
     { D3DBLEND_ZERO,         D3DBLEND_ZERO        }, /* 1 - RULE_Clear   */
     { D3DBLEND_ONE,          D3DBLEND_ZERO        }, /* 2 - RULE_Src     */

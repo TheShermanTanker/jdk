@@ -137,7 +137,7 @@ $(eval $(call SetupBuildLauncher, java, \
     CFLAGS := -DSTATIC_BUILD, \
     LDFLAGS := $(LDFLAGS_STATIC_JDK), \
     LIBS := $(STATIC_LIBS) $(EXTERNAL_LIBS), \
-    LINK_TYPE := C++, \
+    LANG := C++, \
     OUTPUT_DIR := $(STATIC_LAUNCHER_OUTPUT_DIR), \
     OBJECT_DIR := $(STATIC_LAUNCHER_OUTPUT_DIR), \
 ))

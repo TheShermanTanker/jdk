@@ -36,6 +36,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJ2GSS, \
     OPTIMIZATION := LOW, \
     EXTRA_HEADER_DIRS := java.base:libjava, \
     DISABLED_WARNINGS_gcc := undef unused-but-set-variable, \
+    DISABLED_WARNINGS_gcc_windows_GSSLibStub.c := format, \
+    DISABLED_WARNINGS_gcc_windows := cast-function-type, \
     DISABLED_WARNINGS_clang := undef unused-but-set-variable, \
     LIBS_unix := $(LIBDL), \
 ))
@@ -49,11 +51,16 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBSSPI_BRIDGE, \
       NAME := sspi_bridge, \
+      LANG := C++, \
       OPTIMIZATION := LOW, \
       EXTRA_HEADER_DIRS := \
           libj2gss \
           java.base:libjava, \
-      LIBS_windows := secur32.lib, \
+      DISABLED_WARNINGS_gcc := parentheses unknown-pragmas undef \
+          format conversion-null sign-compare delete-incomplete \
+          missing-field-initializers, \
+      LIBS_microsoft := secur32.lib, \
+      LIBS_gcc := -lsecur32, \
   ))
 
   TARGETS += $(BUILD_LIBSSPI_BRIDGE)
@@ -69,7 +76,9 @@ ifneq ($(BUILD_CRYPTO), false)
         NAME := w2k_lsa_auth, \
         OPTIMIZATION := LOW, \
         EXTRA_HEADER_DIRS := java.base:libjava, \
-        LIBS_windows := advapi32.lib kernel32.lib secur32.lib ws2_32.lib, \
+        DISABLED_WARNINGS_gcc_NativeCreds.c := format, \
+        LIBS_microsoft := advapi32.lib kernel32.lib secur32.lib ws2_32.lib, \
+        LIBS_gcc := -lsecur32 -lws2_32, \
     ))
 
     TARGETS += $(BUILD_LIBW2K_LSA_AUTH)

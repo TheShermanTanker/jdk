@@ -74,6 +74,8 @@
 
 #include <awt_DnDDT.h>
 
+static LPCTSTR DrawingStateProp = TEXT("SunAwtDrawingStateProp");
+
 LPCTSTR szAwtComponentClassName = TEXT("SunAwtComponent");
 // register a message that no other window in the process (even in a plugin
 // scenario) will be using
@@ -341,7 +343,7 @@ void AwtComponent::Dispose()
 
 /* store component pointer in window extra bytes */
 void AwtComponent::SetComponentInHWND() {
-    DASSERT(::GetWindowLongPtr(GetHWnd(), GWLP_USERDATA) == NULL);
+    DASSERT(::GetWindowLongPtr(GetHWnd(), GWLP_USERDATA) == reinterpret_cast<LONG_PTR>(nullptr));
     ::SetWindowLongPtr(GetHWnd(), GWLP_USERDATA, (LONG_PTR)this);
 }
 
@@ -3556,7 +3558,7 @@ UINT AwtComponent::WindowsKeyToJavaChar(UINT wkey, UINT modifiers, TransOps ops,
                     // Shift state bits returned by ::VkKeyScan in HIBYTE
                     static const UINT _VKS_SHIFT_MASK = 0x01;
                     static const UINT _VKS_CTRL_MASK = 0x02;
-                    static const UINT _VKS_ALT_MASK = 0x04;
+                 // static const UINT _VKS_ALT_MASK = 0x04;
 
                     // Check to see whether there is a meaningful translation
                     TCHAR ch;
@@ -3579,7 +3581,7 @@ UINT AwtComponent::WindowsKeyToJavaChar(UINT wkey, UINT modifiers, TransOps ops,
         } // ctrlIsDown
     } // modifiers
 
-    WORD wChar[2];
+    WCHAR wChar[2];
     int converted = 1;
     UINT ch = ::MapVirtualKeyEx(wkey, 2, GetKeyboardLayout());
     if (ch & 0x80000000) {
@@ -6238,8 +6240,7 @@ ret:
     return result;
 }
 
-void AwtComponent::_SetParent(void * param)
-{
+void AwtComponent::_SetParent(void * param) {
     if (AwtToolkit::IsMainThread()) {
         JNIEnv *env = (JNIEnv *)JNU_GetEnv(jvm, JNI_VERSION_1_2);
         SetParentStruct *data = static_cast<SetParentStruct*>(param);
@@ -6442,8 +6443,7 @@ AwtComponent_GetHWnd(JNIEnv *env, jlong pData)
     return p->GetHWnd();
 }
 
-static void _GetInsets(void* param)
-{
+static void _GetInsets(void* param) {
     JNIEnv *env = (JNIEnv *)JNU_GetEnv(jvm, JNI_VERSION_1_2);
 
     GetInsetsStruct *gis = static_cast<GetInsetsStruct *>(param);
@@ -7304,7 +7304,7 @@ void AwtComponent::VerifyState()
         }
         printf("\twas:       [%d,%d,%dx%d]\n", x, y, width, height);
         if (!fSizeValid) {
-            printf("\tshould be: [%d,%d,%dx%d]\n", rect.left, rect.top,
+            printf("\tshould be: [%ld,%ld,%ldx%ld]\n", rect.left, rect.top,
                    rect.right-rect.left, rect.bottom-rect.top);
         }
         if (!fVisibleValid) {

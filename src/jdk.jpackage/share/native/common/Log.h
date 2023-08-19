@@ -206,7 +206,7 @@ private:
 #define LOGGER_LOG(logger, logLevel, message) \
     do { \
         if (logger.isLoggable(logLevel)) { \
-            logger.log(logLevel, _T(__FILE__), __LINE__, _T(__FUNCTION__), message); \
+            logger.log(logLevel, _T(__FILE__), __LINE__, tstrings::fromUtf8(__func__).data(), message); \
         } \
     } while(false)
 
@@ -218,8 +218,8 @@ private:
 #define LOGGER_ERROR(logger, message)   LOGGER_LOG(logger, Logger::LOG_ERROR, message)
 // scope tracing macros
 #define LOGGER_TRACE_SCOPE(logger, scopeName) \
-    Logger::ScopeTracer tracer__COUNTER__(logger, Logger::LOG_TRACE, _T(__FILE__), __LINE__, _T(__FUNCTION__), scopeName)
-#define LOGGER_TRACE_FUNCTION(logger)   LOGGER_TRACE_SCOPE(logger, _T(__FUNCTION__))
+    Logger::ScopeTracer tracer__COUNTER__(logger, Logger::LOG_TRACE, _T(__FILE__), __LINE__, tstrings::fromUtf8(__func__).data(), scopeName)
+#define LOGGER_TRACE_FUNCTION(logger)   LOGGER_TRACE_SCOPE(logger, tstrings::fromUtf8(__func__).data())
 
 
 // default logger macros

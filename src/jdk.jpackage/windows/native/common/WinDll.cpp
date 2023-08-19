@@ -37,7 +37,7 @@ Dll::Handle loadLibrary(const std::wstring& path) {
     HMODULE h = LoadLibraryW(path.c_str());
     if (!h) {
         JP_THROW(SysError(tstrings::any() << "LoadLibraryW(" <<
-                                            path << ") failed", LoadLibraryW));
+                                            path << ") failed", reinterpret_cast<uintptr_t>(LoadLibraryW)));
     }
     return Dll::Handle(h);
 }
@@ -58,16 +58,16 @@ Dll::Dll(const Dll& other): thePath(other.thePath) {
     HMODULE h = NULL;
     if (!GetModuleHandleExW(0, thePath.c_str(), &h)) {
         JP_THROW(SysError(tstrings::any() << "GetModuleHandleExW("
-                                << thePath << ") failed", GetModuleHandleExW));
+                                << thePath << ") failed", reinterpret_cast<uintptr_t>(GetModuleHandleExW)));
     }
     handle = Handle(h);
 }
 
 void* Dll::getFunction(const std::string &name, bool throwIfNotFound) const {
-    void *ptr = GetProcAddress(handle.get(), name.c_str());
+    void *ptr = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(GetProcAddress(handle.get(), name.c_str())));
     if (throwIfNotFound && ptr == NULL) {
         JP_THROW(SysError(tstrings::any() << "GetProcAddress(" << thePath
-                              << ", " << name << ") failed", GetProcAddress));
+                              << ", " << name << ") failed", reinterpret_cast<uintptr_t>(GetProcAddress)));
     }
     return ptr;
 }

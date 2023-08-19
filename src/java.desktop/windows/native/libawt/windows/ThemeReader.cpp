@@ -764,7 +764,7 @@ JNIEXPORT jobject JNICALL Java_sun_awt_windows_ThemeReader_getPosition
  */
 JNIEXPORT jobject JNICALL Java_sun_awt_windows_ThemeReader_getPartSize
 (JNIEnv *env, jclass klass, jlong theme, jint part, jint state) {
-    if (theme != NULL) {
+    if (theme != reinterpret_cast<jlong>(nullptr)) {
         SIZE size;
 
         if (SUCCEEDED(GetThemePartSizeFunc((HTHEME)theme, NULL, part, state,
@@ -807,7 +807,7 @@ JNIEXPORT jobject JNICALL Java_sun_awt_windows_ThemeReader_getPartSize
 JNIEXPORT jobject JNICALL Java_sun_awt_windows_ThemeReader_getThemeBackgroundContentMargins
 (JNIEnv *env, jclass klass, jlong hTheme, jint part, jint state,
 jint boundingWidth, jint boundingHeight) {
-    if (hTheme != NULL) {
+    if (hTheme != reinterpret_cast<jlong>(nullptr)) {
         RECT boundingRect;
         boundingRect.left = 0;
         boundingRect.top = 0;

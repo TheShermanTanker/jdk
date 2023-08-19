@@ -144,10 +144,10 @@ typedef struct EVENT_STRUCT
 #define THREAD_PROC unsigned int
 typedef unsigned int (*THREAD_ROUTINE)(LPVOID lpThreadParameter);
 
-static HANDLE BeginThread(THREAD_ROUTINE thread_func,DWORD *id,DWORD param)
+static HANDLE BeginThread(THREAD_ROUTINE thread_func,DWORD *id,void *param)
 {
     HANDLE ret;
-    ret = (HANDLE) _beginthreadex(NULL,0,thread_func,(void *)param,0,(unsigned int *)id);
+    ret = (HANDLE) _beginthreadex(NULL,0,thread_func,param,0,(unsigned int *)id);
     if(ret == INVALID_HANDLE_VALUE)
         ret = NULL;
     return(ret);
@@ -158,7 +158,7 @@ DWORD JavaBridgeThreadId = 0;
 static THREAD_PROC JavaBridgeThread(LPVOID param1)
 {
     MSG msg;
-    DWORD rc = 0;
+ // DWORD rc = 0;
     while (GetMessage(&msg,        // message structure
                       NULL,                  // handle of window receiving the message
                       0,                  // lowest message to examine
@@ -172,7 +172,8 @@ static THREAD_PROC JavaBridgeThread(LPVOID param1)
                     toCopy.cbData = event_struct->bufsize;
                     toCopy.lpData = event_struct->buffer;
 
-                    LRESULT ret = SendMessage((HWND)ABLongToHandle(event_struct->winAccessBridgeWindow), WM_COPYDATA,
+                 // LRESULT ret =
+                                  SendMessage((HWND)ABLongToHandle(event_struct->winAccessBridgeWindow), WM_COPYDATA,
                                               (WPARAM)event_struct->ourAccessBridgeWindow, (LPARAM) &toCopy);
                     delete event_struct->buffer;
                     delete event_struct;
@@ -197,7 +198,7 @@ static void do_event(char *buffer, int bufsize,HWND ourAccessBridgeWindow,HWND w
     event_struct->winAccessBridgeWindow = ABHandleToLong(winAccessBridgeWindow);
     if(!JavaBridgeThreadId)
         {
-            HANDLE JavaBridgeThreadHandle = BeginThread(JavaBridgeThread,&JavaBridgeThreadId,(DWORD)event_struct);
+            HANDLE JavaBridgeThreadHandle = BeginThread(JavaBridgeThread,&JavaBridgeThreadId,event_struct);
             CloseHandle(JavaBridgeThreadHandle);
         }
     PostThreadMessage(JavaBridgeThreadId,WM_USER,(WPARAM)event_struct,0);

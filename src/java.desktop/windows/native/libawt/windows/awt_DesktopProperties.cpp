@@ -37,6 +37,13 @@
 #include <shellapi.h>
 #include <shlobj.h>
 
+#ifndef min
+#define min(a,b) ((a) <= (b)? (a):(b))
+#endif
+#ifndef max
+#define max(a,b) ((a) >= (b)? (a):(b))
+#endif
+
 // WDesktopProperties fields
 jfieldID AwtDesktopProperties::pDataID = 0;
 jmethodID AwtDesktopProperties::setBooleanPropertyID = 0;

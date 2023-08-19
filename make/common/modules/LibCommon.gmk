@@ -30,6 +30,28 @@ ifeq ($(INCLUDE), true)
 
 include JdkNativeCompilation.gmk
 
+ifeq ($(LINK_TIME_OPT_ENABLED), true)
+  ifeq ($(call Or, $(if $(LINK_TIME_OPT), false, true) $(if $(filter $(MODULE), $(LINK_TIME_OPT))), true, false), true)
+    ifeq ($(TOOLCHAIN_TYPE), gcc)
+      CFLAGS_JDKLIB += -flto=$(JOBS) -fuse-linker-plugin -fno-fat-lto-objects
+      CXXFLAGS_JDKLIB += -flto=$(JOBS) -fuse-linker-plugin -fno-fat-lto-objects
+      LDFLAGS_JDKLIB += -flto=$(JOBS) -fuse-linker-plugin $(DEBUG_PREFIX_CFLAGS)
+    else ifeq ($(TOOLCHAIN_TYPE), clang)
+      CFLAGS_JDKLIB += -flto
+      CXXFLAGS_JDKLIB += -flto
+      ifeq ($(call isTargetOs, aix), true)
+        CFLAGS_JDKLIB += -ffat-lto-objects
+        CXXFLAGS_JDKLIB += -ffat-lto-objects
+      endif
+      LDFLAGS_JDKLIB += -flto=$(JOBS) -fuse-linker-plugin $(DEBUG_PREFIX_CFLAGS)
+    else ifeq ($(TOOLCHAIN_TYPE), microsoft)
+      CFLAGS_JDKLIB += -GL -Gy
+      CXXFLAGS_JDKLIB += -GL -Gy
+      LDFLAGS_JDKLIB += -LTCG:INCREMENTAL
+    endif
+  endif
+endif
+
 ################################################################################
 
 endif # include guard

@@ -126,6 +126,18 @@ AC_DEFUN_ONCE([JDKOPT_SETUP_JDK_OPTIONS],
       CHECKING_MSG: [if linker should clean out unused code (linktime-gc)])
   AC_SUBST(ENABLE_LINKTIME_GC)
 
+  UTIL_ARG_WITH(NAME: link-time-opt, DEFAULT: [], TYPE: string,
+      OPTIONAL: true, DEFAULT_DESC: [auto], ENABLED_DEFAULT: false,
+      DESC: [perform link time optimization on native code not including HotSpot],
+      CHECKING_MSG: [whether link time optimization should be performed on native code excluding HotSpot])
+
+  if [ [[ "$LINK_TIME_OPT" =~ "," ]] ]; then
+    LINK_TIME_OPT=`$ECHO "$LINK_TIME_OPT" | $SED -e 's/,/ /g'`
+  fi
+
+  AC_SUBST(LINK_TIME_OPT)
+  AC_SUBST(LINK_TIME_OPT_ENABLED)
+
   # Check for full doc dependencies
   FULL_DOCS_AVAILABLE=true
   AC_MSG_CHECKING([for graphviz dot])
@@ -270,9 +282,9 @@ AC_DEFUN_ONCE([JDKOPT_SETUP_DEBUG_SYMBOLS],
       [AS_HELP_STRING([--with-native-debug-symbols],
       [set the native debug symbol configuration (none, internal, external, zipped) @<:@varying@:>@])],
       [
-        if test "x$OPENJDK_TARGET_OS" = xwindows; then
+        if test "x$TOOLCHAIN_TYPE" = xmicrosoft; then
           if test "x$withval" = xinternal; then
-            AC_MSG_ERROR([Windows does not support the parameter 'internal' for --with-native-debug-symbols])
+            AC_MSG_ERROR([Microsoft does not support the parameter 'internal' for --with-native-debug-symbols])
           fi
         fi
       ],
