@@ -99,14 +99,14 @@ FILE *logfile = NULL;
 MessageHistory g_MessageHistory;
 
 /**
- * WinMain
+ * main
  *
  */
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nShowCmd) {
+int main() {
     MSG msg;
 
     g_LogStringCallback = AddToMessageHistory;
-    theInstance = hInst;
+    theInstance = GetModuleHandle(nullptr);
     theDialogWindow = NULL;
     theGoToDialogWindow = NULL;
 
@@ -118,7 +118,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nS
 
     ReadActiveEventOptionsFromRegistry ();
 
-    if (InitWindow(hInst)) {
+    if (InitWindow(theInstance)) {
         if (initializeAccessBridge() == TRUE) {
             theAccessBridgeLoadedFlag = TRUE;
             ApplyEventOptions(theDialogWindow);
@@ -1209,6 +1209,7 @@ INT_PTR CALLBACK jaccessinspectorDialogProc( HWND hWnd, UINT message,
         return TRUE;
     }
 
+    static_cast<void>(lastError);
     return FALSE;
 }
 

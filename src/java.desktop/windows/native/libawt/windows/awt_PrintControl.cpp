@@ -31,6 +31,18 @@
 #include "awt_PrintDialog.h"
 #include <winspool.h>
 
+#undef _tcstok
+#ifdef _UNICODE
+#define _tcstok [](wchar_t* token, const wchar_t* delimit) { \
+                    wchar_t* buffer; \
+                    return wcstok(token, delimit, &buffer); \
+                }
+#elif defined(_MBCS)
+#define _tcstok _mbstok
+#else
+#define _tcstok strtok
+#endif
+
 #define ROUNDTOINT(x) ((int)((x)+0.5))
 static const int DEFAULT_RES = 72;
 static const double TENTHS_MM_TO_POINTS = 3.527777778;

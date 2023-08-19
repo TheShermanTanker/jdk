@@ -36,7 +36,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBMANAGEMENT, \
     OPTIMIZATION := HIGH, \
     JDK_LIBS := java.base:libjava java.base:libjvm, \
     LIBS_aix := -lperfstat, \
-    LIBS_windows := advapi32.lib psapi.lib, \
+    LIBS_microsoft_windows := advapi32.lib psapi.lib, \
+    LIBS_gcc_windows := -lpsapi, \
 ))
 
 TARGETS += $(BUILD_LIBMANAGEMENT)

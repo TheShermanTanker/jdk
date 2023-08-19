@@ -38,6 +38,13 @@
 #include <java_awt_FontMetrics.h>
 #include <java_awt_event_InputEvent.h>
 
+#ifndef min
+#define min(a,b) ((a) <= (b)? (a):(b))
+#endif
+#ifndef max
+#define max(a,b) ((a) >= (b)? (a):(b))
+#endif
+
 /* IMPORTANT! Read the README.JNI file for notes on JNI converted AWT code.
  */
 
@@ -454,7 +461,7 @@ MsgRouting AwtChoice::WmNotify(UINT notifyCode)
             ::GetComboBoxInfo(GetHWnd(), &cbi);
             m_hList = cbi.hwndList;
             m_listDefWindowProc = ComCtl32Util::GetInstance().SubclassHWND(m_hList, ListWindowProc);
-            DASSERT(::GetWindowLongPtr(m_hList, GWLP_USERDATA) == NULL);
+            DASSERT(::GetWindowLongPtr(m_hList, GWLP_USERDATA) == reinterpret_cast<LONG_PTR>(nullptr));
             ::SetWindowLongPtr(m_hList, GWLP_USERDATA, (LONG_PTR)this);
         }
         sm_isMouseMoveInList = FALSE;

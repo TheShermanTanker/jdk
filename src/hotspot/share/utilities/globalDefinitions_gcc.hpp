@@ -31,15 +31,14 @@
 // globally used constants & types, class (forward)
 // declarations and a few frequently used utility functions.
 
-#include <alloca.h>
-#include <ctype.h>
-#include <inttypes.h>
-#include <string.h>
-#include <stdarg.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cctype>
+#include <cinttypes>
+#include <cstring>
+#include <cstdarg>
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 // In stdlib.h on AIX malloc is defined as a macro causing
 // compiler errors when resolving them in different depths as it
 // happens in the log tags. This avoids the macro.
@@ -50,17 +49,18 @@
 #endif
 #include <wchar.h>
 
-#include <math.h>
-#include <time.h>
+#include <cmath>
+#include <ctime>
 #include <fcntl.h>
-#include <dlfcn.h>
-#include <pthread.h>
 
-#include <limits.h>
-#include <errno.h>
+#include <climits>
+#include <cerrno>
+#include <csignal>
 
 #if defined(LINUX) || defined(_ALLBSD_SOURCE) || defined(_AIX)
-#include <signal.h>
+#include <alloca.h>
+#include <dlfcn.h>
+#include <pthread.h>
 #ifndef __OpenBSD__
 #include <ucontext.h>
 #endif
@@ -72,19 +72,19 @@
 #endif // LINUX || _ALLBSD_SOURCE
 
 // checking for nanness
-#if defined(__APPLE__)
+#ifdef __APPLE__
 inline int g_isnan(double f) { return isnan(f); }
-#elif defined(LINUX) || defined(_ALLBSD_SOURCE) || defined(_AIX)
-inline int g_isnan(float  f) { return isnan(f); }
-inline int g_isnan(double f) { return isnan(f); }
+#elif defined(LINUX) || defined(_ALLBSD_SOURCE) || defined(_AIX) || defined(_WIN32)
+inline int g_isnan(float  f) { return std::isnan(f); }
+inline int g_isnan(double f) { return std::isnan(f); }
 #else
 #error "missing platform-specific definition here"
 #endif
 
 // Checking for finiteness
 
-inline int g_isfinite(jfloat  f)                 { return isfinite(f); }
-inline int g_isfinite(jdouble f)                 { return isfinite(f); }
+inline int g_isfinite(jfloat  f)                 { return std::isfinite(f); }
+inline int g_isfinite(jdouble f)                 { return std::isfinite(f); }
 
 
 // gcc warns about applying offsetof() to non-POD object or calculating
@@ -115,5 +115,11 @@ inline int g_isfinite(jdouble f)                 { return isfinite(f); }
 #define NOINLINE     __attribute__ ((noinline))
 #define ALWAYSINLINE inline __attribute__ ((always_inline))
 #define ATTRIBUTE_FLATTEN __attribute__ ((flatten))
+
+#ifdef _WIN32
+#define M_PI 3.14159265358979323846
+#define WIN32_TRY
+#define WIN32_EXCEPT(filter) if (false)
+#endif
 
 #endif // SHARE_UTILITIES_GLOBALDEFINITIONS_GCC_HPP

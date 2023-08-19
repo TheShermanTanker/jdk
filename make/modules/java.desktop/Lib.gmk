@@ -35,7 +35,7 @@ $(call FillFindCache, $(wildcard $(TOPDIR)/src/java.desktop/*/native))
 # Create the AWT/2D libraries
 
 include lib/AwtLibraries.gmk
-include lib/ClientLibraries.gmk
+include lib/2dLibraries.gmk
 
 ifeq ($(call isTargetOs, aix), false)
   ##############################################################################
@@ -51,19 +51,21 @@ ifeq ($(call isTargetOs, aix), false)
       -DUSE_PLATFORM_MIDI_IN=TRUE \
       #
 
-  LIBJSOUND_LINK_TYPE := C
-  ifeq ($(call isTargetOs, macosx), true)
-    LIBJSOUND_LINK_TYPE := C++
+  LIBJSOUND_LANG := C
+  ifeq ($(call isTargetOs, macosx windows), true)
+    LIBJSOUND_LANG := C++
   endif
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBJSOUND, \
       NAME := jsound, \
-      LINK_TYPE := $(LIBJSOUND_LINK_TYPE), \
+      LANG := $(LIBJSOUND_LANG), \
       OPTIMIZATION := LOW, \
       EXTRA_HEADER_DIRS := java.base:libjava, \
       CFLAGS := $(LIBJSOUND_CFLAGS), \
       CXXFLAGS := $(LIBJSOUND_CFLAGS), \
       DISABLED_WARNINGS_gcc := undef unused-variable, \
+      DISABLED_WARNINGS_gcc_windows := sign-compare type-limits, \
+      DISABLED_WARNINGS_C_gcc_windows := pointer-sign, \
       DISABLED_WARNINGS_clang := undef unused-variable, \
       DISABLED_WARNINGS_clang_PLATFORM_API_MacOSX_MidiUtils.c := \
           unused-but-set-variable, \
@@ -76,7 +78,8 @@ ifeq ($(call isTargetOs, aix), false)
           -framework CoreFoundation \
           -framework CoreMIDI \
           -framework CoreServices, \
-      LIBS_windows := advapi32.lib dsound.lib ole32.lib user32.lib winmm.lib, \
+      LIBS_microsoft_windows := advapi32.lib dsound.lib ole32.lib user32.lib winmm.lib, \
+      LIBS_gcc_windows := -ldsound -lole32 -lwinmm, \
   ))
 
   TARGETS += $(BUILD_LIBJSOUND)

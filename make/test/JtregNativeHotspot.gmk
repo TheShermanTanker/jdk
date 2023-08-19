@@ -79,7 +79,11 @@ ifneq ($(call isTargetOs, linux)+$(call isTargetCpu, aarch64), true+true)
 endif
 
 ifeq ($(call isTargetOs, windows), true)
-  HOTSPOT_JTREG_EXECUTABLES_CFLAGS_exeFPRegs := -MT
+  ifeq ($(TOOLCHAIN_TYPE), gcc)
+    HOTSPOT_JTREG_EXECUTABLES_LDFLAGS_exeFPRegs := -static-libgcc
+  else ifeq ($(TOOLCHAIN_TYPE), microsoft)
+    HOTSPOT_JTREG_EXECUTABLES_CFLAGS_exeFPRegs := -MT
+  endif
   HOTSPOT_JTREG_LIBRARIES_JDK_LIBS_libnativeStack := java.base:libjvm
 
   HOTSPOT_JTREG_EXCLUDE += exesigtest.c libterminatedThread.c libTestJNI.c \

@@ -64,11 +64,8 @@
 #include "utilities/unsigned5.hpp"
 #include "utilities/vmError.hpp"
 
-#include <stdio.h>
-#include <stdarg.h>
-
-// These functions needs to be exported on Windows only
-#define DEBUGEXPORT WINDOWS_ONLY(JNIEXPORT)
+#include <cstdio>
+#include <cstdarg>
 
 // Support for showing register content on asserts/guarantees.
 #ifdef CAN_SHOW_REGISTERS_ON_ASSERT
@@ -315,20 +312,20 @@ class Command : public StackObj {
 
 int Command::level = 0;
 
-extern "C" DEBUGEXPORT void blob(CodeBlob* cb) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void blob(CodeBlob* cb) {
   Command c("blob");
   cb->print();
 }
 
 
-extern "C" DEBUGEXPORT void dump_vtable(address p) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void dump_vtable(address p) {
   Command c("dump_vtable");
   Klass* k = (Klass*)p;
   k->vtable().print();
 }
 
 
-extern "C" DEBUGEXPORT void nm(intptr_t p) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void nm(intptr_t p) {
   // Actually we look through all CodeBlobs (the nm name has been kept for backwards compatibility)
   Command c("nm");
   CodeBlob* cb = CodeCache::find_blob((address)p);
@@ -340,7 +337,7 @@ extern "C" DEBUGEXPORT void nm(intptr_t p) {
 }
 
 
-extern "C" DEBUGEXPORT void disnm(intptr_t p) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void disnm(intptr_t p) {
   Command c("disnm");
   CodeBlob* cb = CodeCache::find_blob((address) p);
   if (cb != nullptr) {
@@ -355,7 +352,7 @@ extern "C" DEBUGEXPORT void disnm(intptr_t p) {
 }
 
 
-extern "C" DEBUGEXPORT void printnm(intptr_t p) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void printnm(intptr_t p) {
   char buffer[256];
   os::snprintf_checked(buffer, sizeof(buffer), "printnm: " INTPTR_FORMAT, p);
   Command c(buffer);
@@ -369,13 +366,13 @@ extern "C" DEBUGEXPORT void printnm(intptr_t p) {
 }
 
 
-extern "C" DEBUGEXPORT void universe() {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void universe() {
   Command c("universe");
   Universe::print_on(tty);
 }
 
 
-extern "C" DEBUGEXPORT void verify() {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void verify() {
   // try to run a verify on the entire system
   // note: this may not be safe if we're not at a safepoint; for debugging,
   // this manipulates the safepoint settings to avoid assertion failures
@@ -392,7 +389,7 @@ extern "C" DEBUGEXPORT void verify() {
 }
 
 
-extern "C" DEBUGEXPORT void pp(void* p) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void pp(void* p) {
   Command c("pp");
   FlagSetting fl(DisplayVMOutput, true);
   if (p == nullptr) {
@@ -417,9 +414,9 @@ extern "C" DEBUGEXPORT void pp(void* p) {
 }
 
 
-extern "C" DEBUGEXPORT void findpc(intptr_t x);
+extern "C" WINDOWS_ONLY(JNIEXPORT) void findpc(intptr_t x);
 
-extern "C" DEBUGEXPORT void ps() { // print stack
+extern "C" WINDOWS_ONLY(JNIEXPORT) void ps() { // print stack
   if (Thread::current_or_null() == nullptr) return;
   Command c("ps");
 
@@ -448,7 +445,7 @@ extern "C" DEBUGEXPORT void ps() { // print stack
   }
 }
 
-extern "C" DEBUGEXPORT void pfl() {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void pfl() {
   // print frame layout
   Command c("pfl");
   JavaThread* p = JavaThread::active();
@@ -460,7 +457,7 @@ extern "C" DEBUGEXPORT void pfl() {
   }
 }
 
-extern "C" DEBUGEXPORT void psf() { // print stack frames
+extern "C" WINDOWS_ONLY(JNIEXPORT) void psf() { // print stack frames
   {
     Command c("psf");
     JavaThread* p = JavaThread::active();
@@ -474,19 +471,19 @@ extern "C" DEBUGEXPORT void psf() { // print stack frames
 }
 
 
-extern "C" DEBUGEXPORT void threads() {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void threads() {
   Command c("threads");
   Threads::print(false, true);
 }
 
 
-extern "C" DEBUGEXPORT void psd() {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void psd() {
   Command c("psd");
   SystemDictionary::print();
 }
 
 
-extern "C" DEBUGEXPORT void pss() { // print all stacks
+extern "C" WINDOWS_ONLY(JNIEXPORT) void pss() { // print all stacks
   if (Thread::current_or_null() == nullptr) return;
   Command c("pss");
   Threads::print(true, PRODUCT_ONLY(false) NOT_PRODUCT(true));
@@ -494,7 +491,7 @@ extern "C" DEBUGEXPORT void pss() { // print all stacks
 
 // #ifndef PRODUCT
 
-extern "C" DEBUGEXPORT void debug() {               // to set things up for compiler debugging
+extern "C" WINDOWS_ONLY(JNIEXPORT) void debug() {               // to set things up for compiler debugging
   Command c("debug");
   NOT_PRODUCT(WizardMode = true;)
   PrintCompilation = true;
@@ -503,7 +500,7 @@ extern "C" DEBUGEXPORT void debug() {               // to set things up for comp
 }
 
 
-extern "C" DEBUGEXPORT void ndebug() {              // undo debug()
+extern "C" WINDOWS_ONLY(JNIEXPORT) void ndebug() {              // undo debug()
   Command c("ndebug");
   PrintCompilation = false;
   PrintInlining = PrintAssembly = false;
@@ -511,35 +508,35 @@ extern "C" DEBUGEXPORT void ndebug() {              // undo debug()
 }
 
 
-extern "C" DEBUGEXPORT void flush()  {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void flush()  {
   Command c("flush");
   tty->flush();
 }
 
-extern "C" DEBUGEXPORT void events() {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void events() {
   Command c("events");
   Events::print();
 }
 
-extern "C" DEBUGEXPORT Method* findm(intptr_t pc) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) Method* findm(intptr_t pc) {
   Command c("findm");
   nmethod* nm = CodeCache::find_nmethod((address)pc);
   return (nm == nullptr) ? (Method*)nullptr : nm->method();
 }
 
 
-extern "C" DEBUGEXPORT nmethod* findnm(intptr_t addr) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) nmethod* findnm(intptr_t addr) {
   Command c("findnm");
   return  CodeCache::find_nmethod((address)addr);
 }
 
-extern "C" DEBUGEXPORT void find(intptr_t x) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void find(intptr_t x) {
   Command c("find");
   os::print_location(tty, x, false);
 }
 
 
-extern "C" DEBUGEXPORT void findpc(intptr_t x) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void findpc(intptr_t x) {
   Command c("findpc");
   os::print_location(tty, x, true);
 }
@@ -550,13 +547,13 @@ extern "C" DEBUGEXPORT void findpc(intptr_t x) {
 //   call findclass("java/lang/Object", 0x3)             -> find j.l.Object and disasm all of its methods
 //   call findmethod("*ang/Object*", "wait", 0xff)       -> detailed disasm of all "wait" methods in j.l.Object
 //   call findmethod("*ang/Object*", "wait:(*J*)V", 0x1) -> list all "wait" methods in j.l.Object that have a long parameter
-extern "C" DEBUGEXPORT void findclass(const char* class_name_pattern, int flags) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void findclass(const char* class_name_pattern, int flags) {
   Command c("findclass");
   ClassPrinter::print_flags_help(tty);
   ClassPrinter::print_classes(class_name_pattern, flags, tty);
 }
 
-extern "C" DEBUGEXPORT void findmethod(const char* class_name_pattern,
+extern "C" WINDOWS_ONLY(JNIEXPORT) void findmethod(const char* class_name_pattern,
                                      const char* method_pattern, int flags) {
   Command c("findmethod");
   ClassPrinter::print_flags_help(tty);
@@ -564,7 +561,7 @@ extern "C" DEBUGEXPORT void findmethod(const char* class_name_pattern,
 }
 
 // Need method pointer to find bcp
-extern "C" DEBUGEXPORT void findbcp(intptr_t method, intptr_t bcp) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) void findbcp(intptr_t method, intptr_t bcp) {
   Command c("findbcp");
   Method* mh = (Method*)method;
   if (!mh->is_native()) {
@@ -575,7 +572,7 @@ extern "C" DEBUGEXPORT void findbcp(intptr_t method, intptr_t bcp) {
 }
 
 // check and decode a single u5 value
-extern "C" DEBUGEXPORT u4 u5decode(intptr_t addr) {
+extern "C" WINDOWS_ONLY(JNIEXPORT) u4 u5decode(intptr_t addr) {
   Command c("u5decode");
   u1* arr = (u1*)addr;
   size_t off = 0, lim = 5;
@@ -592,7 +589,7 @@ extern "C" DEBUGEXPORT u4 u5decode(intptr_t addr) {
 // there is no limit on the count of items printed; the
 // printing stops when an null is printed or at limit.
 // See documentation for UNSIGNED5::Reader::print(count).
-extern "C" DEBUGEXPORT intptr_t u5p(intptr_t addr,
+extern "C" WINDOWS_ONLY(JNIEXPORT) intptr_t u5p(intptr_t addr,
                                   intptr_t limit,
                                   int count) {
   Command c("u5p");
@@ -643,7 +640,7 @@ void help() {
 }
 
 #ifndef PRODUCT
-extern "C" DEBUGEXPORT void pns(void* sp, void* fp, void* pc) { // print native stack
+extern "C" WINDOWS_ONLY(JNIEXPORT) void pns(void* sp, void* fp, void* pc) { // print native stack
   Command c("pns");
   static char buf[O_BUFLEN];
   // Call generic frame constructor (certain arguments may be ignored)
@@ -661,7 +658,7 @@ extern "C" DEBUGEXPORT void pns(void* sp, void* fp, void* pc) { // print native 
 // WARNING: Only intended for use when debugging. Do not leave calls to
 // pns2() in committed source (product or debug).
 //
-extern "C" DEBUGEXPORT void pns2() { // print native stack
+extern "C" WINDOWS_ONLY(JNIEXPORT) void pns2() { // print native stack
   Command c("pns2");
   static char buf[O_BUFLEN];
   address lastpc = nullptr;

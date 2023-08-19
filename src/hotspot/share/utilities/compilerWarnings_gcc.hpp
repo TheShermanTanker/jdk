@@ -28,10 +28,10 @@
 // Macros related to control of compiler warnings.
 
 #ifndef ATTRIBUTE_PRINTF
-#define ATTRIBUTE_PRINTF(fmt,vargs)  __attribute__((format(printf, fmt, vargs)))
+#define ATTRIBUTE_PRINTF(fmt,vargs)  NOT_WINDOWS(__attribute__((format(printf, fmt, vargs))))
 #endif
 #ifndef ATTRIBUTE_SCANF
-#define ATTRIBUTE_SCANF(fmt,vargs)  __attribute__((format(scanf, fmt, vargs)))
+#define ATTRIBUTE_SCANF(fmt,vargs)  NOT_WINDOWS(__attribute__((format(scanf, fmt, vargs))))
 #endif
 
 #define PRAGMA_DISABLE_GCC_WARNING(optstring) _Pragma(STR(GCC diagnostic ignored optstring))
@@ -86,7 +86,7 @@
 // so uses of functions that are both forbidden and fortified won't cause
 // forbidden warnings in such builds.
 #define FORBID_C_FUNCTION(signature, alternative) \
-  extern "C" __attribute__((__warning__(alternative))) signature;
+  [[gnu::warning(alternative)]] signature noexcept
 
 // Disable warning attribute over the scope of the affected statement.
 // The name serves only to document the intended function.

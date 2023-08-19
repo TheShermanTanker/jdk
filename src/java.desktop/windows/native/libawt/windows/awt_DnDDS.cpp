@@ -23,21 +23,13 @@
  * questions.
  */
 
-#pragma push_macro("bad_alloc")
-//"bad_alloc" would be introduced in STL as "std::zbad_alloc" and discarded by linker
-//by this action we avoid the conflict with AWT implementation of "bad_alloc"
-//we need <new> inclusion for STL "new" oprators set.
-#define bad_alloc zbad_alloc
 #include <new>
 
 #if defined(_DEBUG) || defined(DEBUG)
-extern void * operator new(size_t size, const char * filename, int linenumber);
-void * operator new(size_t size) {return operator new(size, "stl", 1);}
+extern void * operator new(std::size_t size, const char * filename, int linenumber);
+void * operator new(std::size_t size) {return operator new(size, "stl", 1);}
 #endif
 #include <map>
-
-#pragma pop_macro("bad_alloc")
-//"bad_alloc" is undefined from here
 
 #include <shlobj.h>
 
