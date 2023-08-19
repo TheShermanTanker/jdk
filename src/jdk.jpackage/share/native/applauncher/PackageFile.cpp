@@ -41,7 +41,7 @@ PackageFile PackageFile::loadFromAppDir(const tstring& appDirPath) {
     if (FileUtils::isFileExists(packageFilePath)) {
         LOG_TRACE(tstrings::any() << "Read \"" << packageFilePath
                                   << "\" package file");
-        std::ifstream input(packageFilePath);
+        std::ifstream input(tstrings::toUtf8(packageFilePath));
         if (!input.good()) {
             JP_THROW(tstrings::any() << "Error opening \"" << packageFilePath
                     << "\" file: " << lastCRTError());

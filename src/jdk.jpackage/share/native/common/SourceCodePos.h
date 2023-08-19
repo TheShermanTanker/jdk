@@ -48,9 +48,9 @@ struct SourceCodePos
 // Initializes SourceCodePos instance with the
 // information from the point of calling.
 #ifdef THIS_FILE
-    #define JP_SOURCE_CODE_POS SourceCodePos(THIS_FILE, __FUNCTION__, __LINE__)
+    #define JP_SOURCE_CODE_POS SourceCodePos(THIS_FILE, __func__, __LINE__)
 #else
-    #define JP_SOURCE_CODE_POS SourceCodePos(__FILE__, __FUNCTION__, __LINE__)
+    #define JP_SOURCE_CODE_POS SourceCodePos(__FILE__, __func__, __LINE__)
 #endif
 
 

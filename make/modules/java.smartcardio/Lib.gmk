@@ -39,7 +39,8 @@ $(eval $(call SetupJdkLibrary, BUILD_LIBJ2PCSC, \
         java.base:libjava, \
     OPTIMIZATION := LOW, \
     LIBS_unix := $(LIBDL), \
-    LIBS_windows := winscard.lib, \
+    LIBS_microsoft_windows := winscard.lib, \
+    LIBS_gcc_windows  := -lwinscard, \
 ))
 
 TARGETS += $(BUILD_LIBJ2PCSC)

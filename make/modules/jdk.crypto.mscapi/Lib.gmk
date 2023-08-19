@@ -34,10 +34,13 @@ ifeq ($(call isTargetOs, windows), true)
 
   $(eval $(call SetupJdkLibrary, BUILD_LIBSUNMSCAPI, \
       NAME := sunmscapi, \
+      LANG := C++, \
       OPTIMIZATION := LOW, \
       EXTRA_HEADER_DIRS := java.base:libjava, \
+      DISABLED_WARNINGS_gcc := conversion-null maybe-uninitialized sign-compare, \
       LDFLAGS := $(LDFLAGS_CXX_JDK), \
-      LIBS_windows := advapi32.lib crypt32.lib ncrypt.lib, \
+      LIBS_microsoft_windows := advapi32.lib crypt32.lib ncrypt.lib, \
+      LIBS_gcc_windows := -lcrypt32 -lncrypt, \
   ))
 
   TARGETS += $(BUILD_LIBSUNMSCAPI)

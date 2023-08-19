@@ -1,56 +1,56 @@
-;
-; Copyright (c) 2018, 2021, Intel Corporation. All rights reserved.
-; Intel Short Vector Math Library (SVML) Source Code
-;
-; DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-;
-; This code is free software; you can redistribute it and/or modify it
-; under the terms of the GNU General Public License version 2 only, as
-; published by the Free Software Foundation.  Oracle designates this
-; particular file as subject to the "Classpath" exception as provided
-; by Oracle in the LICENSE file that accompanied this code.
-;
-; This code is distributed in the hope that it will be useful, but WITHOUT
-; ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-; FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-; version 2 for more details (a copy is included in the LICENSE file that
-; accompanied this code).
-;
-; You should have received a copy of the GNU General Public License version
-; 2 along with this work; if not, write to the Free Software Foundation,
-; Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
-;
-; Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
-; or visit www.oracle.com if you need additional information or have any
-; questions.
-;
+/*
+ * Copyright (c) 2018, 2021, Intel Corporation. All rights reserved.
+ * Intel Short Vector Math Library (SVML) Source Code
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * This code is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License version 2 only, as
+ * published by the Free Software Foundation.  Oracle designates this
+ * particular file as subject to the "Classpath" exception as provided
+ * by Oracle in the LICENSE file that accompanied this code.
+ *
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+ * version 2 for more details (a copy is included in the LICENSE file that
+ * accompanied this code).
+ *
+ * You should have received a copy of the GNU General Public License version
+ * 2 along with this work; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA.
+ *
+ * Please contact Oracle, 500 Oracle Parkway, Redwood Shores, CA 94065 USA
+ * or visit www.oracle.com if you need additional information or have any
+ * questions.
+ */
 
-INCLUDE globals_vectorApiSupport_windows.S.inc
-IFNB __VECTOR_API_MATH_INTRINSICS_WINDOWS
-        OPTION DOTNAME
+#include "globals_vectorApiSupport_windows.S.inc"
+#ifdef __VECTOR_API_MATH_INTRINSICS_WINDOWS
+        .intel_syntax noprefix
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST0:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p4_ha_l9
+        .align    16, 0x90
+        .globl __jsvml_log1p4_ha_l9
 
-__jsvml_log1p4_ha_l9    PROC    EXPORT
+__jsvml_log1p4_ha_l9:
 
-_B1_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L1::
+.L_B1_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L1:
 
         sub       rsp, 552
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         vmovups   YMMWORD PTR [336+rsp], ymm15
         vmovups   YMMWORD PTR [368+rsp], ymm14
         vmovups   YMMWORD PTR [400+rsp], ymm13
@@ -59,28 +59,28 @@ L1::
         vmovups   YMMWORD PTR [496+rsp], ymm9
         mov       QWORD PTR [528+rsp], r13
         lea       r13, QWORD PTR [239+rsp]
-        vmovupd   ymm9, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        vmovupd   ymm9, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
-        vmovupd   ymm15, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
+        vmovupd   ymm15, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
         vmovdqa   ymm4, ymm0
         vandpd    ymm3, ymm4, ymm9
-        vcmplt_oqpd ymm1, ymm3, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        vcmplt_oqpd ymm1, ymm3, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         vaddpd    ymm10, ymm4, ymm15
         vmaxpd    ymm13, ymm15, ymm4
         vminpd    ymm5, ymm15, ymm4
-        vorpd     ymm12, ymm1, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        vorpd     ymm12, ymm1, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         vandpd    ymm2, ymm10, ymm12
         vsubpd    ymm1, ymm13, ymm2
-        vmovupd   ymm12, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        vmovupd   ymm12, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         vaddpd    ymm0, ymm5, ymm1
-        vandpd    ymm14, ymm2, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
-        vorpd     ymm1, ymm14, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        vandpd    ymm14, ymm2, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
+        vorpd     ymm1, ymm14, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         vandnpd   ymm3, ymm9, ymm4
         vcvtpd2ps xmm9, ymm1
-        vcmplt_oqpd ymm14, ymm4, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
+        vcmplt_oqpd ymm14, ymm4, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
         vrcpps    xmm10, xmm9
         vcvtps2pd ymm5, xmm10
-        vandps    ymm13, ymm2, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        vandps    ymm13, ymm2, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         vpsubq    ymm12, ymm12, ymm13
         vpsrlq    ymm2, ymm2, 20
         vroundpd  ymm5, ymm5, 0
@@ -101,15 +101,15 @@ L1::
         movsxd    r10, r10d
         vextracti128 xmm9, ymm2, 1
         vshufps   xmm10, xmm2, xmm9, 221
-        vcmpnle_uqpd ymm9, ymm4, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        vcmpnle_uqpd ymm9, ymm4, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         vcvtdq2pd ymm2, xmm10
-        vmovupd   xmm10, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+rcx]
+        vmovupd   xmm10, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+rcx]
         vorpd     ymm15, ymm14, ymm9
-        vmovupd   xmm9, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+r8]
+        vmovupd   xmm9, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+r8]
         vmovmskpd edx, ymm15
-        vmovupd   xmm15, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+r9]
+        vmovupd   xmm15, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+r9]
         test      edx, edx
-        vmovupd   xmm14, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+r10]
+        vmovupd   xmm14, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+r10]
         vunpcklpd xmm12, xmm10, xmm9
         vunpckhpd xmm9, xmm10, xmm9
         vunpcklpd xmm5, xmm15, xmm14
@@ -117,13 +117,13 @@ L1::
         vinsertf128 ymm5, ymm12, xmm5, 1
         vinsertf128 ymm14, ymm9, xmm10, 1
         vsubpd    ymm9, ymm13, ymm1
-        vmovupd   ymm12, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
-        vmovupd   ymm1, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        vmovupd   ymm12, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
+        vmovupd   ymm1, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         vmulpd    ymm10, ymm13, ymm13
-        vfmadd231pd ymm5, ymm2, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
-        vfmadd132pd ymm2, ymm14, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
-        vfmadd213pd ymm12, ymm13, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
-        vfmadd213pd ymm1, ymm13, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        vfmadd231pd ymm5, ymm2, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
+        vfmadd132pd ymm2, ymm14, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
+        vfmadd213pd ymm12, ymm13, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
+        vfmadd213pd ymm1, ymm13, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         vsubpd    ymm0, ymm0, ymm9
         vaddpd    ymm9, ymm5, ymm13
         vfmadd213pd ymm12, ymm10, ymm1
@@ -134,9 +134,9 @@ L1::
         vaddpd    ymm10, ymm13, ymm12
         vaddpd    ymm12, ymm9, ymm10
         vorpd     ymm0, ymm12, ymm3
-        jne       _B1_3
+        jne       .L_B1_3
 
-_B1_2::
+.L_B1_2:
 
         vmovups   ymm9, YMMWORD PTR [496+rsp]
         vmovups   ymm10, YMMWORD PTR [464+rsp]
@@ -148,12 +148,12 @@ _B1_2::
         add       rsp, 552
         ret
 
-_B1_3::
+.L_B1_3:
 
         vmovupd   YMMWORD PTR [r13], ymm4
         vmovupd   YMMWORD PTR [64+r13], ymm0
 
-_B1_6::
+.L_B1_6:
 
         xor       eax, eax
         vmovups   YMMWORD PTR [128+rsp], ymm6
@@ -165,18 +165,18 @@ _B1_6::
         mov       QWORD PTR [160+rsp], rsi
         mov       esi, edx
 
-_B1_7::
+.L_B1_7:
 
         bt        esi, ebx
-        jc        _B1_10
+        jc        .L_B1_10
 
-_B1_8::
+.L_B1_8:
 
         inc       ebx
         cmp       ebx, 4
-        jl        _B1_7
+        jl        .L_B1_7
 
-_B1_9::
+.L_B1_9:
 
         vmovups   ymm6, YMMWORD PTR [128+rsp]
         vmovups   ymm7, YMMWORD PTR [96+rsp]
@@ -185,121 +185,116 @@ _B1_9::
         vmovupd   ymm0, YMMWORD PTR [64+r13]
         mov       rbx, QWORD PTR [168+rsp]
         mov       rsi, QWORD PTR [160+rsp]
-        jmp       _B1_2
+        jmp       .L_B1_2
 
-_B1_10::
+.L_B1_10:
 
         vzeroupper
         lea       rcx, QWORD PTR [r13+rbx*8]
         lea       rdx, QWORD PTR [64+r13+rbx*8]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B1_8
-        ALIGN     16
+        jmp       .L_B1_8
+        .align    16, 0x90
 
-_B1_11::
+.L_B1_11:
 
-__jsvml_log1p4_ha_l9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p4_ha_l9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p4_ha_l9_B1_B3:
-        DD      1069057
-        DD      4379728
-        DD      2070600
-        DD      1943615
-        DD      1820726
-        DD      1693741
-        DD      1566756
-        DD      1439771
-        DD      4522251
+        .long   1069057
+        .long   4379728
+        .long   2070600
+        .long   1943615
+        .long   1820726
+        .long   1693741
+        .long   1566756
+        .long   1439771
+        .long   4522251
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B1_1
-        DD      imagerel _B1_6
-        DD      imagerel _unwind___jsvml_log1p4_ha_l9_B1_B3
+        .rva    .L_B1_1
+        .rva    .L_B1_6
+        .rva    _unwind___jsvml_log1p4_ha_l9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p4_ha_l9_B6_B10:
-        DD      798497
-        DD      1336367
-        DD      1389605
-        DD      178205
-        DD      296983
-        DD      423953
-        DD      550923
-        DD      imagerel _B1_1
-        DD      imagerel _B1_6
-        DD      imagerel _unwind___jsvml_log1p4_ha_l9_B1_B3
+        .long   798497
+        .long   1336367
+        .long   1389605
+        .long   178205
+        .long   296983
+        .long   423953
+        .long   550923
+        .rva    .L_B1_1
+        .rva    .L_B1_6
+        .rva    _unwind___jsvml_log1p4_ha_l9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B1_6
-        DD      imagerel _B1_11
-        DD      imagerel _unwind___jsvml_log1p4_ha_l9_B6_B10
+        .rva    .L_B1_6
+        .rva    .L_B1_11
+        .rva    _unwind___jsvml_log1p4_ha_l9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST1:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p2_ha_ex
+        .align    16, 0x90
+        .globl __jsvml_log1p2_ha_ex
 
-__jsvml_log1p2_ha_ex    PROC    EXPORT
+__jsvml_log1p2_ha_ex:
 
-_B2_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L28::
+.L_B2_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L28:
 
         sub       rsp, 280
         movaps    xmm5, xmm0
         movups    XMMWORD PTR [192+rsp], xmm13
-        lea       r8, QWORD PTR [__ImageBase]
+        lea       r8, QWORD PTR [rip+__ImageBase]
         movups    XMMWORD PTR [208+rsp], xmm11
         movups    XMMWORD PTR [224+rsp], xmm10
         movups    XMMWORD PTR [240+rsp], xmm9
         mov       QWORD PTR [256+rsp], r13
         lea       r13, QWORD PTR [111+rsp]
-        movups    xmm4, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        movups    xmm4, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
         movaps    xmm2, xmm4
         andnps    xmm4, xmm5
-        movups    xmm13, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
+        movups    xmm13, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
         andps     xmm2, xmm5
-        cmpltpd   xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        cmpltpd   xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         movaps    xmm0, xmm13
         movaps    xmm11, xmm13
         addpd     xmm0, xmm5
         maxpd     xmm11, xmm5
-        orps      xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        orps      xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         movaps    xmm3, xmm13
         andps     xmm0, xmm2
-        movups    xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
+        movups    xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
         andps     xmm2, xmm0
-        orps      xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        orps      xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         cvtpd2ps  xmm1, xmm2
         minpd     xmm3, xmm5
         subpd     xmm11, xmm0
@@ -307,21 +302,21 @@ L28::
         rcpps     xmm10, xmm1
         addpd     xmm3, xmm11
         cvtps2pd  xmm11, xmm10
-        movups    xmm10, XMMWORD PTR [_2il0floatpacket_31]
+        movups    xmm10, XMMWORD PTR [rip+_2il0floatpacket_31]
         addpd     xmm11, xmm10
         subpd     xmm11, xmm10
-        movdqu    xmm9, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        movdqu    xmm9, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         movaps    xmm10, xmm5
-        movdqu    xmm1, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        movdqu    xmm1, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         pand      xmm9, xmm0
         mulpd     xmm2, xmm11
         psubq     xmm1, xmm9
-        cmpltpd   xmm10, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
+        cmpltpd   xmm10, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
         subpd     xmm2, xmm13
         mulpd     xmm1, xmm11
         movaps    xmm9, xmm5
         psrlq     xmm0, 20
-        cmpnlepd  xmm9, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        cmpnlepd  xmm9, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         mulpd     xmm3, xmm1
         pshufd    xmm13, xmm0, 221
         psrlq     xmm11, 39
@@ -331,14 +326,14 @@ L28::
         orps      xmm10, xmm9
         movd      ecx, xmm13
         movmskpd  eax, xmm10
-        movups    xmm10, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
+        movups    xmm10, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
         mulpd     xmm10, xmm0
-        mulpd     xmm0, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
+        mulpd     xmm0, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
         movsxd    rdx, edx
         movsxd    rcx, ecx
         mov       QWORD PTR [264+rsp], r13
-        movups    xmm9, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+r8+rdx]
-        movups    xmm11, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+r8+rcx]
+        movups    xmm9, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+r8+rdx]
+        movups    xmm11, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+r8+rcx]
         movaps    xmm13, xmm9
         unpcklpd  xmm13, xmm11
         unpckhpd  xmm9, xmm11
@@ -346,20 +341,20 @@ L28::
         addpd     xmm11, xmm3
         addpd     xmm13, xmm10
         addpd     xmm9, xmm0
-        movups    xmm10, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
+        movups    xmm10, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
         movaps    xmm1, xmm11
         mulpd     xmm10, xmm11
         mulpd     xmm1, xmm11
-        addpd     xmm10, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
+        addpd     xmm10, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
         movaps    xmm0, xmm11
         subpd     xmm0, xmm2
         mulpd     xmm10, xmm1
         subpd     xmm3, xmm0
-        movups    xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        movups    xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         movaps    xmm0, xmm13
         mulpd     xmm2, xmm11
         addpd     xmm0, xmm11
-        addpd     xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        addpd     xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         addpd     xmm9, xmm3
         addpd     xmm2, xmm10
         mulpd     xmm1, xmm2
@@ -371,9 +366,9 @@ L28::
         addpd     xmm0, xmm11
         orps      xmm0, xmm4
         test      eax, eax
-        jne       _B2_3
+        jne       .L_B2_3
 
-_B2_2::
+.L_B2_2:
 
         movups    xmm9, XMMWORD PTR [240+rsp]
         movups    xmm10, XMMWORD PTR [224+rsp]
@@ -383,12 +378,12 @@ _B2_2::
         add       rsp, 280
         ret
 
-_B2_3::
+.L_B2_3:
 
         movups    XMMWORD PTR [r13], xmm5
         movups    XMMWORD PTR [64+r13], xmm0
 
-_B2_6::
+.L_B2_6:
 
         xor       ecx, ecx
         mov       QWORD PTR [40+rsp], rbx
@@ -396,109 +391,104 @@ _B2_6::
         mov       QWORD PTR [32+rsp], rsi
         mov       esi, eax
 
-_B2_7::
+.L_B2_7:
 
         mov       ecx, ebx
         mov       edx, 1
         shl       edx, cl
         test      esi, edx
-        jne       _B2_10
+        jne       .L_B2_10
 
-_B2_8::
+.L_B2_8:
 
         inc       ebx
         cmp       ebx, 2
-        jl        _B2_7
+        jl        .L_B2_7
 
-_B2_9::
+.L_B2_9:
 
         mov       rbx, QWORD PTR [40+rsp]
         mov       rsi, QWORD PTR [32+rsp]
         movups    xmm0, XMMWORD PTR [64+r13]
-        jmp       _B2_2
+        jmp       .L_B2_2
 
-_B2_10::
+.L_B2_10:
 
         lea       rcx, QWORD PTR [r13+rbx*8]
         lea       rdx, QWORD PTR [64+r13+rbx*8]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B2_8
-        ALIGN     16
+        jmp       .L_B2_8
+        .align    16, 0x90
 
-_B2_11::
+.L_B2_11:
 
-__jsvml_log1p2_ha_ex ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p2_ha_ex\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p2_ha_ex_B1_B3:
-        DD      803073
-        DD      2151489
-        DD      1022009
-        DD      960560
-        DD      899111
-        DD      841751
-        DD      2294027
+        .long   803073
+        .long   2151489
+        .long   1022009
+        .long   960560
+        .long   899111
+        .long   841751
+        .long   2294027
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B2_1
-        DD      imagerel _B2_6
-        DD      imagerel _unwind___jsvml_log1p2_ha_ex_B1_B3
+        .rva    .L_B2_1
+        .rva    .L_B2_6
+        .rva    _unwind___jsvml_log1p2_ha_ex_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p2_ha_ex_B6_B10:
-        DD      265761
-        DD      287758
-        DD      340999
-        DD      imagerel _B2_1
-        DD      imagerel _B2_6
-        DD      imagerel _unwind___jsvml_log1p2_ha_ex_B1_B3
+        .long   265761
+        .long   287758
+        .long   340999
+        .rva    .L_B2_1
+        .rva    .L_B2_6
+        .rva    _unwind___jsvml_log1p2_ha_ex_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B2_6
-        DD      imagerel _B2_11
-        DD      imagerel _unwind___jsvml_log1p2_ha_ex_B6_B10
+        .rva    .L_B2_6
+        .rva    .L_B2_11
+        .rva    _unwind___jsvml_log1p2_ha_ex_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST2:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p1_ha_l9
+        .align    16, 0x90
+        .globl __jsvml_log1p1_ha_l9
 
-__jsvml_log1p1_ha_l9    PROC    EXPORT
+__jsvml_log1p1_ha_l9:
 
-_B3_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L43::
+.L_B3_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L43:
 
         sub       rsp, 264
-        lea       rdx, QWORD PTR [__ImageBase]
+        lea       rdx, QWORD PTR [rip+__ImageBase]
         vmovups   XMMWORD PTR [192+rsp], xmm15
         vmovapd   xmm15, xmm0
         vmovups   XMMWORD PTR [208+rsp], xmm14
@@ -507,41 +497,41 @@ L43::
         vmovups   XMMWORD PTR [240+rsp], xmm6
         mov       QWORD PTR [168+rsp], r13
         lea       r13, QWORD PTR [95+rsp]
-        vmovsd    xmm10, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        vmovsd    xmm10, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
         vandpd    xmm14, xmm15, xmm10
-        vmovsd    xmm0, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
-        vmovddup  xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
+        vmovsd    xmm0, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
+        vmovddup  xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
         vaddsd    xmm1, xmm0, xmm15
-        vcmpltsd  xmm4, xmm14, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        vcmpltsd  xmm4, xmm14, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         vmovddup  xmm7, xmm15
         vandnpd   xmm14, xmm10, xmm15
         vmaxpd    xmm2, xmm5, xmm7
         vminpd    xmm7, xmm5, xmm7
-        vmovsd    xmm3, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        vmovsd    xmm3, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         vorpd     xmm3, xmm3, xmm4
         vandpd    xmm1, xmm1, xmm3
-        vmovsd    xmm6, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        vmovsd    xmm6, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         vsubsd    xmm5, xmm2, xmm1
-        vmovsd    xmm2, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
+        vmovsd    xmm2, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
         vaddsd    xmm5, xmm5, xmm7
         vandpd    xmm4, xmm1, xmm2
         vorpd     xmm7, xmm4, xmm6
         vcvtpd2ps xmm2, xmm7
         vmovlhps  xmm3, xmm2, xmm2
         vrcpps    xmm4, xmm3
-        vcmpltsd  xmm3, xmm15, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
+        vcmpltsd  xmm3, xmm15, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
         vcvtps2pd xmm2, xmm4
-        vcmpnlesd xmm4, xmm15, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
-        vmovq     xmm6, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        vcmpnlesd xmm4, xmm15, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
+        vmovq     xmm6, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         vorpd     xmm3, xmm3, xmm4
         vroundsd  xmm2, xmm2, xmm2, 0
-        vmovq     xmm10, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        vmovq     xmm10, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         vfmsub213sd xmm7, xmm2, xmm0
         vpand     xmm0, xmm1, xmm6
         vpsubq    xmm10, xmm10, xmm0
         vpsrlq    xmm1, xmm1, 20
-        vmovsd    xmm4, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
+        vmovsd    xmm4, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
         vmulsd    xmm0, xmm10, xmm2
         vpsrlq    xmm2, xmm2, 39
         vmovd     eax, xmm2
@@ -552,16 +542,16 @@ L43::
         vmulsd    xmm5, xmm5, xmm0
         movsxd    rax, eax
         vmovapd   xmm6, xmm10
-        vmovsd    xmm2, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
-        vmovsd    xmm0, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        vmovsd    xmm2, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
+        vmovsd    xmm0, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         mov       QWORD PTR [256+rsp], r13
-        vfmadd213sd xmm6, xmm4, QWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rdx+rax]
+        vfmadd213sd xmm6, xmm4, QWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rdx+rax]
         vaddsd    xmm4, xmm7, xmm5
-        vmovddup  xmm1, QWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454136+rdx+rax]
+        vmovddup  xmm1, QWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454136+rdx+rax]
         vsubsd    xmm7, xmm4, xmm7
-        vfmadd132sd xmm10, xmm1, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
-        vfmadd213sd xmm2, xmm4, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
-        vfmadd213sd xmm0, xmm4, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        vfmadd132sd xmm10, xmm1, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
+        vfmadd213sd xmm2, xmm4, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
+        vfmadd213sd xmm0, xmm4, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         vmulsd    xmm3, xmm4, xmm4
         vsubsd    xmm7, xmm5, xmm7
         vaddsd    xmm5, xmm6, xmm4
@@ -574,9 +564,9 @@ L43::
         vaddsd    xmm3, xmm2, xmm5
         vorpd     xmm0, xmm3, xmm14
         and       ecx, 1
-        jne       _B3_3
+        jne       .L_B3_3
 
-_B3_2::
+.L_B3_2:
 
         vmovups   xmm6, XMMWORD PTR [240+rsp]
         vmovups   xmm7, XMMWORD PTR [224+rsp]
@@ -587,79 +577,76 @@ _B3_2::
         add       rsp, 264
         ret
 
-_B3_3::
+.L_B3_3:
 
         vmovsd    QWORD PTR [r13], xmm15
         vmovsd    QWORD PTR [64+r13], xmm0
-        jne       _B3_6
+        jne       .L_B3_6
 
-_B3_4::
+.L_B3_4:
 
         vmovsd    xmm0, QWORD PTR [64+r13]
-        jmp       _B3_2
+        jmp       .L_B3_2
 
-_B3_6::
+.L_B3_6:
 
         lea       rcx, QWORD PTR [r13]
         lea       rdx, QWORD PTR [64+r13]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B3_4
-        ALIGN     16
+        jmp       .L_B3_4
+        .align    16, 0x90
 
-_B3_7::
+.L_B3_7:
 
-__jsvml_log1p1_ha_l9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p1_ha_l9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p1_ha_l9_B1_B6:
-        DD      936705
-        DD      1430603
-        DD      1009731
-        DD      948282
-        DD      763953
-        DD      911400
-        DD      849947
-        DD      2162955
+        .long   936705
+        .long   1430603
+        .long   1009731
+        .long   948282
+        .long   763953
+        .long   911400
+        .long   849947
+        .long   2162955
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B3_1
-        DD      imagerel _B3_7
-        DD      imagerel _unwind___jsvml_log1p1_ha_l9_B1_B6
+        .rva    .L_B3_1
+        .rva    .L_B3_7
+        .rva    _unwind___jsvml_log1p1_ha_l9_B1_B6
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST3:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p1_ha_e9
+        .align    16, 0x90
+        .globl __jsvml_log1p1_ha_e9
 
-__jsvml_log1p1_ha_e9    PROC    EXPORT
+__jsvml_log1p1_ha_e9:
 
-_B4_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L56::
+.L_B4_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L56:
 
         sub       rsp, 264
-        lea       rdx, QWORD PTR [__ImageBase]
+        lea       rdx, QWORD PTR [rip+__ImageBase]
         vmovups   XMMWORD PTR [240+rsp], xmm15
         vmovups   XMMWORD PTR [208+rsp], xmm13
         vmovups   XMMWORD PTR [224+rsp], xmm12
@@ -668,23 +655,23 @@ L56::
         vmovups   XMMWORD PTR [192+rsp], xmm7
         mov       QWORD PTR [168+rsp], r13
         lea       r13, QWORD PTR [95+rsp]
-        vmovsd    xmm13, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        vmovsd    xmm13, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
         vandpd    xmm7, xmm8, xmm13
-        vmovsd    xmm12, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
-        vmovddup  xmm3, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
+        vmovsd    xmm12, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
+        vmovddup  xmm3, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
         vaddsd    xmm5, xmm12, xmm8
-        vcmpltsd  xmm15, xmm7, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        vcmpltsd  xmm15, xmm7, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         vmovddup  xmm4, xmm8
         vandnpd   xmm7, xmm13, xmm8
         vmaxpd    xmm2, xmm3, xmm4
         vminpd    xmm3, xmm3, xmm4
-        vmovsd    xmm1, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        vmovsd    xmm1, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         vorpd     xmm0, xmm1, xmm15
         vandpd    xmm1, xmm5, xmm0
-        vmovsd    xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
+        vmovsd    xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
         vsubsd    xmm4, xmm2, xmm1
-        vmovsd    xmm0, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        vmovsd    xmm0, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         vandpd    xmm2, xmm1, xmm5
         vorpd     xmm0, xmm2, xmm0
         vaddsd    xmm4, xmm4, xmm3
@@ -692,13 +679,13 @@ L56::
         vmovlhps  xmm3, xmm5, xmm5
         vrcpps    xmm2, xmm3
         vcvtps2pd xmm5, xmm2
-        vcmpnlesd xmm2, xmm8, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        vcmpnlesd xmm2, xmm8, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         vroundsd  xmm3, xmm5, xmm5, 0
         vmulsd    xmm0, xmm0, xmm3
-        vcmpltsd  xmm5, xmm8, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
-        vmovq     xmm13, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        vcmpltsd  xmm5, xmm8, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
+        vmovq     xmm13, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         vorpd     xmm5, xmm5, xmm2
-        vmovq     xmm15, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        vmovq     xmm15, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         vsubsd    xmm0, xmm0, xmm12
         vmovmskpd ecx, xmm5
         vpand     xmm12, xmm1, xmm13
@@ -712,20 +699,20 @@ L56::
         vpshufd   xmm12, xmm1, 0
         vcvtdq2pd xmm13, xmm12
         vaddsd    xmm12, xmm0, xmm4
-        vmulsd    xmm2, xmm13, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
+        vmulsd    xmm2, xmm13, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
         vsubsd    xmm0, xmm12, xmm0
-        vmulsd    xmm13, xmm13, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
+        vmulsd    xmm13, xmm13, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
         vsubsd    xmm1, xmm4, xmm0
-        vmovsd    xmm15, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
+        vmovsd    xmm15, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
         vmulsd    xmm4, xmm15, xmm12
         movsxd    rax, eax
-        vmovsd    xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        vmovsd    xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         vmulsd    xmm0, xmm5, xmm12
         vmulsd    xmm5, xmm12, xmm12
-        vaddsd    xmm3, xmm13, QWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454136+rdx+rax]
-        vaddsd    xmm13, xmm4, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
-        vaddsd    xmm2, xmm2, QWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rdx+rax]
-        vaddsd    xmm4, xmm0, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        vaddsd    xmm3, xmm13, QWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454136+rdx+rax]
+        vaddsd    xmm13, xmm4, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
+        vaddsd    xmm2, xmm2, QWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rdx+rax]
+        vaddsd    xmm4, xmm0, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         vaddsd    xmm3, xmm3, xmm1
         vmulsd    xmm15, xmm13, xmm5
         mov       QWORD PTR [256+rsp], r13
@@ -739,9 +726,9 @@ L56::
         vaddsd    xmm2, xmm1, xmm4
         vorpd     xmm0, xmm2, xmm7
         and       ecx, 1
-        jne       _B4_3
+        jne       .L_B4_3
 
-_B4_2::
+.L_B4_2:
 
         vmovups   xmm7, XMMWORD PTR [192+rsp]
         vmovups   xmm8, XMMWORD PTR [176+rsp]
@@ -752,79 +739,76 @@ _B4_2::
         add       rsp, 264
         ret
 
-_B4_3::
+.L_B4_3:
 
         vmovsd    QWORD PTR [r13], xmm8
         vmovsd    QWORD PTR [64+r13], xmm0
-        jne       _B4_6
+        jne       .L_B4_6
 
-_B4_4::
+.L_B4_4:
 
         vmovsd    xmm0, QWORD PTR [64+r13]
-        jmp       _B4_2
+        jmp       .L_B4_2
 
-_B4_6::
+.L_B4_6:
 
         lea       rcx, QWORD PTR [r13]
         lea       rdx, QWORD PTR [64+r13]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B4_4
-        ALIGN     16
+        jmp       .L_B4_4
+        .align    16, 0x90
 
-_B4_7::
+.L_B4_7:
 
-__jsvml_log1p1_ha_e9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p1_ha_e9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p1_ha_e9_B1_B6:
-        DD      936705
-        DD      1430603
-        DD      817219
-        DD      755766
-        DD      968749
-        DD      907300
-        DD      1046555
-        DD      2162955
+        .long   936705
+        .long   1430603
+        .long   817219
+        .long   755766
+        .long   968749
+        .long   907300
+        .long   1046555
+        .long   2162955
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B4_1
-        DD      imagerel _B4_7
-        DD      imagerel _unwind___jsvml_log1p1_ha_e9_B1_B6
+        .rva    .L_B4_1
+        .rva    .L_B4_7
+        .rva    _unwind___jsvml_log1p1_ha_e9_B1_B6
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST4:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p4_ha_e9
+        .align    16, 0x90
+        .globl __jsvml_log1p4_ha_e9
 
-__jsvml_log1p4_ha_e9    PROC    EXPORT
+__jsvml_log1p4_ha_e9:
 
-_B5_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L69::
+.L_B5_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L69:
 
         sub       rsp, 552
-        lea       rax, QWORD PTR [__ImageBase]
+        lea       rax, QWORD PTR [rip+__ImageBase]
         vmovups   YMMWORD PTR [304+rsp], ymm15
         vmovups   YMMWORD PTR [336+rsp], ymm14
         vmovups   YMMWORD PTR [368+rsp], ymm13
@@ -834,22 +818,22 @@ L69::
         vmovups   YMMWORD PTR [464+rsp], ymm6
         mov       QWORD PTR [528+rsp], r13
         lea       r13, QWORD PTR [207+rsp]
-        vmovupd   ymm1, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        vmovupd   ymm1, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
-        vmovupd   ymm15, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
+        vmovupd   ymm15, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
         vmovapd   ymm3, ymm0
         vandpd    ymm2, ymm3, ymm1
-        vcmplt_oqpd ymm2, ymm2, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        vcmplt_oqpd ymm2, ymm2, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         vaddpd    ymm5, ymm3, ymm15
         vmaxpd    ymm4, ymm15, ymm3
-        vorpd     ymm8, ymm2, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        vorpd     ymm8, ymm2, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         vandpd    ymm6, ymm5, ymm8
-        vandpd    ymm14, ymm6, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
-        vorpd     ymm0, ymm14, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        vandpd    ymm14, ymm6, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
+        vorpd     ymm0, ymm14, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         vcvtpd2ps xmm7, ymm0
-        vmovupd   xmm5, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        vmovupd   xmm5, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         vsubpd    ymm13, ymm4, ymm6
-        vmovupd   xmm4, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        vmovupd   xmm4, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         vrcpps    xmm9, xmm7
         vcvtps2pd ymm8, xmm9
         vroundpd  ymm8, ymm8, 0
@@ -866,8 +850,8 @@ L69::
         vpsrlq    xmm14, xmm7, 20
         vandps    xmm4, xmm7, xmm4
         vshufps   xmm9, xmm13, xmm14, 221
-        vcmplt_oqpd ymm13, ymm3, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
-        vcmpnle_uqpd ymm14, ymm3, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        vcmplt_oqpd ymm13, ymm3, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
+        vcmpnle_uqpd ymm14, ymm3, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         vpsubq    xmm5, xmm5, xmm4
         vcvtdq2pd ymm9, xmm9
         vorpd     ymm13, ymm13, ymm14
@@ -888,30 +872,30 @@ L69::
         vpextrd   r10d, xmm14, 2
         movsxd    r9, r9d
         movsxd    r10, r10d
-        vmovupd   xmm13, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+rcx]
-        vmovupd   xmm8, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+r8]
+        vmovupd   xmm13, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+rcx]
+        vmovupd   xmm8, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+r8]
         vaddpd    ymm14, ymm0, ymm1
         vunpcklpd xmm7, xmm13, xmm8
         vunpckhpd xmm13, xmm13, xmm8
-        vmulpd    ymm8, ymm9, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
-        vmovupd   xmm4, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+r9]
-        vmovupd   xmm6, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rax+r10]
+        vmulpd    ymm8, ymm9, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
+        vmovupd   xmm4, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+r9]
+        vmovupd   xmm6, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rax+r10]
         vunpcklpd xmm15, xmm4, xmm6
         vunpckhpd xmm6, xmm4, xmm6
-        vmulpd    ymm5, ymm14, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
-        vmulpd    ymm9, ymm9, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
+        vmulpd    ymm5, ymm14, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
+        vmulpd    ymm9, ymm9, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
         vsubpd    ymm0, ymm14, ymm0
         vinsertf128 ymm15, ymm7, xmm15, 1
         vaddpd    ymm7, ymm15, ymm8
         vmulpd    ymm8, ymm14, ymm14
         vinsertf128 ymm4, ymm13, xmm6, 1
         vsubpd    ymm13, ymm1, ymm0
-        vaddpd    ymm0, ymm5, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
+        vaddpd    ymm0, ymm5, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
         vaddpd    ymm4, ymm4, ymm9
-        vmulpd    ymm1, ymm14, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        vmulpd    ymm1, ymm14, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         vmulpd    ymm6, ymm0, ymm8
         vaddpd    ymm4, ymm4, ymm13
-        vaddpd    ymm5, ymm1, YMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        vaddpd    ymm5, ymm1, YMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         vaddpd    ymm1, ymm7, ymm14
         vaddpd    ymm9, ymm5, ymm6
         vsubpd    ymm7, ymm1, ymm7
@@ -922,9 +906,9 @@ L69::
         vaddpd    ymm0, ymm1, ymm15
         vorpd     ymm0, ymm0, ymm2
         test      edx, edx
-        jne       _B5_3
+        jne       .L_B5_3
 
-_B5_2::
+.L_B5_2:
 
         vmovups   ymm6, YMMWORD PTR [464+rsp]
         vmovups   ymm7, YMMWORD PTR [432+rsp]
@@ -937,12 +921,12 @@ _B5_2::
         add       rsp, 552
         ret
 
-_B5_3::
+.L_B5_3:
 
         vmovupd   YMMWORD PTR [r13], ymm3
         vmovupd   YMMWORD PTR [64+r13], ymm0
 
-_B5_6::
+.L_B5_6:
 
         xor       eax, eax
         vmovups   YMMWORD PTR [96+rsp], ymm10
@@ -953,18 +937,18 @@ _B5_6::
         mov       QWORD PTR [128+rsp], rsi
         mov       esi, edx
 
-_B5_7::
+.L_B5_7:
 
         bt        esi, ebx
-        jc        _B5_10
+        jc        .L_B5_10
 
-_B5_8::
+.L_B5_8:
 
         inc       ebx
         cmp       ebx, 4
-        jl        _B5_7
+        jl        .L_B5_7
 
-_B5_9::
+.L_B5_9:
 
         vmovups   ymm10, YMMWORD PTR [96+rsp]
         vmovups   ymm11, YMMWORD PTR [64+rsp]
@@ -972,97 +956,92 @@ _B5_9::
         vmovupd   ymm0, YMMWORD PTR [64+r13]
         mov       rbx, QWORD PTR [136+rsp]
         mov       rsi, QWORD PTR [128+rsp]
-        jmp       _B5_2
+        jmp       .L_B5_2
 
-_B5_10::
+.L_B5_10:
 
         vzeroupper
         lea       rcx, QWORD PTR [r13+rbx*8]
         lea       rdx, QWORD PTR [64+r13+rbx*8]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B5_8
-        ALIGN     16
+        jmp       .L_B5_8
+        .align    16, 0x90
 
-_B5_11::
+.L_B5_11:
 
-__jsvml_log1p4_ha_e9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p4_ha_e9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p4_ha_e9_B1_B3:
-        DD      1202433
-        DD      4379737
-        DD      1927249
-        DD      1800264
-        DD      2066495
-        DD      1677366
-        DD      1562669
-        DD      1435684
-        DD      1308699
-        DD      4522251
+        .long   1202433
+        .long   4379737
+        .long   1927249
+        .long   1800264
+        .long   2066495
+        .long   1677366
+        .long   1562669
+        .long   1435684
+        .long   1308699
+        .long   4522251
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B5_1
-        DD      imagerel _B5_6
-        DD      imagerel _unwind___jsvml_log1p4_ha_e9_B1_B3
+        .rva    .L_B5_1
+        .rva    .L_B5_6
+        .rva    _unwind___jsvml_log1p4_ha_e9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p4_ha_e9_B6_B10:
-        DD      665121
-        DD      1074214
-        DD      1127452
-        DD      182292
-        DD      309262
-        DD      436232
-        DD      imagerel _B5_1
-        DD      imagerel _B5_6
-        DD      imagerel _unwind___jsvml_log1p4_ha_e9_B1_B3
+        .long   665121
+        .long   1074214
+        .long   1127452
+        .long   182292
+        .long   309262
+        .long   436232
+        .rva    .L_B5_1
+        .rva    .L_B5_6
+        .rva    _unwind___jsvml_log1p4_ha_e9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B5_6
-        DD      imagerel _B5_11
-        DD      imagerel _unwind___jsvml_log1p4_ha_e9_B6_B10
+        .rva    .L_B5_6
+        .rva    .L_B5_11
+        .rva    _unwind___jsvml_log1p4_ha_e9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST5:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p1_ha_ex
+        .align    16, 0x90
+        .globl __jsvml_log1p1_ha_ex
 
-__jsvml_log1p1_ha_ex    PROC    EXPORT
+__jsvml_log1p1_ha_ex:
 
-_B6_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L96::
+.L_B6_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L96:
 
         sub       rsp, 264
-        lea       rdx, QWORD PTR [__ImageBase]
+        lea       rdx, QWORD PTR [rip+__ImageBase]
         movups    XMMWORD PTR [176+rsp], xmm14
         movups    XMMWORD PTR [192+rsp], xmm12
         movups    XMMWORD PTR [208+rsp], xmm11
@@ -1072,27 +1051,27 @@ L96::
         movaps    xmm3, xmm10
         mov       QWORD PTR [168+rsp], r13
         lea       r13, QWORD PTR [95+rsp]
-        movsd     xmm6, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        movsd     xmm6, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
         movaps    xmm5, xmm6
         andnps    xmm6, xmm10
-        movsd     xmm12, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
+        movsd     xmm12, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
         andps     xmm5, xmm10
         movaps    xmm11, xmm12
         movaps    xmm2, xmm12
-        movsd     xmm1, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        movsd     xmm1, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         addsd     xmm11, xmm10
-        cmpltsd   xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        cmpltsd   xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         unpcklpd  xmm2, xmm12
         orps      xmm1, xmm5
         unpcklpd  xmm3, xmm10
         movaps    xmm4, xmm2
-        movsd     xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
+        movsd     xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
         andps     xmm11, xmm1
         maxpd     xmm4, xmm3
         minpd     xmm2, xmm3
         subsd     xmm4, xmm11
-        movsd     xmm0, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        movsd     xmm0, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         andps     xmm5, xmm11
         orps      xmm5, xmm0
         addsd     xmm4, xmm2
@@ -1100,18 +1079,18 @@ L96::
         movlhps   xmm1, xmm1
         rcpps     xmm2, xmm1
         cvtps2pd  xmm0, xmm2
-        movups    xmm1, XMMWORD PTR [_2il0floatpacket_31]
+        movups    xmm1, XMMWORD PTR [rip+_2il0floatpacket_31]
         movaps    xmm2, xmm10
         addpd     xmm0, xmm1
-        cmpnlesd  xmm2, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        cmpnlesd  xmm2, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         subpd     xmm0, xmm1
-        movq      xmm14, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        movq      xmm14, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         movaps    xmm1, xmm10
-        movq      xmm3, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        movq      xmm3, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         pand      xmm14, xmm11
         psubq     xmm3, xmm14
         mulsd     xmm5, xmm0
-        cmpltsd   xmm1, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
+        cmpltsd   xmm1, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
         mulsd     xmm3, xmm0
         subsd     xmm5, xmm12
         mulsd     xmm4, xmm3
@@ -1127,23 +1106,23 @@ L96::
         movmskpd  ecx, xmm1
         movaps    xmm3, xmm0
         movaps    xmm11, xmm12
-        mulsd     xmm11, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
+        mulsd     xmm11, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
         subsd     xmm3, xmm5
-        mulsd     xmm12, QWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
+        mulsd     xmm12, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
         subsd     xmm4, xmm3
-        movsd     xmm3, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
+        movsd     xmm3, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
         movaps    xmm2, xmm0
         mulsd     xmm3, xmm0
         and       ecx, 1
         mulsd     xmm2, xmm0
-        addsd     xmm3, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
+        addsd     xmm3, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
         movsxd    rax, eax
-        movsd     xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        movsd     xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         mulsd     xmm5, xmm0
         mulsd     xmm3, xmm2
-        addsd     xmm11, QWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+rdx+rax]
-        addsd     xmm12, QWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454136+rdx+rax]
-        addsd     xmm5, QWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        addsd     xmm11, QWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+rdx+rax]
+        addsd     xmm12, QWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454136+rdx+rax]
+        addsd     xmm5, QWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         addsd     xmm12, xmm4
         addsd     xmm3, xmm5
         movaps    xmm14, xmm11
@@ -1157,9 +1136,9 @@ L96::
         addsd     xmm0, xmm3
         addsd     xmm0, xmm14
         orps      xmm0, xmm6
-        jne       _B6_3
+        jne       .L_B6_3
 
-_B6_2::
+.L_B6_2:
 
         movups    xmm6, XMMWORD PTR [240+rsp]
         movups    xmm10, XMMWORD PTR [224+rsp]
@@ -1170,99 +1149,96 @@ _B6_2::
         add       rsp, 264
         ret
 
-_B6_3::
+.L_B6_3:
 
         movsd     QWORD PTR [r13], xmm10
         movsd     QWORD PTR [64+r13], xmm0
-        jne       _B6_6
+        jne       .L_B6_6
 
-_B6_4::
+.L_B6_4:
 
         movsd     xmm0, QWORD PTR [64+r13]
-        jmp       _B6_2
+        jmp       .L_B6_2
 
-_B6_6::
+.L_B6_6:
 
         lea       rcx, QWORD PTR [r13]
         lea       rdx, QWORD PTR [64+r13]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B6_4
-        ALIGN     16
+        jmp       .L_B6_4
+        .align    16, 0x90
 
-_B6_7::
+.L_B6_7:
 
-__jsvml_log1p1_ha_ex ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p1_ha_ex\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p1_ha_ex_B1_B6:
-        DD      937473
-        DD      1430606
-        DD      1009730
-        DD      960566
-        DD      899117
-        DD      837668
-        DD      780315
-        DD      2162955
+        .long   937473
+        .long   1430606
+        .long   1009730
+        .long   960566
+        .long   899117
+        .long   837668
+        .long   780315
+        .long   2162955
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B6_1
-        DD      imagerel _B6_7
-        DD      imagerel _unwind___jsvml_log1p1_ha_ex_B1_B6
+        .rva    .L_B6_1
+        .rva    .L_B6_7
+        .rva    _unwind___jsvml_log1p1_ha_ex_B1_B6
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST6:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p2_ha_e9
+        .align    16, 0x90
+        .globl __jsvml_log1p2_ha_e9
 
-__jsvml_log1p2_ha_e9    PROC    EXPORT
+__jsvml_log1p2_ha_e9:
 
-_B7_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L109::
+.L_B7_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L109:
 
         sub       rsp, 280
         vmovapd   xmm5, xmm0
         vmovups   XMMWORD PTR [192+rsp], xmm14
-        lea       r8, QWORD PTR [__ImageBase]
+        lea       r8, QWORD PTR [rip+__ImageBase]
         vmovups   XMMWORD PTR [208+rsp], xmm13
         vmovups   XMMWORD PTR [224+rsp], xmm12
         vmovups   XMMWORD PTR [240+rsp], xmm11
         mov       QWORD PTR [256+rsp], r13
         lea       r13, QWORD PTR [111+rsp]
-        vmovupd   xmm13, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        vmovupd   xmm13, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
         vandpd    xmm4, xmm5, xmm13
-        vmovupd   xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
-        vcmpltpd  xmm4, xmm4, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        vmovupd   xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
+        vcmpltpd  xmm4, xmm4, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         vaddpd    xmm1, xmm5, xmm14
         vmaxpd    xmm3, xmm14, xmm5
         vminpd    xmm11, xmm14, xmm5
-        vorpd     xmm2, xmm4, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        vorpd     xmm2, xmm4, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         vandnpd   xmm4, xmm13, xmm5
         vandpd    xmm2, xmm1, xmm2
-        vandpd    xmm12, xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
-        vorpd     xmm1, xmm12, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        vandpd    xmm12, xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
+        vorpd     xmm1, xmm12, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         vcvtpd2ps xmm13, xmm1
         vsubpd    xmm3, xmm3, xmm2
         vaddpd    xmm3, xmm11, xmm3
@@ -1271,13 +1247,13 @@ L109::
         vcvtps2pd xmm11, xmm0
         vroundpd  xmm11, xmm11, 0
         vmulpd    xmm1, xmm1, xmm11
-        vpand     xmm13, xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        vpand     xmm13, xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         vpsrlq    xmm2, xmm2, 20
-        vmovdqu   xmm12, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        vmovdqu   xmm12, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         vpsubq    xmm0, xmm12, xmm13
         vsubpd    xmm1, xmm1, xmm14
-        vcmpltpd  xmm12, xmm5, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
-        vcmpnlepd xmm13, xmm5, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        vcmpltpd  xmm12, xmm5, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
+        vcmpnlepd xmm13, xmm5, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         vmulpd    xmm0, xmm11, xmm0
         vpshufd   xmm14, xmm2, 221
         vpsrlq    xmm2, xmm11, 39
@@ -1285,26 +1261,26 @@ L109::
         vmulpd    xmm3, xmm3, xmm0
         vmovd     eax, xmm2
         vorpd     xmm13, xmm12, xmm13
-        vmulpd    xmm11, xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
-        vmulpd    xmm14, xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
+        vmulpd    xmm11, xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
+        vmulpd    xmm14, xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
         vmovmskpd edx, xmm13
         vpextrd   ecx, xmm2, 2
         movsxd    rax, eax
         movsxd    rcx, ecx
         mov       QWORD PTR [264+rsp], r13
-        vmovupd   xmm12, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+r8+rax]
-        vmovupd   xmm13, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+r8+rcx]
+        vmovupd   xmm12, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+r8+rax]
+        vmovupd   xmm13, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+r8+rcx]
         vunpcklpd xmm2, xmm12, xmm13
         vunpckhpd xmm13, xmm12, xmm13
         vaddpd    xmm12, xmm2, xmm11
         vaddpd    xmm11, xmm13, xmm14
         vaddpd    xmm14, xmm1, xmm3
-        vmulpd    xmm2, xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        vmulpd    xmm2, xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         vsubpd    xmm13, xmm14, xmm1
-        vmulpd    xmm1, xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
+        vmulpd    xmm1, xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
         vsubpd    xmm0, xmm3, xmm13
-        vaddpd    xmm13, xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
-        vaddpd    xmm3, xmm1, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
+        vaddpd    xmm13, xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
+        vaddpd    xmm3, xmm1, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
         vmulpd    xmm2, xmm14, xmm14
         vaddpd    xmm0, xmm11, xmm0
         vmulpd    xmm1, xmm3, xmm2
@@ -1318,9 +1294,9 @@ L109::
         vaddpd    xmm3, xmm13, xmm1
         vorpd     xmm0, xmm3, xmm4
         test      edx, edx
-        jne       _B7_3
+        jne       .L_B7_3
 
-_B7_2::
+.L_B7_2:
 
         vmovups   xmm11, XMMWORD PTR [240+rsp]
         vmovups   xmm12, XMMWORD PTR [224+rsp]
@@ -1330,12 +1306,12 @@ _B7_2::
         add       rsp, 280
         ret
 
-_B7_3::
+.L_B7_3:
 
         vmovupd   XMMWORD PTR [r13], xmm5
         vmovupd   XMMWORD PTR [64+r13], xmm0
 
-_B7_6::
+.L_B7_6:
 
         xor       eax, eax
         mov       QWORD PTR [40+rsp], rbx
@@ -1343,106 +1319,101 @@ _B7_6::
         mov       QWORD PTR [32+rsp], rsi
         mov       esi, edx
 
-_B7_7::
+.L_B7_7:
 
         bt        esi, ebx
-        jc        _B7_10
+        jc        .L_B7_10
 
-_B7_8::
+.L_B7_8:
 
         inc       ebx
         cmp       ebx, 2
-        jl        _B7_7
+        jl        .L_B7_7
 
-_B7_9::
+.L_B7_9:
 
         mov       rbx, QWORD PTR [40+rsp]
         mov       rsi, QWORD PTR [32+rsp]
         vmovupd   xmm0, XMMWORD PTR [64+r13]
-        jmp       _B7_2
+        jmp       .L_B7_2
 
-_B7_10::
+.L_B7_10:
 
         lea       rcx, QWORD PTR [r13+rbx*8]
         lea       rdx, QWORD PTR [64+r13+rbx*8]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B7_8
-        ALIGN     16
+        jmp       .L_B7_8
+        .align    16, 0x90
 
-_B7_11::
+.L_B7_11:
 
-__jsvml_log1p2_ha_e9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p2_ha_e9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p2_ha_e9_B1_B3:
-        DD      803329
-        DD      2151490
-        DD      1030202
-        DD      968753
-        DD      907304
-        DD      845848
-        DD      2294027
+        .long   803329
+        .long   2151490
+        .long   1030202
+        .long   968753
+        .long   907304
+        .long   845848
+        .long   2294027
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B7_1
-        DD      imagerel _B7_6
-        DD      imagerel _unwind___jsvml_log1p2_ha_e9_B1_B3
+        .rva    .L_B7_1
+        .rva    .L_B7_6
+        .rva    _unwind___jsvml_log1p2_ha_e9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p2_ha_e9_B6_B10:
-        DD      265761
-        DD      287758
-        DD      340999
-        DD      imagerel _B7_1
-        DD      imagerel _B7_6
-        DD      imagerel _unwind___jsvml_log1p2_ha_e9_B1_B3
+        .long   265761
+        .long   287758
+        .long   340999
+        .rva    .L_B7_1
+        .rva    .L_B7_6
+        .rva    _unwind___jsvml_log1p2_ha_e9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B7_6
-        DD      imagerel _B7_11
-        DD      imagerel _unwind___jsvml_log1p2_ha_e9_B6_B10
+        .rva    .L_B7_6
+        .rva    .L_B7_11
+        .rva    _unwind___jsvml_log1p2_ha_e9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST7:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p2_ha_l9
+        .align    16, 0x90
+        .globl __jsvml_log1p2_ha_l9
 
-__jsvml_log1p2_ha_l9    PROC    EXPORT
+__jsvml_log1p2_ha_l9:
 
-_B8_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L124::
+.L_B8_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L124:
 
         sub       rsp, 280
-        lea       r8, QWORD PTR [__ImageBase]
+        lea       r8, QWORD PTR [rip+__ImageBase]
         vmovups   XMMWORD PTR [192+rsp], xmm15
         vmovups   XMMWORD PTR [208+rsp], xmm14
         vmovups   XMMWORD PTR [224+rsp], xmm13
@@ -1450,31 +1421,31 @@ L124::
         vmovups   XMMWORD PTR [240+rsp], xmm12
         mov       QWORD PTR [256+rsp], r13
         lea       r13, QWORD PTR [111+rsp]
-        vmovupd   xmm5, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13056]
+        vmovupd   xmm5, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13056]
         and       r13, -64
         vandpd    xmm12, xmm13, xmm5
-        vmovupd   xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12992]
-        vcmpltpd  xmm2, xmm12, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13120]
+        vmovupd   xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12992]
+        vcmpltpd  xmm2, xmm12, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13120]
         vaddpd    xmm3, xmm13, xmm14
         vmaxpd    xmm4, xmm14, xmm13
-        vorpd     xmm1, xmm2, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13184]
+        vorpd     xmm1, xmm2, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13184]
         vandnpd   xmm12, xmm5, xmm13
         vandpd    xmm15, xmm3, xmm1
         vminpd    xmm2, xmm14, xmm13
         vsubpd    xmm4, xmm4, xmm15
-        vandpd    xmm0, xmm15, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12672]
+        vandpd    xmm0, xmm15, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12672]
         vaddpd    xmm5, xmm2, xmm4
-        vorpd     xmm4, xmm0, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12736]
+        vorpd     xmm4, xmm0, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12736]
         vcvtpd2ps xmm3, xmm4
         vmovlhps  xmm1, xmm3, xmm3
         vrcpps    xmm2, xmm1
         vcvtps2pd xmm1, xmm2
-        vpand     xmm3, xmm15, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13568]
+        vpand     xmm3, xmm15, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13568]
         vpsrlq    xmm15, xmm15, 20
-        vmovdqu   xmm0, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13632]
+        vmovdqu   xmm0, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13632]
         vpsubq    xmm2, xmm0, xmm3
-        vcmpltpd  xmm3, xmm13, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12800]
-        vcmpnlepd xmm0, xmm13, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12864]
+        vcmpltpd  xmm3, xmm13, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12800]
+        vcmpnlepd xmm0, xmm13, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12864]
         vroundpd  xmm1, xmm1, 0
         vorpd     xmm0, xmm3, xmm0
         vmulpd    xmm2, xmm1, xmm2
@@ -1489,18 +1460,18 @@ L124::
         movsxd    rax, eax
         movsxd    rcx, ecx
         mov       QWORD PTR [264+rsp], r13
-        vmovupd   xmm15, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+r8+rax]
-        vmovupd   xmm0, XMMWORD PTR [imagerel(__jsvml_dlog1p_ha_data_internal)-8454144+r8+rcx]
+        vmovupd   xmm15, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+r8+rax]
+        vmovupd   xmm0, XMMWORD PTR ["__jsvml_dlog1p_ha_data_internal"@imgrel-8454144+r8+rcx]
         vunpcklpd xmm1, xmm15, xmm0
         vunpckhpd xmm3, xmm15, xmm0
-        vfmadd231pd xmm1, xmm14, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13248]
-        vfmadd132pd xmm14, xmm3, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+13312]
-        vmovupd   xmm0, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12416]
-        vmovupd   xmm15, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12544]
+        vfmadd231pd xmm1, xmm14, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13248]
+        vfmadd132pd xmm14, xmm3, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+13312]
+        vmovupd   xmm0, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12416]
+        vmovupd   xmm15, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12544]
         vaddpd    xmm3, xmm4, xmm2
         vsubpd    xmm4, xmm3, xmm4
-        vfmadd213pd xmm0, xmm3, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12480]
-        vfmadd213pd xmm15, xmm3, XMMWORD PTR [__jsvml_dlog1p_ha_data_internal+12608]
+        vfmadd213pd xmm0, xmm3, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12480]
+        vfmadd213pd xmm15, xmm3, XMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal+12608]
         vsubpd    xmm5, xmm2, xmm4
         vaddpd    xmm4, xmm1, xmm3
         vmulpd    xmm2, xmm3, xmm3
@@ -1513,9 +1484,9 @@ L124::
         vaddpd    xmm2, xmm4, xmm0
         vorpd     xmm0, xmm2, xmm12
         test      edx, edx
-        jne       _B8_3
+        jne       .L_B8_3
 
-_B8_2::
+.L_B8_2:
 
         vmovups   xmm12, XMMWORD PTR [240+rsp]
         vmovups   xmm13, XMMWORD PTR [224+rsp]
@@ -1525,12 +1496,12 @@ _B8_2::
         add       rsp, 280
         ret
 
-_B8_3::
+.L_B8_3:
 
         vmovupd   XMMWORD PTR [r13], xmm13
         vmovupd   XMMWORD PTR [64+r13], xmm0
 
-_B8_6::
+.L_B8_6:
 
         xor       eax, eax
         mov       QWORD PTR [40+rsp], rbx
@@ -1538,110 +1509,105 @@ _B8_6::
         mov       QWORD PTR [32+rsp], rsi
         mov       esi, edx
 
-_B8_7::
+.L_B8_7:
 
         bt        esi, ebx
-        jc        _B8_10
+        jc        .L_B8_10
 
-_B8_8::
+.L_B8_8:
 
         inc       ebx
         cmp       ebx, 2
-        jl        _B8_7
+        jl        .L_B8_7
 
-_B8_9::
+.L_B8_9:
 
         mov       rbx, QWORD PTR [40+rsp]
         mov       rsi, QWORD PTR [32+rsp]
         vmovupd   xmm0, XMMWORD PTR [64+r13]
-        jmp       _B8_2
+        jmp       .L_B8_2
 
-_B8_10::
+.L_B8_10:
 
         lea       rcx, QWORD PTR [r13+rbx*8]
         lea       rdx, QWORD PTR [64+r13+rbx*8]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B8_8
-        ALIGN     16
+        jmp       .L_B8_8
+        .align    16, 0x90
 
-_B8_11::
+.L_B8_11:
 
-__jsvml_log1p2_ha_l9 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p2_ha_l9\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p2_ha_l9_B1_B3:
-        DD      803329
-        DD      2151490
-        DD      1034298
-        DD      972845
-        DD      911396
-        DD      849947
-        DD      2294027
+        .long   803329
+        .long   2151490
+        .long   1034298
+        .long   972845
+        .long   911396
+        .long   849947
+        .long   2294027
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B8_1
-        DD      imagerel _B8_6
-        DD      imagerel _unwind___jsvml_log1p2_ha_l9_B1_B3
+        .rva    .L_B8_1
+        .rva    .L_B8_6
+        .rva    _unwind___jsvml_log1p2_ha_l9_B1_B3
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p2_ha_l9_B6_B10:
-        DD      265761
-        DD      287758
-        DD      340999
-        DD      imagerel _B8_1
-        DD      imagerel _B8_6
-        DD      imagerel _unwind___jsvml_log1p2_ha_l9_B1_B3
+        .long   265761
+        .long   287758
+        .long   340999
+        .rva    .L_B8_1
+        .rva    .L_B8_6
+        .rva    _unwind___jsvml_log1p2_ha_l9_B1_B3
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B8_6
-        DD      imagerel _B8_11
-        DD      imagerel _unwind___jsvml_log1p2_ha_l9_B6_B10
+        .rva    .L_B8_6
+        .rva    .L_B8_11
+        .rva    _unwind___jsvml_log1p2_ha_l9_B6_B10
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST8:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_log1p8_ha_z0
+        .align    16, 0x90
+        .globl __jsvml_log1p8_ha_z0
 
-__jsvml_log1p8_ha_z0    PROC    EXPORT
+__jsvml_log1p8_ha_z0:
 
-_B9_1::
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L139::
+.L_B9_1:
+
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L139:
 
         sub       rsp, 1336
         mov       QWORD PTR [1320+rsp], r13
         lea       r13, QWORD PTR [1183+rsp]
-        vmovups   zmm24, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+256]
+        vmovups   zmm24, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+256]
         and       r13, -64
-        vmovups   zmm26, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+320]
+        vmovups   zmm26, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+320]
         vmovaps   zmm27, zmm0
         vmaxpd    zmm28, zmm24, zmm27 {sae}
         vminpd    zmm30, zmm24, zmm27 {sae}
@@ -1650,36 +1616,36 @@ L139::
         vgetexppd zmm25, zmm29 {sae}
         vsubpd    zmm31, zmm29, zmm28 {rn-sae}
         vrcp14pd  zmm3, zmm23
-        vmovups   zmm29, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+384]
+        vmovups   zmm29, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+384]
         vsubpd    zmm1, zmm30, zmm31 {rn-sae}
         vxorpd    zmm0, zmm25, zmm26
         vrndscalepd zmm28, zmm3, 88 {sae}
-        vmovups   zmm3, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+512]
-        vmovups   zmm30, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+576]
-        vmovups   zmm31, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+960]
+        vmovups   zmm3, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+512]
+        vmovups   zmm30, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+576]
+        vmovups   zmm31, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+960]
         vscalefpd zmm22, zmm1, zmm0 {rn-sae}
         vcmppd    k1, zmm28, zmm29, 17 {sae}
         vfmsub213pd zmm23, zmm28, zmm24 {rn-sae}
-        vmovups   zmm0, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+128]
+        vmovups   zmm0, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+128]
         vmulpd    zmm4, zmm28, zmm22 {rn-sae}
         vaddpd    zmm25{k1}, zmm25, zmm24 {rn-sae}
-        vmovups   zmm24, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+448]
+        vmovups   zmm24, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+448]
         vaddpd    zmm22, zmm23, zmm4 {rn-sae}
         vsubpd    zmm2, zmm22, zmm23 {rn-sae}
         vmulpd    zmm1, zmm22, zmm22 {rn-sae}
         vfmadd231pd zmm3, zmm24, zmm22 {rn-sae}
-        vmovups   zmm24, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+896]
+        vmovups   zmm24, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+896]
         vpsrlq    zmm23, zmm28, 48
-        vmovups   zmm28, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+768]
+        vmovups   zmm28, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+768]
         vsubpd    zmm5, zmm4, zmm2 {rn-sae}
-        vpermt2pd zmm0, zmm23, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+192]
-        vmovups   zmm2, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+640]
-        vmovups   zmm4, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512]
+        vpermt2pd zmm0, zmm23, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+192]
+        vmovups   zmm2, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+640]
+        vmovups   zmm4, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512]
         vaddpd    zmm0, zmm0, zmm5 {rn-sae}
         vfmadd231pd zmm2, zmm30, zmm22 {rn-sae}
-        vmovups   zmm5, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+704]
-        vpermt2pd zmm4, zmm23, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+64]
-        vmovups   zmm23, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+832]
+        vmovups   zmm5, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+704]
+        vpermt2pd zmm4, zmm23, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+64]
+        vmovups   zmm23, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+832]
         vfmadd213pd zmm3, zmm1, zmm2 {rn-sae}
         vfmadd231pd zmm4, zmm31, zmm25 {rn-sae}
         vfmadd231pd zmm28, zmm5, zmm22 {rn-sae}
@@ -1690,7 +1656,7 @@ L139::
         vsubpd    zmm4, zmm29, zmm4 {rn-sae}
         vfmadd213pd zmm3, zmm2, zmm28 {rn-sae}
         vsubpd    zmm5, zmm22, zmm4 {rn-sae}
-        vmovups   zmm22, ZMMWORD PTR [__jsvml_dlog1p_ha_data_internal_avx512+1024]
+        vmovups   zmm22, ZMMWORD PTR [rip+__jsvml_dlog1p_ha_data_internal_avx512+1024]
         vfmadd213pd zmm3, zmm1, zmm5 {rn-sae}
         vcmppd    k0, zmm5, zmm5, 4 {sae}
         vfmadd213pd zmm25, zmm22, zmm0 {rn-sae}
@@ -1700,57 +1666,57 @@ L139::
         mov       QWORD PTR [1328+rsp], r13
         vpternlogq zmm0, zmm27, zmm26, 248
         test      r8d, r8d
-        jne       _B9_3
+        jne       .L_B9_3
 
-_B9_2::
+.L_B9_2:
 
         mov       r13, QWORD PTR [1320+rsp]
         add       rsp, 1336
         ret
 
-_B9_3::
+.L_B9_3:
 
         vstmxcsr  DWORD PTR [1312+rsp]
 
-_B9_4::
+.L_B9_4:
 
         movzx     edx, WORD PTR [1312+rsp]
         mov       eax, edx
         or        eax, 8064
         cmp       edx, eax
-        je        _B9_6
+        je        .L_B9_6
 
-_B9_5::
+.L_B9_5:
 
         mov       DWORD PTR [1312+rsp], eax
         vldmxcsr  DWORD PTR [1312+rsp]
 
-_B9_6::
+.L_B9_6:
 
         vmovups   ZMMWORD PTR [r13], zmm27
         vmovups   ZMMWORD PTR [64+r13], zmm0
         test      r8d, r8d
-        jne       _B9_11
+        jne       .L_B9_11
 
-_B9_7::
+.L_B9_7:
 
         cmp       edx, eax
-        je        _B9_2
+        je        .L_B9_2
 
-_B9_8::
+.L_B9_8:
 
         vstmxcsr  DWORD PTR [1312+rsp]
         mov       eax, DWORD PTR [1312+rsp]
 
-_B9_9::
+.L_B9_9:
 
         and       eax, -8065
         or        eax, edx
         mov       DWORD PTR [1312+rsp], eax
         vldmxcsr  DWORD PTR [1312+rsp]
-        jmp       _B9_2
+        jmp       .L_B9_2
 
-_B9_11::
+.L_B9_11:
 
         xor       ecx, ecx
         kmovw     WORD PTR [1080+rsp], k4
@@ -1782,18 +1748,18 @@ _B9_11::
         mov       QWORD PTR [1112+rsp], rbp
         mov       ebp, eax
 
-_B9_12::
+.L_B9_12:
 
         bt        edi, ebx
-        jc        _B9_15
+        jc        .L_B9_15
 
-_B9_13::
+.L_B9_13:
 
         inc       ebx
         cmp       ebx, 8
-        jl        _B9_12
+        jl        .L_B9_12
 
-_B9_14::
+.L_B9_14:
 
         kmovw     k4, WORD PTR [1080+rsp]
         mov       eax, ebp
@@ -1822,144 +1788,138 @@ _B9_14::
         mov       rsi, QWORD PTR [1096+rsp]
         mov       rdi, QWORD PTR [1088+rsp]
         mov       rbp, QWORD PTR [1112+rsp]
-        jmp       _B9_7
+        jmp       .L_B9_7
 
-_B9_15::
+.L_B9_15:
 
         vzeroupper
         lea       rcx, QWORD PTR [r13+rbx*8]
         lea       rdx, QWORD PTR [64+r13+rbx*8]
 
         call      __jsvml_dlog1p_ha_cout_rare_internal
-        jmp       _B9_13
-        ALIGN     16
+        jmp       .L_B9_13
+        .align    16, 0x90
 
-_B9_16::
+.L_B9_16:
 
-__jsvml_log1p8_ha_z0 ENDP
+        .section .drectve
+        .ascii " -export \"__jsvml_log1p8_ha_z0\""
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p8_ha_z0_B1_B9:
-        DD      267009
-        DD      10867731
-        DD      10944779
+        .long   267009
+        .long   10867731
+        .long   10944779
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B9_1
-        DD      imagerel _B9_11
-        DD      imagerel _unwind___jsvml_log1p8_ha_z0_B1_B9
+        .rva    .L_B9_1
+        .rva    .L_B9_11
+        .rva    _unwind___jsvml_log1p8_ha_z0_B1_B9
 
-.pdata  ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_log1p8_ha_z0_B11_B15:
-        DD      2948353
-        DD      9131261
-        DD      8942834
-        DD      9004264
-        DD      9057502
-        DD      153814
-        DD      411851
-        DD      669888
-        DD      927925
-        DD      1185962
-        DD      1443999
-        DD      1767572
-        DD      2025609
-        DD      2283646
-        DD      2541683
-        DD      2799720
-        DD      3057757
-        DD      3315794
-        DD      3573831
-        DD      3831868
-        DD      4089905
-        DD      10867712
-        DD      10944768
+        .long   2948353
+        .long   9131261
+        .long   8942834
+        .long   9004264
+        .long   9057502
+        .long   153814
+        .long   411851
+        .long   669888
+        .long   927925
+        .long   1185962
+        .long   1443999
+        .long   1767572
+        .long   2025609
+        .long   2283646
+        .long   2541683
+        .long   2799720
+        .long   3057757
+        .long   3315794
+        .long   3573831
+        .long   3831868
+        .long   4089905
+        .long   10867712
+        .long   10944768
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B9_11
-        DD      imagerel _B9_16
-        DD      imagerel _unwind___jsvml_log1p8_ha_z0_B11_B15
+        .rva    .L_B9_11
+        .rva    .L_B9_16
+        .rva    _unwind___jsvml_log1p8_ha_z0_B11_B15
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_TEXT   SEGMENT      'CODE'
+        .text
 
 TXTST9:
 
-_TEXT   ENDS
-_TEXT   SEGMENT      'CODE'
+        .text
 
-        ALIGN     16
-        PUBLIC __jsvml_dlog1p_ha_cout_rare_internal
+        .align    16, 0x90
+        .globl __jsvml_dlog1p_ha_cout_rare_internal
 
-__jsvml_dlog1p_ha_cout_rare_internal    PROC
+__jsvml_dlog1p_ha_cout_rare_internal:
 
-_B10_1::
+.L_B10_1:
 
-        DB        243
-        DB        15
-        DB        30
-        DB        250
-L190::
+        .byte     243
+        .byte     15
+        .byte     30
+        .byte     250
+.L190:
 
         sub       rsp, 56
         xor       eax, eax
-        movsd     xmm0, QWORD PTR [_2il0floatpacket_96]
+        movsd     xmm0, QWORD PTR [rip+_2il0floatpacket_96]
         movsd     xmm3, QWORD PTR [rcx]
         addsd     xmm3, xmm0
         movsd     QWORD PTR [40+rsp], xmm3
         movzx     r8d, WORD PTR [46+rsp]
         and       r8d, 32752
         cmp       r8d, 32752
-        je        _B10_12
+        je        .L_B10_12
 
-_B10_2::
+.L_B10_2:
 
         movsd     QWORD PTR [48+rsp], xmm3
         xor       r8d, r8d
         movzx     ecx, WORD PTR [54+rsp]
         test      ecx, 32752
-        jne       _B10_4
+        jne       .L_B10_4
 
-_B10_3::
+.L_B10_3:
 
-        mulsd     xmm3, QWORD PTR [_imldLnHATab+1600]
+        mulsd     xmm3, QWORD PTR [rip+_imldLnHATab+1600]
         mov       r8d, -60
         movsd     QWORD PTR [48+rsp], xmm3
 
-_B10_4::
+.L_B10_4:
 
-        movsd     xmm1, QWORD PTR [_imldLnHATab+1608]
+        movsd     xmm1, QWORD PTR [rip+_imldLnHATab+1608]
         comisd    xmm3, xmm1
-        jbe       _B10_8
+        jbe       .L_B10_8
 
-_B10_5::
+.L_B10_5:
 
         movaps    xmm2, xmm3
         subsd     xmm2, xmm0
         movsd     QWORD PTR [40+rsp], xmm2
         and       BYTE PTR [47+rsp], 127
         movsd     xmm1, QWORD PTR [40+rsp]
-        comisd    xmm1, QWORD PTR [_imldLnHATab+1592]
-        jbe       _B10_7
+        comisd    xmm1, QWORD PTR [rip+_imldLnHATab+1592]
+        jbe       .L_B10_7
 
-_B10_6::
+.L_B10_6:
 
         movsd     QWORD PTR [40+rsp], xmm3
         pxor      xmm1, xmm1
@@ -1971,30 +1931,30 @@ _B10_6::
         movaps    xmm3, xmm5
         movzx     ecx, WORD PTR [54+rsp]
         and       ecx, 32752
-        addsd     xmm3, QWORD PTR [_imldLnHATab+1576]
+        addsd     xmm3, QWORD PTR [rip+_imldLnHATab+1576]
         shr       ecx, 4
         movsd     QWORD PTR [32+rsp], xmm3
         movaps    xmm3, xmm5
         mov       r10d, DWORD PTR [32+rsp]
         and       r10d, 127
-        addsd     xmm3, QWORD PTR [_imldLnHATab+1584]
+        addsd     xmm3, QWORD PTR [rip+_imldLnHATab+1584]
         movsd     QWORD PTR [32+rsp], xmm3
         lea       r8d, DWORD PTR [-1023+r8+rcx]
         cvtsi2sd  xmm1, r8d
         movsd     xmm3, QWORD PTR [32+rsp]
-        lea       rcx, QWORD PTR [__ImageBase]
-        movsd     xmm2, QWORD PTR [_imldLnHATab+1560]
+        lea       rcx, QWORD PTR [rip+__ImageBase]
+        movsd     xmm2, QWORD PTR [rip+_imldLnHATab+1560]
         lea       r11d, DWORD PTR [r10+r10*2]
-        movsd     xmm4, QWORD PTR [_imldLnHATab+1568]
+        movsd     xmm4, QWORD PTR [rip+_imldLnHATab+1568]
         mov       r9, rcx
         mov       r8, rcx
-        subsd     xmm3, QWORD PTR [_imldLnHATab+1584]
+        subsd     xmm3, QWORD PTR [rip+_imldLnHATab+1584]
         mulsd     xmm2, xmm1
         mulsd     xmm1, xmm4
         subsd     xmm5, xmm3
-        addsd     xmm2, QWORD PTR [imagerel(_imldLnHATab)+8+r8+r11*8]
-        addsd     xmm1, QWORD PTR [imagerel(_imldLnHATab)+16+r9+r11*8]
-        movsd     xmm4, QWORD PTR [imagerel(_imldLnHATab)+rcx+r11*8]
+        addsd     xmm2, QWORD PTR ["_imldLnHATab"@imgrel+8+r8+r11*8]
+        addsd     xmm1, QWORD PTR ["_imldLnHATab"@imgrel+16+r9+r11*8]
+        movsd     xmm4, QWORD PTR ["_imldLnHATab"@imgrel+rcx+r11*8]
         mulsd     xmm3, xmm4
         mulsd     xmm4, xmm5
         subsd     xmm3, xmm0
@@ -2002,19 +1962,19 @@ _B10_6::
         addsd     xmm3, xmm2
         addsd     xmm0, xmm4
         addsd     xmm4, xmm1
-        movsd     xmm5, QWORD PTR [_imldLnHATab+1672]
+        movsd     xmm5, QWORD PTR [rip+_imldLnHATab+1672]
         mulsd     xmm5, xmm0
-        addsd     xmm5, QWORD PTR [_imldLnHATab+1664]
+        addsd     xmm5, QWORD PTR [rip+_imldLnHATab+1664]
         mulsd     xmm5, xmm0
-        addsd     xmm5, QWORD PTR [_imldLnHATab+1656]
+        addsd     xmm5, QWORD PTR [rip+_imldLnHATab+1656]
         mulsd     xmm5, xmm0
-        addsd     xmm5, QWORD PTR [_imldLnHATab+1648]
+        addsd     xmm5, QWORD PTR [rip+_imldLnHATab+1648]
         mulsd     xmm5, xmm0
-        addsd     xmm5, QWORD PTR [_imldLnHATab+1640]
+        addsd     xmm5, QWORD PTR [rip+_imldLnHATab+1640]
         mulsd     xmm5, xmm0
-        addsd     xmm5, QWORD PTR [_imldLnHATab+1632]
+        addsd     xmm5, QWORD PTR [rip+_imldLnHATab+1632]
         mulsd     xmm5, xmm0
-        addsd     xmm5, QWORD PTR [_imldLnHATab+1624]
+        addsd     xmm5, QWORD PTR [rip+_imldLnHATab+1624]
         mulsd     xmm5, xmm0
         mulsd     xmm5, xmm0
         addsd     xmm4, xmm5
@@ -2023,21 +1983,21 @@ _B10_6::
         add       rsp, 56
         ret
 
-_B10_7::
+.L_B10_7:
 
-        movsd     xmm0, QWORD PTR [_imldLnHATab+1672]
+        movsd     xmm0, QWORD PTR [rip+_imldLnHATab+1672]
         mulsd     xmm0, xmm2
-        addsd     xmm0, QWORD PTR [_imldLnHATab+1664]
+        addsd     xmm0, QWORD PTR [rip+_imldLnHATab+1664]
         mulsd     xmm0, xmm2
-        addsd     xmm0, QWORD PTR [_imldLnHATab+1656]
+        addsd     xmm0, QWORD PTR [rip+_imldLnHATab+1656]
         mulsd     xmm0, xmm2
-        addsd     xmm0, QWORD PTR [_imldLnHATab+1648]
+        addsd     xmm0, QWORD PTR [rip+_imldLnHATab+1648]
         mulsd     xmm0, xmm2
-        addsd     xmm0, QWORD PTR [_imldLnHATab+1640]
+        addsd     xmm0, QWORD PTR [rip+_imldLnHATab+1640]
         mulsd     xmm0, xmm2
-        addsd     xmm0, QWORD PTR [_imldLnHATab+1632]
+        addsd     xmm0, QWORD PTR [rip+_imldLnHATab+1632]
         mulsd     xmm0, xmm2
-        addsd     xmm0, QWORD PTR [_imldLnHATab+1624]
+        addsd     xmm0, QWORD PTR [rip+_imldLnHATab+1624]
         mulsd     xmm0, xmm2
         mulsd     xmm0, xmm2
         addsd     xmm2, xmm0
@@ -2045,4284 +2005,4280 @@ _B10_7::
         add       rsp, 56
         ret
 
-_B10_8::
+.L_B10_8:
 
         ucomisd   xmm3, xmm1
-        jp        _B10_9
-        je        _B10_11
+        jp        .L_B10_9
+        je        .L_B10_11
 
-_B10_9::
+.L_B10_9:
 
         divsd     xmm1, xmm1
         movsd     QWORD PTR [rdx], xmm1
         mov       eax, 1
 
-_B10_10::
+.L_B10_10:
 
         add       rsp, 56
         ret
 
-_B10_11::
+.L_B10_11:
 
-        movsd     xmm0, QWORD PTR [_imldLnHATab+1616]
+        movsd     xmm0, QWORD PTR [rip+_imldLnHATab+1616]
         mov       eax, 2
-        xorps     xmm0, XMMWORD PTR [_2il0floatpacket_97]
+        xorps     xmm0, XMMWORD PTR [rip+_2il0floatpacket_97]
         divsd     xmm0, xmm1
         movsd     QWORD PTR [rdx], xmm0
         add       rsp, 56
         ret
 
-_B10_12::
+.L_B10_12:
 
         mov       cl, BYTE PTR [47+rsp]
         and       cl, -128
         cmp       cl, -128
-        je        _B10_14
+        je        .L_B10_14
 
-_B10_13::
+.L_B10_13:
 
         mulsd     xmm3, xmm3
         movsd     QWORD PTR [rdx], xmm3
         add       rsp, 56
         ret
 
-_B10_14::
+.L_B10_14:
 
         test      DWORD PTR [44+rsp], 1048575
-        jne       _B10_13
+        jne       .L_B10_13
 
-_B10_15::
+.L_B10_15:
 
         cmp       DWORD PTR [40+rsp], 0
-        jne       _B10_13
+        jne       .L_B10_13
 
-_B10_16::
+.L_B10_16:
 
-        movsd     xmm0, QWORD PTR [_imldLnHATab+1608]
+        movsd     xmm0, QWORD PTR [rip+_imldLnHATab+1608]
         mov       eax, 1
         divsd     xmm0, xmm0
         movsd     QWORD PTR [rdx], xmm0
         add       rsp, 56
         ret
-        ALIGN     16
+        .align    16, 0x90
 
-_B10_17::
+.L_B10_17:
 
-__jsvml_dlog1p_ha_cout_rare_internal ENDP
 
-_TEXT   ENDS
-.xdata  SEGMENT  DWORD   READ  ''
+        .section .xdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 _unwind___jsvml_dlog1p_ha_cout_rare_internal_B1_B16:
-        DD      67585
-        DD      25096
+        .long   67585
+        .long   25096
 
-.xdata  ENDS
-.pdata  SEGMENT  DWORD   READ  ''
+        .section .pdata, "dr"
 
-        ALIGN 004H
+        .align 0x04
 
-        DD      imagerel _B10_1
-        DD      imagerel _B10_17
-        DD      imagerel _unwind___jsvml_dlog1p_ha_cout_rare_internal_B1_B16
+        .rva    .L_B10_1
+        .rva    .L_B10_17
+        .rva    _unwind___jsvml_dlog1p_ha_cout_rare_internal_B1_B16
 
-.pdata  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
+        .data
 
-_RDATA  SEGMENT     READONLY PAGE   'DATA'
-        ALIGN  32
-        PUBLIC __jsvml_dlog1p_ha_data_internal_avx512
-__jsvml_dlog1p_ha_data_internal_avx512  DD      0
-        DD      0
-        DD      3222405120
-        DD      3215919664
-        DD      1848311808
-        DD      3216910087
-        DD      1890025472
-        DD      3217424176
-        DD      3348791296
-        DD      3217854455
-        DD      2880159744
-        DD      3218171740
-        DD      3256631296
-        DD      3218366859
-        DD      4139499520
-        DD      3218553303
-        DD      288669696
-        DD      1070754146
-        DD      1823703040
-        DD      1070569756
-        DD      1015742464
-        DD      1070240749
-        DD      1800667136
-        DD      1069924160
-        DD      2183659520
-        DD      1069619086
-        DD      1566113792
-        DD      1069101918
-        DD      3047030784
-        DD      1068533144
-        DD      2313682944
-        DD      1067467101
-        DD      0
-        DD      0
-        DD      3496399314
-        DD      1028893491
-        DD      720371772
-        DD      1026176044
-        DD      1944193543
-        DD      3175338952
-        DD      634920691
-        DD      3175752108
-        DD      1664625295
-        DD      1029304828
-        DD      192624563
-        DD      3177103997
-        DD      3796653051
-        DD      3176138396
-        DD      1005287031
-        DD      1029411448
-        DD      3433090547
-        DD      1029291198
-        DD      1779090477
-        DD      3176336968
-        DD      3242817150
-        DD      1029626109
-        DD      3430202884
-        DD      3175842849
-        DD      2270669051
-        DD      1028809259
-        DD      1375653371
-        DD      1028457284
-        DD      4246237509
-        DD      3176626033
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      2147483648
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      0
-        DD      1072168960
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      815627376
-        DD      1069318605
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2123607906
-        DD      3217033013
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      2632876527
-        DD      1069697314
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      4213758726
-        DD      3217380691
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      2580324188
-        DD      1070176665
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      787901
-        DD      3218079744
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      1431655526
-        DD      1070945621
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4294967238
-        DD      3219128319
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      0
-        DD      1048576
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      4294967295
-        DD      2146435071
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        DD      120
-        DD      0
-        PUBLIC __jsvml_dlog1p_ha_data_internal
-__jsvml_dlog1p_ha_data_internal DD      3715793664
-        DD      3230016299
-        DD      4013928704
-        DD      3189565726
-        DD      3699038248
-        DD      3230016303
-        DD      4255595370
-        DD      3189567439
-        DD      3648859040
-        DD      3230016307
-        DD      1732833791
-        DD      3189567296
-        DD      3565385952
-        DD      3230016311
-        DD      2485752410
-        DD      3189567274
-        DD      3448748152
-        DD      3230016315
-        DD      3514744523
-        DD      3189567800
-        DD      3299074072
-        DD      3230016319
-        DD      3686511262
-        DD      3189567474
-        DD      3116491376
-        DD      3230016323
-        DD      716063611
-        DD      3189567908
-        DD      2901127016
-        DD      3230016327
-        DD      354437295
-        DD      3189567291
-        DD      2653107184
-        DD      3230016331
-        DD      3777462366
-        DD      3189567264
-        DD      2372557360
-        DD      3230016335
-        DD      3590663412
-        DD      3189567498
-        DD      2059602304
-        DD      3230016339
-        DD      1680795031
-        DD      3189567428
-        DD      1714366048
-        DD      3230016343
-        DD      2010344982
-        DD      3189567986
-        DD      1336971936
-        DD      3230016347
-        DD      166254822
-        DD      3189567184
-        DD      927542568
-        DD      3230016351
-        DD      59552610
-        DD      3189567972
-        DD      486199888
-        DD      3230016355
-        DD      2268824919
-        DD      3189567664
-        DD      13065112
-        DD      3230016359
-        DD      3005381643
-        DD      3189567835
-        DD      3803226080
-        DD      3230016362
-        DD      4018973165
-        DD      3189567825
-        DD      3266868056
-        DD      3230016366
-        DD      3693925101
-        DD      3189567457
-        DD      2699077504
-        DD      3230016370
-        DD      4005905743
-        DD      3189567697
-        DD      2099972936
-        DD      3230016374
-        DD      3580935118
-        DD      3189567215
-        DD      1469672176
-        DD      3230016378
-        DD      2928784295
-        DD      3189567129
-        DD      808292392
-        DD      3230016382
-        DD      674298833
-        DD      3189567553
-        DD      115950104
-        DD      3230016386
-        DD      2555938320
-        DD      3189567208
-        DD      3687728456
-        DD      3230016389
-        DD      532458218
-        DD      3189567130
-        DD      2933808064
-        DD      3230016393
-        DD      3888913110
-        DD      3189567192
-        DD      2149270784
-        DD      3230016397
-        DD      2365955494
-        DD      3189567756
-        DD      1334230552
-        DD      3230016401
-        DD      3325722981
-        DD      3189567206
-        DD      488800640
-        DD      3230016405
-        DD      1496133617
-        DD      3189567683
-        DD      3908061016
-        DD      3230016408
-        DD      1824836379
-        DD      3189567490
-        DD      3002189112
-        DD      3230016412
-        DD      1222174320
-        DD      3189567837
-        DD      2066263648
-        DD      3230016416
-        DD      2472769660
-        DD      3189567285
-        DD      1100395408
-        DD      3230016420
-        DD      447932460
-        DD      3189567455
-        DD      104694584
-        DD      3230016424
-        DD      1006807684
-        DD      3189567460
-        DD      3374238048
-        DD      3230016427
-        DD      4121834935
-        DD      3189567556
-        DD      2319200184
-        DD      3230016431
-        DD      3019906587
-        DD      3189567664
-        DD      1234656664
-        DD      3230016435
-        DD      3882744783
-        DD      3189567930
-        DD      120715280
-        DD      3230016439
-        DD      1927363170
-        DD      3189567242
-        DD      3272450504
-        DD      3230016442
-        DD      8203115
-        DD      3189567876
-        DD      2100034368
-        DD      3230016446
-        DD      1260625560
-        DD      3189567855
-        DD      898540192
-        DD      3230016450
-        DD      1791679111
-        DD      3189567639
-        DD      3963040720
-        DD      3230016453
-        DD      831133439
-        DD      3189567590
-        DD      2703706240
-        DD      3230016457
-        DD      2803140504
-        DD      3189567482
-        DD      1415608352
-        DD      3230016461
-        DD      2955844462
-        DD      3189568058
-        DD      98850816
-        DD      3230016465
-        DD      4017967070
-        DD      3189567455
-        DD      3048504096
-        DD      3230016468
-        DD      3974385451
-        DD      3189567871
-        DD      1674736240
-        DD      3230016472
-        DD      2424114556
-        DD      3189567887
-        DD      272616624
-        DD      3230016476
-        DD      4261883032
-        DD      3189567073
-        DD      3137214056
-        DD      3230016479
-        DD      3716750895
-        DD      3189567522
-        DD      1678694944
-        DD      3230016483
-        DD      498025304
-        DD      3189567180
-        DD      192127016
-        DD      3230016487
-        DD      1011852160
-        DD      3189567511
-        DD      2972577480
-        DD      3230016490
-        DD      558940916
-        DD      3189567850
-        DD      1430211120
-        DD      3230016494
-        DD      2550865739
-        DD      3189567935
-        DD      4155061376
-        DD      3230016497
-        DD      1930847170
-        DD      3189567371
-        DD      2557291968
-        DD      3230016501
-        DD      1716354804
-        DD      3189567130
-        DD      931967984
-        DD      3230016505
-        DD      2729403392
-        DD      3189567981
-        DD      3574154016
-        DD      3230016508
-        DD      1067280599
-        DD      3189567890
-        DD      1894012232
-        DD      3230016512
-        DD      2094260282
-        DD      3189567604
-        DD      186606176
-        DD      3230016516
-        DD      3897933165
-        DD      3189568046
-        DD      2746998904
-        DD      3230016519
-        DD      1935720459
-        DD      3189567701
-        DD      985351064
-        DD      3230016523
-        DD      2170344821
-        DD      3189567164
-        DD      3491691984
-        DD      3230016526
-        DD      4220979537
-        DD      3189567547
-        DD      1676181328
-        DD      3230016530
-        DD      1953924393
-        DD      3189567854
-        DD      4128847448
-        DD      3230016533
-        DD      1689829067
-        DD      3189567468
-        DD      2259849008
-        DD      3230016537
-        DD      2367753130
-        DD      3189567619
-        DD      364246088
-        DD      3230016541
-        DD      2263309073
-        DD      3189567722
-        DD      2737098280
-        DD      3230016544
-        DD      2366756869
-        DD      3189567856
-        DD      788562816
-        DD      3230016548
-        DD      2294653975
-        DD      3189567145
-        DD      3108665616
-        DD      3230016551
-        DD      1786494117
-        DD      3189567254
-        DD      1107562960
-        DD      3230016555
-        DD      3655887416
-        DD      3189567689
-        DD      3375279848
-        DD      3230016558
-        DD      1178948625
-        DD      3189567241
-        DD      1321971608
-        DD      3230016562
-        DD      1620080441
-        DD      3189567466
-        DD      3537662304
-        DD      3230016565
-        DD      154455618
-        DD      3189567981
-        DD      1432506360
-        DD      3230016569
-        DD      3128192125
-        DD      3189567889
-        DD      3596526920
-        DD      3230016572
-        DD      2026842750
-        DD      3189567212
-        DD      1439877480
-        DD      3230016576
-        DD      1384431897
-        DD      3189567284
-        DD      3552580280
-        DD      3230016579
-        DD      1999983129
-        DD      3189568079
-        DD      1344787944
-        DD      3230016583
-        DD      4035436820
-        DD      3189567579
-        DD      3406521808
-        DD      3230016586
-        DD      77799817
-        DD      3189567285
-        DD      1147933592
-        DD      3230016590
-        DD      1261060207
-        DD      3189567477
-        DD      3159043768
-        DD      3230016593
-        DD      2102717775
-        DD      3189567605
-        DD      850003184
-        DD      3230016597
-        DD      161472469
-        DD      3189567688
-        DD      2810831440
-        DD      3230016600
-        DD      1937336881
-        DD      3189567665
-        DD      451678520
-        DD      3230016604
-        DD      2268353549
-        DD      3189567773
-        DD      2362563168
-        DD      3230016607
-        DD      1785871595
-        DD      3189567889
-        DD      4248601816
-        DD      3230016610
-        DD      2434669991
-        DD      3189567898
-        DD      1814910472
-        DD      3230016614
-        DD      2666999375
-        DD      3189568058
-        DD      3651506624
-        DD      3230016617
-        DD      1033139811
-        DD      3189567312
-        DD      1168538136
-        DD      3230016621
-        DD      4004618418
-        DD      3189567740
-        DD      2956021672
-        DD      3230016624
-        DD      3799928764
-        DD      3189567751
-        DD      424104288
-        DD      3230016628
-        DD      3650233137
-        DD      3189567549
-        DD      2162801816
-        DD      3230016631
-        DD      437313833
-        DD      3189567438
-        DD      3877227800
-        DD      3230016634
-        DD      2138293494
-        DD      3189567140
-        DD      1272495376
-        DD      3230016638
-        DD      2891370752
-        DD      3189567168
-        DD      2938619176
-        DD      3230016641
-        DD      1704142730
-        DD      3189567114
-        DD      285744240
-        DD      3230016645
-        DD      500817607
-        DD      3189568035
-        DD      1903884424
-        DD      3230016648
-        DD      3102571944
-        DD      3189567668
-        DD      3498151272
-        DD      3230016651
-        DD      2374193154
-        DD      3189567933
-        DD      773655960
-        DD      3230016655
-        DD      2898331636
-        DD      3189568089
-        DD      2320411168
-        DD      3230016658
-        DD      1983295500
-        DD      3189567113
-        DD      3843527280
-        DD      3230016661
-        DD      2132853542
-        DD      3189567093
-        DD      1048114320
-        DD      3230016665
-        DD      3551155364
-        DD      3189567407
-        DD      2524183824
-        DD      3230016668
-        DD      2564000663
-        DD      3189567090
-        DD      3976845048
-        DD      3230016671
-        DD      361581803
-        DD      3189567196
-        DD      1111206880
-        DD      3230016675
-        DD      696765230
-        DD      3189568040
-        DD      2517279744
-        DD      3230016678
-        DD      941542475
-        DD      3189567463
-        DD      3900171776
-        DD      3230016681
-        DD      2377895552
-        DD      3189567282
-        DD      964990760
-        DD      3230016685
-        DD      1173605489
-        DD      3189567454
-        DD      2301746008
-        DD      3230016688
-        DD      3096720313
-        DD      3189567400
-        DD      3615544576
-        DD      3230016691
-        DD      1942008121
-        DD      3189567335
-        DD      611493160
-        DD      3230016695
-        DD      3375481119
-        DD      3189567537
-        DD      1879599992
-        DD      3230016698
-        DD      4103239143
-        DD      3189567624
-        DD      3124971056
-        DD      3230016701
-        DD      3773474925
-        DD      3189567869
-        DD      52711992
-        DD      3230016705
-        DD      2465315445
-        DD      3189567444
-        DD      1252829960
-        DD      3230016708
-        DD      1041581158
-        DD      3189567781
-        DD      2430429904
-        DD      3230016711
-        DD      166620501
-        DD      3189567739
-        DD      3585583704
-        DD      3230016714
-        DD      2379237630
-        DD      3189567984
-        DD      423395616
-        DD      3230016718
-        DD      134834559
-        DD      3189567178
-        DD      1533871416
-        DD      3230016721
-        DD      1449318760
-        DD      3189567373
-        DD      2622114680
-        DD      3230016724
-        DD      3042372984
-        DD      3189567127
-        DD      3688195920
-        DD      3230016727
-        DD      1265290101
-        DD      3189567921
-        DD      437218048
-        DD      3230016731
-        DD      2248549362
-        DD      3189567262
-        DD      1459185496
-        DD      3230016734
-        DD      1293250365
-        DD      3189567151
-        DD      2459200496
-        DD      3230016737
-        DD      313786605
-        DD      3189567180
-        DD      3437332240
-        DD      3230016740
-        DD      3289151823
-        DD      3189567872
-        DD      98682312
-        DD      3230016744
-        DD      2693758821
-        DD      3189567877
-        DD      1033253848
-        DD      3230016747
-        DD      4237443192
-        DD      3189567301
-        DD      1946147760
-        DD      3230016750
-        DD      4099404586
-        DD      3189567972
-        DD      2837431968
-        DD      3230016753
-        DD      343640666
-        DD      3189567552
-        DD      3707174040
-        DD      3230016756
-        DD      4238401458
-        DD      3189567983
-        DD      260473960
-        DD      3230016760
-        DD      21423548
-        DD      3189567559
-        DD      1087333264
-        DD      3230016763
-        DD      3515278593
-        DD      3189567309
-        DD      1892851296
-        DD      3230016766
-        DD      629106375
-        DD      3189567166
-        DD      2677094384
-        DD      3230016769
-        DD      2048670044
-        DD      3189567227
-        DD      3440128544
-        DD      3230016772
-        DD      3739217292
-        DD      3189568009
-        DD      4182019504
-        DD      3230016775
-        DD      3662039444
-        DD      3189567618
-        DD      607865368
-        DD      3230016779
-        DD      1766486991
-        DD      3189567112
-        DD      1307665824
-        DD      3230016782
-        DD      512689457
-        DD      3189567670
-        DD      1986518392
-        DD      3230016785
-        DD      1704577378
-        DD      3189567760
-        DD      2644487576
-        DD      3230016788
-        DD      4001935135
-        DD      3189567473
-        DD      3281637576
-        DD      3230016791
-        DD      1184452342
-        DD      3189567735
-        DD      3898032312
-        DD      3230016794
-        DD      2714793956
-        DD      3189567464
-        DD      198768096
-        DD      3230016798
-        DD      3657654418
-        DD      3189567905
-        DD      773842856
-        DD      3230016801
-        DD      2809688013
-        DD      3189567736
-        DD      1328352328
-        DD      3230016804
-        DD      390727591
-        DD      3189567393
-        DD      1862359256
-        DD      3230016807
-        DD      1135237925
-        DD      3189567248
-        DD      2375926096
-        DD      3230016810
-        DD      1377572509
-        DD      3189567837
-        DD      2869115032
-        DD      3230016813
-        DD      3148383775
-        DD      3189568032
-        DD      3341987960
-        DD      3230016816
-        DD      3809536738
-        DD      3189567313
-        DD      3794606472
-        DD      3230016819
-        DD      4243445934
-        DD      3189568034
-        DD      4227031920
-        DD      3230016822
-        DD      1302642088
-        DD      3189567451
-        DD      344358048
-        DD      3230016826
-        DD      3239125361
-        DD      3189567151
-        DD      736580224
-        DD      3230016829
-        DD      3753161736
-        DD      3189567129
-        DD      1108791648
-        DD      3230016832
-        DD      624357483
-        DD      3189568045
-        DD      1461052568
-        DD      3230016835
-        DD      3153257064
-        DD      3189567338
-        DD      1793422920
-        DD      3230016838
-        DD      2705820149
-        DD      3189567635
-        DD      2105962400
-        DD      3230016841
-        DD      911564860
-        DD      3189567737
-        DD      2398730424
-        DD      3230016844
-        DD      1086958332
-        DD      3189567948
-        DD      2671786152
-        DD      3230016847
-        DD      1598984535
-        DD      3189567210
-        DD      2925188456
-        DD      3230016850
-        DD      4113385879
-        DD      3189567401
-        DD      3158995968
-        DD      3230016853
-        DD      2426812671
-        DD      3189567396
-        DD      3373267048
-        DD      3230016856
-        DD      3480845679
-        DD      3189567359
-        DD      3568059792
-        DD      3230016859
-        DD      3306230729
-        DD      3189567924
-        DD      3743432056
-        DD      3230016862
-        DD      3853821277
-        DD      3189567317
-        DD      3899441408
-        DD      3230016865
-        DD      2049309148
-        DD      3189567699
-        DD      4036145192
-        DD      3230016868
-        DD      2667321817
-        DD      3189567166
-        DD      4153600472
-        DD      3230016871
-        DD      3540670389
-        DD      3189567114
-        DD      4251864072
-        DD      3230016874
-        DD      404207883
-        DD      3189567310
-        DD      36025272
-        DD      3230016878
-        DD      2837617046
-        DD      3189567103
-        DD      96074976
-        DD      3230016881
-        DD      1231280453
-        DD      3189567669
-        DD      137101976
-        DD      3230016884
-        DD      792492437
-        DD      3189567071
-        DD      159162080
-        DD      3230016887
-        DD      2385525292
-        DD      3189567618
-        DD      162310880
-        DD      3230016890
-        DD      3272051015
-        DD      3189567858
-        DD      146603712
-        DD      3230016893
-        DD      623573538
-        DD      3189567881
-        DD      112095672
-        DD      3230016896
-        DD      2151835939
-        DD      3189567451
-        DD      58841608
-        DD      3230016899
-        DD      958006130
-        DD      3189567217
-        DD      4281863424
-        DD      3230016901
-        DD      549948691
-        DD      3189567863
-        DD      4191280920
-        DD      3230016904
-        DD      4177689987
-        DD      3189567217
-        DD      4082115512
-        DD      3230016907
-        DD      2895765193
-        DD      3189567599
-        DD      3954421112
-        DD      3230016910
-        DD      1055606208
-        DD      3189567799
-        DD      3808251392
-        DD      3230016913
-        DD      1966521217
-        DD      3189567351
-        DD      3643659776
-        DD      3230016916
-        DD      1017382758
-        DD      3189567732
-        DD      3460699480
-        DD      3230016919
-        DD      3485890155
-        DD      3189567410
-        DD      3259423472
-        DD      3230016922
-        DD      2657419170
-        DD      3189567140
-        DD      3039884488
-        DD      3230016925
-        DD      4198858220
-        DD      3189568080
-        DD      2802135064
-        DD      3230016928
-        DD      2343740494
-        DD      3189567869
-        DD      2546227480
-        DD      3230016931
-        DD      2423084215
-        DD      3189567957
-        DD      2272213808
-        DD      3230016934
-        DD      3887273856
-        DD      3189567631
-        DD      1980145888
-        DD      3230016937
-        DD      3992755473
-        DD      3189567251
-        DD      1670075336
-        DD      3230016940
-        DD      722498073
-        DD      3189567389
-        DD      1342053552
-        DD      3230016943
-        DD      3573506400
-        DD      3189567965
-        DD      996131728
-        DD      3230016946
-        DD      714695829
-        DD      3189567392
-        DD      632360808
-        DD      3230016949
-        DD      2816704229
-        DD      3189567846
-        DD      250791552
-        DD      3230016952
-        DD      386951333
-        DD      3189567243
-        DD      4146441768
-        DD      3230016954
-        DD      2155319939
-        DD      3189567580
-        DD      3729427184
-        DD      3230016957
-        DD      4227840137
-        DD      3189567931
-        DD      3294765200
-        DD      3230016960
-        DD      1718354212
-        DD      3189567672
-        DD      2842505696
-        DD      3230016963
-        DD      4243880582
-        DD      3189567656
-        DD      2372698352
-        DD      3230016966
-        DD      3784093842
-        DD      3189567302
-        DD      1885392624
-        DD      3230016969
-        DD      2318733051
-        DD      3189567813
-        DD      1380637784
-        DD      3230016972
-        DD      497929746
-        DD      3189567210
-        DD      858482864
-        DD      3230016975
-        DD      3218883783
-        DD      3189567649
-        DD      318976720
-        DD      3230016978
-        DD      3492652862
-        DD      3189567382
-        DD      4057135272
-        DD      3230016980
-        DD      473724673
-        DD      3189568069
-        DD      3483072376
-        DD      3230016983
-        DD      150485010
-        DD      3189567757
-        DD      2891803552
-        DD      3230016986
-        DD      3028900958
-        DD      3189567173
-        DD      2283376816
-        DD      3230016989
-        DD      321242596
-        DD      3189567822
-        DD      1657840008
-        DD      3230016992
-        DD      151305746
-        DD      3189568029
-        DD      1015240760
-        DD      3230016995
-        DD      2208026401
-        DD      3189567184
-        DD      355626480
-        DD      3230016998
-        DD      2487781842
-        DD      3189567931
-        DD      3974011720
-        DD      3230017000
-        DD      2391142094
-        DD      3189567091
-        DD      3280508896
-        DD      3230017003
-        DD      734457618
-        DD      3189568092
-        DD      2570132168
-        DD      3230017006
-        DD      3070902701
-        DD      3189567794
-        DD      1842928168
-        DD      3230017009
-        DD      1110877923
-        DD      3189567896
-        DD      1098943352
-        DD      3230017012
-        DD      3880360185
-        DD      3189567898
-        DD      338223984
-        DD      3230017015
-        DD      391995809
-        DD      3189567294
-        DD      3855783416
-        DD      3230017017
-        DD      4186345433
-        DD      3189567745
-        DD      3061732952
-        DD      3230017020
-        DD      3682852050
-        DD      3189567081
-        DD      2251085560
-        DD      3230017023
-        DD      3057037137
-        DD      3189567617
-        DD      1423886760
-        DD      3230017026
-        DD      3352664894
-        DD      3189567074
-        DD      580181848
-        DD      3230017029
-        DD      1170568982
-        DD      3189567927
-        DD      4014983272
-        DD      3230017031
-        DD      671148579
-        DD      3189567293
-        DD      3138401368
-        DD      3230017034
-        DD      267496658
-        DD      3189567304
-        DD      2245448192
-        DD      3230017037
-        DD      1285167087
-        DD      3189568066
-        DD      1336168336
-        DD      3230017040
-        DD      4259909589
-        DD      3189567788
-        DD      410606184
-        DD      3230017043
-        DD      1494078902
-        DD      3189568031
-        DD      3763773256
-        DD      3230017045
-        DD      261935754
-        DD      3189567685
-        DD      2805778992
-        DD      3230017048
-        DD      3679585605
-        DD      3189567195
-        DD      1831634536
-        DD      3230017051
-        DD      809066513
-        DD      3189567664
-        DD      841383576
-        DD      3230017054
-        DD      385945238
-        DD      3189567897
-        DD      4130036912
-        DD      3230017056
-        DD      825579909
-        DD      3189567603
-        DD      3107703272
-        DD      3230017059
-        DD      3911295427
-        DD      3189567514
-        DD      2069393104
-        DD      3230017062
-        DD      3473784588
-        DD      3189567461
-        DD      1015149384
-        DD      3230017065
-        DD      629861200
-        DD      3189567515
-        DD      4239982216
-        DD      3230017067
-        DD      2659142760
-        DD      3189567083
-        DD      3153999632
-        DD      3230017070
-        DD      1251680713
-        DD      3189567080
-        DD      2052211384
-        DD      3230017073
-        DD      3168705163
-        DD      3189567992
-        DD      934659776
-        DD      3230017076
-        DD      1674797624
-        DD      3189567952
-        DD      4096354216
-        DD      3230017078
-        DD      437847902
-        DD      3189567971
-        DD      2947402064
-        DD      3230017081
-        DD      4024401533
-        DD      3189567960
-        DD      1782812400
-        DD      3230017084
-        DD      786902458
-        DD      3189567873
-        DD      602626840
-        DD      3230017087
-        DD      2593792633
-        DD      3189567812
-        DD      3701854136
-        DD      3230017089
-        DD      3989721221
-        DD      3189567126
-        DD      2490600968
-        DD      3230017092
-        DD      2545746866
-        DD      3189567591
-        DD      1263875768
-        DD      3230017095
-        DD      3115843521
-        DD      3189567377
-        DD      21719488
-        DD      3230017098
-        DD      1730226063
-        DD      3189567307
-        DD      3059140216
-        DD      3230017100
-        DD      690350922
-        DD      3189567892
-        DD      1786244008
-        DD      3230017103
-        DD      3350998585
-        DD      3189567394
-        DD      498038616
-        DD      3230017106
-        DD      1499123379
-        DD      3189568082
-        DD      3489531672
-        DD      3230017108
-        DD      2598665922
-        DD      3189567118
-        DD      2170828712
-        DD      3230017111
-        DD      2436376826
-        DD      3189567935
-        DD      836937048
-        DD      3230017114
-        DD      1977004902
-        DD      3189568052
-        DD      3782863816
-        DD      3230017116
-        DD      4027224619
-        DD      3189567373
-        DD      2418714096
-        DD      3230017119
-        DD      2616869856
-        DD      3189567271
-        DD      1039494712
-        DD      3230017122
-        DD      3775628133
-        DD      3189567616
-        DD      3940212336
-        DD      3230017124
-        DD      419018052
-        DD      3189567909
-        DD      2530971600
-        DD      3230017127
-        DD      150919657
-        DD      3189567379
-        DD      1106778856
-        DD      3230017130
-        DD      2926254537
-        DD      3189567139
-        DD      3962640312
-        DD      3230017132
-        DD      1610863810
-        DD      3189567216
-        DD      2508660136
-        DD      3230017135
-        DD      1166015244
-        DD      3189567672
-        DD      1039844240
-        DD      3230017138
-        DD      645159638
-        DD      3189567685
-        DD      3851198376
-        DD      3230017140
-        DD      2449439581
-        DD      3189567695
-        DD      2352826264
-        DD      3230017143
-        DD      1619104640
-        DD      3189567458
-        DD      839733360
-        DD      3230017146
-        DD      2427070371
-        DD      3189567165
-        DD      3606924968
-        DD      3230017148
-        DD      2166480890
-        DD      3189567544
-        DD      2064504368
-        DD      3230017151
-        DD      2283025905
-        DD      3189567907
-        DD      507476584
-        DD      3230017154
-        DD      3923356754
-        DD      3189567272
-        DD      3230846472
-        DD      3230017156
-        DD      805331677
-        DD      3189567533
-        DD      1644716880
-        DD      3230017159
-        DD      3790469685
-        DD      3189567406
-        DD      44092384
-        DD      3230017162
-        DD      2689788214
-        DD      3189567653
-        DD      2723977432
-        DD      3230017164
-        DD      2762250221
-        DD      3189567072
-        DD      1094474416
-        DD      3230017167
-        DD      2781925193
-        DD      3189567716
-        DD      3745554800
-        DD      3230017169
-        DD      593120878
-        DD      3189567817
-        DD      2087320704
-        DD      3230017172
-        DD      403414988
-        DD      3189568021
-        DD      414776008
-        DD      3230017175
-        DD      359307328
-        DD      3189567387
-        DD      3022924432
-        DD      3230017177
-        DD      3373547966
-        DD      3189567572
-        DD      1321867688
-        DD      3230017180
-        DD      3978711340
-        DD      3189567805
-        DD      3901576528
-        DD      3230017182
-        DD      2765663238
-        DD      3189568046
-        DD      2172152384
-        DD      3230017185
-        DD      1181150766
-        DD      3189568053
-        DD      428598440
-        DD      3230017188
-        DD      2473022131
-        DD      3189567471
-        DD      2965917728
-        DD      3230017190
-        DD      1621744488
-        DD      3189567971
-        DD      1194211288
-        DD      3230017193
-        DD      2931299013
-        DD      3189567190
-        DD      3703449168
-        DD      3230017195
-        DD      873154950
-        DD      3189568039
-        DD      1903732144
-        DD      3230017198
-        DD      1510784525
-        DD      3189567521
-        DD      90062704
-        DD      3230017201
-        DD      2918231590
-        DD      3189568086
-        DD      2557443240
-        DD      3230017203
-        DD      3329944838
-        DD      3189567475
-        DD      715974088
-        DD      3230017206
-        DD      2679715410
-        DD      3189568021
-        DD      3155624672
-        DD      3230017208
-        DD      1841110143
-        DD      3189567518
-        DD      1286495072
-        DD      3230017211
-        DD      3881638924
-        DD      3189567497
-        DD      3698554440
-        DD      3230017213
-        DD      167906931
-        DD      3189567169
-        DD      1801902600
-        DD      3230017216
-        DD      1468264167
-        DD      3189567597
-        DD      4186508448
-        DD      3230017218
-        DD      2400624638
-        DD      3189567691
-        DD      2262471560
-        DD      3230017221
-        DD      3796182064
-        DD      3189567357
-        DD      324793264
-        DD      3230017224
-        DD      2801238958
-        DD      3189567581
-        DD      2668474776
-        DD      3230017226
-        DD      2273142813
-        DD      3189567436
-        DD      703615288
-        DD      3230017229
-        DD      831867571
-        DD      3189567237
-        DD      3020183048
-        DD      3230017231
-        DD      2238048829
-        DD      3189567595
-        DD      1028277008
-        DD      3230017234
-        DD      1163763070
-        DD      3189567452
-        DD      3317865168
-        DD      3230017236
-        DD      1206450788
-        DD      3189567228
-        DD      1299046216
-        DD      3230017239
-        DD      737162226
-        DD      3189567879
-        DD      3561787920
-        DD      3230017241
-        DD      2433253277
-        DD      3189567901
-        DD      1516188728
-        DD      3230017244
-        DD      3561277099
-        DD      3189567506
-        DD      3752216144
-        DD      3230017246
-        DD      1385095507
-        DD      3189567674
-        DD      1679968384
-        DD      3230017249
-        DD      829462408
-        DD      3189567156
-        DD      3889412704
-        DD      3230017251
-        DD      2939266725
-        DD      3189567673
-        DD      1790647080
-        DD      3230017254
-        DD      4214100827
-        DD      3189567848
-        DD      3973638544
-        DD      3230017256
-        DD      2537954451
-        DD      3189567376
-        DD      1848484816
-        DD      3230017259
-        DD      1128740312
-        DD      3189567098
-        DD      4005152680
-        DD      3230017261
-        DD      1932232434
-        DD      3189568053
-        DD      1853739648
-        DD      3230017264
-        DD      1359710694
-        DD      3189567457
-        DD      3984212256
-        DD      3230017266
-        DD      1268482287
-        DD      3189567990
-        DD      1806667776
-        DD      3230017269
-        DD      839689017
-        DD      3189567631
-        DD      3911072520
-        DD      3230017271
-        DD      3727165601
-        DD      3189567921
-        DD      1707523520
-        DD      3230017274
-        DD      1836550952
-        DD      3189567895
-        DD      3785986872
-        DD      3230017276
-        DD      172951407
-        DD      3189567220
-        DD      1556559360
-        DD      3230017279
-        DD      1166449891
-        DD      3189567294
-        DD      3609206856
-        DD      3230017281
-        DD      28625366
-        DD      3189567222
-        DD      1354025920
-        DD      3230017284
-        DD      4038426582
-        DD      3189567978
-        DD      3380982208
-        DD      3230017286
-        DD      2756284659
-        DD      3189567362
-        DD      1100172048
-        DD      3230017289
-        DD      848830252
-        DD      3189567230
-        DD      3101560856
-        DD      3230017291
-        DD      1868170309
-        DD      3189567423
-        DD      795244752
-        DD      3230017294
-        DD      3128260908
-        DD      3189567885
-        DD      2771188936
-        DD      3230017296
-        DD      1691261279
-        DD      3189567706
-        DD      439489304
-        DD      3230017299
-        DD      2886711298
-        DD      3189567236
-        DD      2390110824
-        DD      3230017301
-        DD      1311431101
-        DD      3189567133
-        DD      33149176
-        DD      3230017304
-        DD      3042183093
-        DD      3189567401
-        DD      1958569120
-        DD      3230017306
-        DD      3174208880
-        DD      3189567462
-        DD      3871433416
-        DD      3230017308
-        DD      302374021
-        DD      3189567243
-        DD      1476804712
-        DD      3230017311
-        DD      712531519
-        DD      3189567241
-        DD      3364647440
-        DD      3230017313
-        DD      3705318448
-        DD      3189567568
-        DD      945056744
-        DD      3230017316
-        DD      2424171915
-        DD      3189568016
-        DD      2807996856
-        DD      3230017318
-        DD      199511961
-        DD      3189567094
-        DD      363562688
-        DD      3230017321
-        DD      3766234060
-        DD      3189567214
-        DD      2201718256
-        DD      3230017323
-        DD      1956195829
-        DD      3189567592
-        DD      4027525584
-        DD      3230017325
-        DD      2891794585
-        DD      3189567375
-        DD      1546046576
-        DD      3230017328
-        DD      843173017
-        DD      3189567760
-        DD      3347244936
-        DD      3230017330
-        DD      1609532414
-        DD      3189567955
-        DD      841215080
-        DD      3230017333
-        DD      3356704285
-        DD      3189567294
-        DD      2617920488
-        DD      3230017335
-        DD      1641729240
-        DD      3189567346
-        DD      87455368
-        DD      3230017338
-        DD      1455753222
-        DD      3189567878
-        DD      1839783016
-        DD      3230017340
-        DD      1936589978
-        DD      3189567944
-        DD      3579964728
-        DD      3230017342
-        DD      1006586129
-        DD      3189567993
-        DD      1013061704
-        DD      3230017345
-        DD      2766825484
-        DD      3189567880
-        DD      2729036928
-        DD      3230017347
-        DD      1888685184
-        DD      3189567954
-        DD      137984104
-        DD      3230017350
-        DD      848046306
-        DD      3189568090
-        DD      1829866024
-        DD      3230017352
-        DD      4178224056
-        DD      3189567750
-        DD      3509743488
-        DD      3230017354
-        DD      2637072474
-        DD      3189567070
-        DD      882677184
-        DD      3230017357
-        DD      3133305384
-        DD      3189567936
-        DD      2538629624
-        DD      3230017359
-        DD      1343200028
-        DD      3189567905
-        DD      4182661312
-        DD      3230017361
-        DD      107195460
-        DD      3189567427
-        DD      1519832648
-        DD      3230017364
-        DD      602154914
-        DD      3189567857
-        DD      3140105848
-        DD      3230017366
-        DD      659160740
-        DD      3189567417
-        DD      453573824
-        DD      3230017369
-        DD      236889930
-        DD      3189567396
-        DD      2050198592
-        DD      3230017371
-        DD      1175634921
-        DD      3189567087
-        DD      3635040168
-        DD      3230017373
-        DD      1241855527
-        DD      3189567941
-        DD      913158504
-        DD      3230017376
-        DD      3947904414
-        DD      3189567477
-        DD      2474515312
-        DD      3230017378
-        DD      1206979822
-        DD      3189567534
-        DD      4024170344
-        DD      3230017380
-        DD      1847397805
-        DD      3189567152
-        DD      1267183240
-        DD      3230017383
-        DD      2916539301
-        DD      3189567754
-        DD      2793515456
-        DD      3230017385
-        DD      2568213263
-        DD      3189568078
-        DD      13259168
-        DD      3230017388
-        DD      3003245330
-        DD      3189567303
-        DD      1516375624
-        DD      3230017390
-        DD      3472633477
-        DD      3189567153
-        DD      3007924104
-        DD      3230017392
-        DD      532406289
-        DD      3189567855
-        DD      192963816
-        DD      3230017395
-        DD      4149310663
-        DD      3189567165
-        DD      1661455728
-        DD      3230017397
-        DD      946970842
-        DD      3189567598
-        DD      3118458864
-        DD      3230017399
-        DD      2040517972
-        DD      3189567254
-        DD      269032128
-        DD      3230017402
-        DD      3669971831
-        DD      3189568072
-        DD      1703136256
-        DD      3230017404
-        DD      2375197389
-        DD      3189567687
-        DD      3125829976
-        DD      3230017406
-        DD      296757744
-        DD      3189567673
-        DD      242171944
-        DD      3230017409
-        DD      611424102
-        DD      3189567452
-        DD      1642122608
-        DD      3230017411
-        DD      1700968423
-        DD      3189567419
-        DD      3030740440
-        DD      3230017413
-        DD      2947762668
-        DD      3189567968
-        DD      113083840
-        DD      3230017416
-        DD      690901756
-        DD      3189567496
-        DD      1479112984
-        DD      3230017418
-        DD      121139903
-        DD      3189567571
-        DD      2833886088
-        DD      3230017420
-        DD      173386055
-        DD      3189567866
-        DD      4177428584
-        DD      3230017422
-        DD      2964718132
-        DD      3189567231
-        DD      1214798496
-        DD      3230017425
-        DD      541562024
-        DD      3189567842
-        DD      2535955680
-        DD      3230017427
-        DD      3368765612
-        DD      3189568076
-        DD      3845958008
-        DD      3230017429
-        DD      3194541507
-        DD      3189567689
-        DD      849863256
-        DD      3230017432
-        DD      3443356552
-        DD      3189567858
-        DD      2137631024
-        DD      3230017434
-        DD      1180679397
-        DD      3189567138
-        DD      3414318912
-        DD      3230017436
-        DD      2261929999
-        DD      3189567651
-        DD      384984464
-        DD      3230017439
-        DD      954057098
-        DD      3189567971
-        DD      1639587024
-        DD      3230017441
-        DD      1346995839
-        DD      3189567263
-        DD      2883183944
-        DD      3230017443
-        DD      3253373727
-        DD      3189567382
-        DD      4115799808
-        DD      3230017445
-        DD      4143791142
-        DD      3189567800
-        DD      1042491824
-        DD      3230017448
-        DD      4240432954
-        DD      3189567700
-        DD      2253218992
-        DD      3230017450
-        DD      1891708033
-        DD      3189568072
-        DD      3453038360
-        DD      3230017452
-        DD      710292621
-        DD      3189567662
-        DD      347006880
-        DD      3230017455
-        DD      2712254611
-        DD      3189567116
-        DD      1525083304
-        DD      3230017457
-        DD      349583280
-        DD      3189568004
-        DD      2692324448
-        DD      3230017459
-        DD      1803227864
-        DD      3189567740
-        DD      3848754312
-        DD      3230017461
-        DD      3644606976
-        DD      3189567826
-        DD      699429536
-        DD      3230017464
-        DD      1067153346
-        DD      3189567751
-        DD      1834308568
-        DD      3230017466
-        DD      1335350692
-        DD      3189567081
-        DD      2958447872
-        DD      3230017468
-        DD      1803696599
-        DD      3189567557
-        DD      4071871152
-        DD      3230017470
-        DD      1232152547
-        DD      3189568017
-        DD      879634736
-        DD      3230017473
-        DD      1455437901
-        DD      3189567512
-        DD      1971696744
-        DD      3230017475
-        DD      3708110750
-        DD      3189567399
-        DD      3053113344
-        DD      3230017477
-        DD      3907324819
-        DD      3189567290
-        DD      4123907920
-        DD      3230017479
-        DD      4080000314
-        DD      3189567141
-        DD      889136480
-        DD      3230017482
-        DD      1286519001
-        DD      3189567298
-        DD      1938756848
-        DD      3230017484
-        DD      1292347423
-        DD      3189567513
-        DD      2977824880
-        DD      3230017486
-        DD      1159725249
-        DD      3189568015
-        DD      4006363664
-        DD      3230017488
-        DD      895621348
-        DD      3189567502
-        DD      729428896
-        DD      3230017491
-        DD      1212894155
-        DD      3189567280
-        DD      1736978096
-        DD      3230017493
-        DD      296117275
-        DD      3189567210
-        DD      2734066816
-        DD      3230017495
-        DD      2463481211
-        DD      3189567796
-        DD      3720717848
-        DD      3230017497
-        DD      76524950
-        DD      3189567159
-        DD      401986584
-        DD      3230017500
-        DD      1718551671
-        DD      3189567216
-        DD      1367830248
-        DD      3230017502
-        DD      3568874946
-        DD      3189567584
-        DD      2323304104
-        DD      3230017504
-        DD      2763456396
-        DD      3189567666
-        DD      3268430632
-        DD      3230017506
-        DD      1208592501
-        DD      3189567715
-        DD      4203232240
-        DD      3230017508
-        DD      4148835618
-        DD      3189567851
-        DD      832763976
-        DD      3230017511
-        DD      610418007
-        DD      3189567082
-        DD      1746982680
-        DD      3230017513
-        DD      3035714190
-        DD      3189567431
-        DD      2650943256
-        DD      3230017515
-        DD      85931336
-        DD      3189567843
-        DD      3544667832
-        DD      3230017517
-        DD      3006685957
-        DD      3189567286
-        DD      133211144
-        DD      3230017520
-        DD      878859600
-        DD      3189567873
-        DD      1006529776
-        DD      3230017522
-        DD      854333969
-        DD      3189567724
-        DD      1869678336
-        DD      3230017524
-        DD      3058646748
-        DD      3189567155
-        DD      2722678648
-        DD      3230017526
-        DD      360733640
-        DD      3189567693
-        DD      3565552488
-        DD      3230017528
-        DD      3015564990
-        DD      3189568013
-        DD      103354256
-        DD      3230017531
-        DD      2286095909
-        DD      3189568081
-        DD      926040176
-        DD      3230017533
-        DD      1899270393
-        DD      3189567137
-        DD      1738664488
-        DD      3230017535
-        DD      1377641292
-        DD      3189567833
-        DD      2541248696
-        DD      3230017537
-        DD      4266686523
-        DD      3189568077
-        DD      3333814224
-        DD      3230017539
-        DD      4018775563
-        DD      3189567218
-        DD      4116382408
-        DD      3230017541
-        DD      3373913644
-        DD      3189567103
-        DD      594007232
-        DD      3230017544
-        DD      2818265402
-        DD      3189568021
-        DD      1356644520
-        DD      3230017546
-        DD      1075601108
-        DD      3189567716
-        DD      2109348112
-        DD      3230017548
-        DD      3342127702
-        DD      3189567566
-        DD      2852139088
-        DD      3230017550
-        DD      2910355434
-        DD      3189567504
-        DD      3585038464
-        DD      3230017552
-        DD      611858749
-        DD      3189567074
-        DD      13099880
-        DD      3230017555
-        DD      1954698831
-        DD      3189567516
-        DD      726278816
-        DD      3230017557
-        DD      550712630
-        DD      3189567710
-        DD      1429628792
-        DD      3230017559
-        DD      3672474493
-        DD      3189567278
-        DD      2123170544
-        DD      3230017561
-        DD      1160875209
-        DD      3189567651
-        DD      2806924760
-        DD      3230017563
-        DD      2242524344
-        DD      3189568000
-        DD      3480912064
-        DD      3230017565
-        DD      2823138691
-        DD      3189567327
-        DD      4145152992
-        DD      3230017567
-        DD      3521079748
-        DD      3189567568
-        DD      504700744
-        DD      3230017570
-        DD      1136670137
-        DD      3189567486
-        DD      1149510328
-        DD      3230017572
-        DD      806933442
-        DD      3189567823
-        DD      1784634816
-        DD      3230017574
-        DD      1606084669
-        DD      3189567242
-        DD      2410094488
-        DD      3230017576
-        DD      2841342625
-        DD      3189567480
-        DD      3025909584
-        DD      3230017578
-        DD      984188059
-        DD      3189567239
-        DD      3632100264
-        DD      3230017580
-        DD      3011730434
-        DD      3189567337
-        DD      4228686632
-        DD      3230017582
-        DD      328432041
-        DD      3189567676
-        DD      520721440
-        DD      3230017585
-        DD      2057225622
-        DD      3189567268
-        DD      1098159248
-        DD      3230017587
-        DD      3150727306
-        DD      3189567348
-        DD      1666052680
-        DD      3230017589
-        DD      3291380622
-        DD      3189567307
-        DD      2224421584
-        DD      3230017591
-        DD      3570771984
-        DD      3189567798
-        DD      2773285760
-        DD      3230017593
-        DD      2427604440
-        DD      3189567698
-        DD      3312664936
-        DD      3230017595
-        DD      3733848165
-        DD      3189567211
-        DD      3842578768
-        DD      3230017597
-        DD      2673912350
-        DD      3189567904
-        DD      68079584
-        DD      3230017600
-        DD      960995892
-        DD      3189567616
-        DD      579121512
-        DD      3230017602
-        DD      4150493479
-        DD      3189567659
-        DD      1080756744
-        DD      3230017604
-        DD      1054941272
-        DD      3189567735
-        DD      1573004704
-        DD      3230017606
-        DD      2574365292
-        DD      3189568007
-        DD      2055884768
-        DD      3230017608
-        DD      2507498673
-        DD      3189567092
-        DD      2529416224
-        DD      3230017610
-        DD      2082176323
-        DD      3189567207
-        DD      2993618320
-        DD      3230017612
-        DD      3719982601
-        DD      3189568058
-        DD      3448510256
-        DD      3230017614
-        DD      4104247904
-        DD      3189567897
-        DD      3894111152
-        DD      3230017616
-        DD      3735557011
-        DD      3189567647
-        DD      35472776
-        DD      3230017619
-        DD      2914260983
-        DD      3189567862
-        DD      462548736
-        DD      3230017621
-        DD      1334094042
-        DD      3189567734
-        DD      880390688
-        DD      3230017623
-        DD      1291097379
-        DD      3189567171
-        DD      1289017512
-        DD      3230017625
-        DD      1627119803
-        DD      3189567853
-        DD      1688448064
-        DD      3230017627
-        DD      3886873723
-        DD      3189567117
-        DD      2078701104
-        DD      3230017629
-        DD      627887757
-        DD      3189567206
-        DD      2459795360
-        DD      3230017631
-        DD      1722013861
-        DD      3189567101
-        DD      2831749488
-        DD      3230017633
-        DD      4163262354
-        DD      3189567678
-        DD      3194582104
-        DD      3230017635
-        DD      4170237688
-        DD      3189567639
-        DD      3548311752
-        DD      3230017637
-        DD      47563772
-        DD      3189567637
-        DD      3892956928
-        DD      3230017639
-        DD      2990136007
-        DD      3189567231
-        DD      4228536056
-        DD      3230017641
-        DD      4294532248
-        DD      3189567995
-        DD      260100240
-        DD      3230017644
-        DD      2060709623
-        DD      3189567397
-        DD      577602376
-        DD      3230017646
-        DD      1488525373
-        DD      3189568044
-        DD      886093456
-        DD      3230017648
-        DD      1657840200
-        DD      3189567474
-        DD      1185591680
-        DD      3230017650
-        DD      3155771782
-        DD      3189567399
-        DD      1476115208
-        DD      3230017652
-        DD      2195162329
-        DD      3189567591
-        DD      1757682144
-        DD      3230017654
-        DD      1292806663
-        DD      3189567956
-        DD      2030310544
-        DD      3230017656
-        DD      2151451208
-        DD      3189567540
-        DD      2294018392
-        DD      3230017658
-        DD      2224122735
-        DD      3189567630
-        DD      2548823632
-        DD      3230017660
-        DD      3554417607
-        DD      3189567684
-        DD      2794744152
-        DD      3230017662
-        DD      3831650627
-        DD      3189567409
-        DD      3031797776
-        DD      3230017664
-        DD      4024246224
-        DD      3189567811
-        DD      3260002296
-        DD      3230017666
-        DD      2530219738
-        DD      3189567128
-        DD      3479375416
-        DD      3230017668
-        DD      1618145996
-        DD      3189568024
-        DD      3689934832
-        DD      3230017670
-        DD      392379700
-        DD      3189567378
-        DD      3891698144
-        DD      3230017672
-        DD      55874694
-        DD      3189567574
-        DD      4084682928
-        DD      3230017674
-        DD      4294251475
-        DD      3189567312
-        DD      4268906688
-        DD      3230017676
-        DD      1899705040
-        DD      3189567783
-        DD      149419600
-        DD      3230017679
-        DD      357699389
-        DD      3189567568
-        DD      316173656
-        DD      3230017681
-        DD      3025711727
-        DD      3189567790
-        DD      474218920
-        DD      3230017683
-        DD      2921891821
-        DD      3189568046
-        DD      623572704
-        DD      3230017685
-        DD      1716968749
-        DD      3189567453
-        DD      764252248
-        DD      3230017687
-        DD      2393171526
-        DD      3189567748
-        DD      896274768
-        DD      3230017689
-        DD      1343317993
-        DD      3189567172
-        DD      1019657400
-        DD      3230017691
-        DD      1388235839
-        DD      3189567661
-        DD      1134417256
-        DD      3230017693
-        DD      2766147125
-        DD      3189567706
-        DD      1240571384
-        DD      3230017695
-        DD      2162068842
-        DD      3189567499
-        DD      1338136776
-        DD      3230017697
-        DD      4075455588
-        DD      3189567932
-        DD      1427130392
-        DD      3230017699
-        DD      1579647664
-        DD      3189567555
-        DD      1507569120
-        DD      3230017701
-        DD      3785749868
-        DD      3189567715
-        DD      1579469816
-        DD      3230017703
-        DD      2639950365
-        DD      3189567469
-        DD      1642849272
-        DD      3230017705
-        DD      3611501026
-        DD      3189567698
-        DD      1697724240
-        DD      3230017707
-        DD      15422953
-        DD      3189568066
-        DD      1744111424
-        DD      3230017709
-        DD      2642213241
-        DD      3189568062
-        DD      1782027472
-        DD      3230017711
-        DD      143606300
-        DD      3189568058
-        DD      1811488992
-        DD      3230017713
-        DD      501328690
-        DD      3189567276
-        DD      1832512520
-        DD      3230017715
-        DD      3258054578
-        DD      3189567915
-        DD      1845114576
-        DD      3230017717
-        DD      1297851139
-        DD      3189568007
-        DD      1849311616
-        DD      3230017719
-        DD      3589200000
-        DD      3189567580
-        DB 0
-        ORG $+46
-        DB      0
-        DD      0
-        DD      2147483648
-        DD      2846560486
-        DD      3210737666
-        DD      2729511872
-        DD      3211784202
-        DD      3956813460
-        DD      3212307985
-        DD      1796237193
-        DD      3212828714
-        DD      1562748889
-        DD      3213092649
-        DD      1602292343
-        DD      3213352007
-        DD      745814092
-        DD      3213610865
-        DD      2969306084
-        DD      3213869224
-        DD      3953060839
-        DD      3214006263
-        DD      1128703349
-        DD      3214134948
-        DD      1371067273
-        DD      3214263386
-        DD      131445019
-        DD      3214391579
-        DD      1427948820
-        DD      3214519527
-        DD      665817496
-        DD      3214647232
-        DD      1817459908
-        DD      3214774694
-        DD      242758400
-        DD      3214901915
-        DD      2082038134
-        DD      3214981455
-        DD      2300828032
-        DD      3215044825
-        DD      571795571
-        DD      3215108076
-        DD      3120479584
-        DD      3215171207
-        DD      3276640540
-        DD      3215234220
-        DD      2949178581
-        DD      3215297115
-        DD      4036279704
-        DD      3215359892
-        DD      4130528508
-        DD      3215422552
-        DD      813954767
-        DD      3215485096
-        DD      248046571
-        DD      3215547523
-        DD      4288926261
-        DD      3215609833
-        DD      1897492927
-        DD      3215672029
-        DD      3499237165
-        DD      3215734109
-        DD      2329611090
-        DD      3215796075
-        DD      203907094
-        DD      3215857927
-        DD      3222364838
-        DD      3215919664
-        DD      295408387
-        DD      3215981289
-        DD      899212401
-        DD      3216012696
-        DD      2606049022
-        DD      3216043395
-        DD      4003691233
-        DD      3216074038
-        DD      1675303236
-        DD      3216104626
-        DD      789189655
-        DD      3216135158
-        DD      2213928479
-        DD      3216165634
-        DD      2518405585
-        DD      3216196055
-        DD      2561783534
-        DD      3216226421
-        DD      3198568176
-        DD      3216256732
-        DD      983674944
-        DD      3216286989
-        DD      1057364031
-        DD      3216317191
-        DD      4260371496
-        DD      3216347338
-        DD      2838974660
-        DD      3216377432
-        DD      1919860988
-        DD      3216407472
-        DD      2330291020
-        DD      3216437458
-        DD      598130195
-        DD      3216467391
-        DD      1836782285
-        DD      3216497270
-        DD      2565351466
-        DD      3216527096
-        DD      3593575201
-        DD      3216556869
-        DD      1431920350
-        DD      3216586590
-        DD      1176515501
-        DD      3216616258
-        DD      3624279252
-        DD      3216645873
-        DD      977982819
-        DD      3216675437
-        DD      2616083454
-        DD      3216704948
-        DD      733015457
-        DD      3216734408
-        DD      403990373
-        DD      3216763816
-        DD      2405156675
-        DD      3216793172
-        DD      3213628385
-        DD      3216822477
-        DD      3597448029
-        DD      3216851731
-        DD      25680167
-        DD      3216880935
-        DD      1848308454
-        DD      3216910087
-        DD      1231492199
-        DD      3216939189
-        DD      3222364838
-        DD      3216968240
-        DD      4274224607
-        DD      3216997241
-        DD      836496059
-        DD      3217026193
-        DD      1119829323
-        DD      3217043131
-        DD      315251054
-        DD      3217057557
-        DD      518461891
-        DD      3217071958
-        DD      2094042713
-        DD      3217086334
-        DD      1109735857
-        DD      3217100686
-        DD      2221359788
-        DD      3217115013
-        DD      1492952593
-        DD      3217129316
-        DD      3576653728
-        DD      3217143594
-        DD      237880003
-        DD      3217157849
-        DD      420109003
-        DD      3217172079
-        DD      180120274
-        DD      3217186285
-        DD      4162843939
-        DD      3217200466
-        DD      4126536273
-        DD      3217214624
-        DD      417628115
-        DD      3217228759
-        DD      1970736719
-        DD      3217242869
-        DD      538873716
-        DD      3217256956
-        DD      758227830
-        DD      3217271019
-        DD      2968307242
-        DD      3217285058
-        DD      3211951040
-        DD      3217299074
-        DD      1825275166
-        DD      3217313067
-        DD      3437683677
-        DD      3217327036
-        DD      4086978021
-        DD      3217340982
-        DD      4104270002
-        DD      3217354905
-        DD      3819025464
-        DD      3217368805
-        DD      3559075183
-        DD      3217382682
-        DD      3650625670
-        DD      3217396536
-        DD      123302585
-        DD      3217410368
-        DD      1890030548
-        DD      3217424176
-        DD      682272600
-        DD      3217437962
-        DD      1114811729
-        DD      3217451725
-        DD      3505892050
-        DD      3217465465
-        DD      3877229085
-        DD      3217479183
-        DD      2543954549
-        DD      3217492879
-        DD      4114626469
-        DD      3217506552
-        DD      311370023
-        DD      3217520204
-        DD      34658569
-        DD      3217533833
-        DD      3593519732
-        DD      3217547439
-        DD      2705545195
-        DD      3217561024
-        DD      1971736889
-        DD      3217574587
-        DD      1696647441
-        DD      3217588128
-        DD      2183357019
-        DD      3217601647
-        DD      3733482817
-        DD      3217615144
-        DD      2352221150
-        DD      3217628620
-        DD      2633258676
-        DD      3217642074
-        DD      578912458
-        DD      3217655507
-        DD      780008323
-        DD      3217668918
-        DD      3530988084
-        DD      3217682307
-        DD      534951267
-        DD      3217695676
-        DD      673467853
-        DD      3217709023
-        DD      4236783385
-        DD      3217722348
-        DD      2923827788
-        DD      3217735653
-        DD      1317060595
-        DD      3217748937
-        DD      3997577740
-        DD      3217762199
-        DD      2660218276
-        DD      3217775441
-        DD      1883376699
-        DD      3217788662
-        DD      1949142230
-        DD      3217801862
-        DD      3138274530
-        DD      3217815041
-        DD      1435244737
-        DD      3217828200
-        DD      1413145637
-        DD      3217841338
-        DD      3348797986
-        DD      3217854455
-        DD      3222758658
-        DD      3217867552
-        DD      1309263324
-        DD      3217880629
-        DD      2176234471
-        DD      3217893685
-        DD      1800387473
-        DD      3217906721
-        DD      452140382
-        DD      3217919737
-        DD      2695621757
-        DD      3217932732
-        DD      208809263
-        DD      3217945708
-        DD      1848308454
-        DD      3217958663
-        DD      3584589359
-        DD      3217971598
-        DD      1386895968
-        DD      3217984514
-        DD      4108155659
-        DD      3217997409
-        DD      3420215606
-        DD      3218010285
-        DD      3878621277
-        DD      3218023141
-        DD      1447787319
-        DD      3218035978
-        DD      680874053
-        DD      3218048795
-        DD      1834892843
-        DD      3218061592
-        DD      870713292
-        DD      3218074370
-        DD      1168986141
-        DD      3218083436
-        DD      3245089583
-        DD      3218089805
-        DD      2494877761
-        DD      3218096165
-        DD      3338922950
-        DD      3218102515
-        DD      1607293197
-        DD      3218108856
-        DD      1719424943
-        DD      3218115187
-        DD      3799224547
-        DD      3218121508
-        DD      3675071677
-        DD      3218127820
-        DD      1469757259
-        DD      3218134123
-        DD      1600486820
-        DD      3218140416
-        DD      4188949205
-        DD      3218146699
-        DD      766352567
-        DD      3218152974
-        DD      43231408
-        DD      3218159239
-        DD      2139646042
-        DD      3218165494
-        DD      2880153102
-        DD      3218171740
-        DD      2383743325
-        DD      3218177977
-        DD      768877423
-        DD      3218184205
-        DD      2448456521
-        DD      3218190423
-        DD      3244923387
-        DD      3218196632
-        DD      3275167422
-        DD      3218202832
-        DD      2655560435
-        DD      3218209023
-        DD      1501959692
-        DD      3218215205
-        DD      4224678246
-        DD      3218221377
-        DD      2348618756
-        DD      3218227541
-        DD      283080250
-        DD      3218233696
-        DD      2436859197
-        DD      3218239841
-        DD      333350563
-        DD      3218245978
-        DD      2675321801
-        DD      3218252105
-        DD      985177381
-        DD      3218258224
-        DD      3964700035
-        DD      3218264333
-        DD      3135315249
-        DD      3218270434
-        DD      2902865164
-        DD      3218276526
-        DD      3377742213
-        DD      3218282609
-        DD      374891912
-        DD      3218288684
-        DD      2593684821
-        DD      3218294749
-        DD      1553148222
-        DD      3218300806
-        DD      1656739931
-        DD      3218306854
-        DD      3012481825
-        DD      3218312893
-        DD      1432962538
-        DD      3218318924
-        DD      1320242026
-        DD      3218324946
-        DD      2780952336
-        DD      3218330959
-        DD      1626300240
-        DD      3218336964
-        DD      2256971748
-        DD      3218342960
-        DD      483265518
-        DD      3218348948
-        DD      704964628
-        DD      3218354927
-        DD      3026437244
-        DD      3218360897
-        DD      3256639170
-        DD      3218366859
-        DD      1499050969
-        DD      3218372813
-        DD      2151680465
-        DD      3218378758
-        DD      1022163351
-        DD      3218384695
-        DD      2507634849
-        DD      3218390623
-        DD      2414862975
-        DD      3218396543
-        DD      845152874
-        DD      3218402455
-        DD      2194349235
-        DD      3218408358
-        DD      2267936813
-        DD      3218414253
-        DD      1165944702
-        DD      3218420140
-        DD      3282948707
-        DD      3218426018
-        DD      128204514
-        DD      3218431889
-        DD      390421100
-        DD      3218437751
-        DD      4167959282
-        DD      3218443604
-        DD      2968834018
-        DD      3218449450
-        DD      1185553177
-        DD      3218455288
-        DD      3210217930
-        DD      3218461117
-        DD      549623114
-        DD      3218466939
-        DD      1890030548
-        DD      3218472752
-        DD      3032400188
-        DD      3218478557
-        DD      4072261525
-        DD      3218484354
-        DD      3450874911
-        DD      1070995813
-        DD      2331021804
-        DD      1070990032
-        DD      1029453230
-        DD      1070984259
-        DD      3747176240
-        DD      1070978493
-        DD      1800682930
-        DD      1070972736
-        DD      3686719393
-        DD      1070966986
-        DD      722545241
-        DD      1070961245
-        DD      1405669883
-        DD      1070955511
-        DD      1349079372
-        DD      1070949785
-        DD      461103529
-        DD      1070944067
-        DD      2945413886
-        DD      1070938356
-        DD      121152472
-        DD      1070932654
-        DD      487700860
-        DD      1070926959
-        DD      3954874384
-        DD      1070921271
-        DD      1842920138
-        DD      1070915592
-        DD      2652318780
-        DD      1070909920
-        DD      1999011482
-        DD      1070904256
-        DD      4089234463
-        DD      1070898599
-        DD      244680560
-        DD      1070892951
-        DD      3262235675
-        DD      1070887309
-        DD      169336595
-        DD      1070881676
-        DD      3763576649
-        DD      1070876049
-        DD      1073096258
-        DD      1070870431
-        DD      601221319
-        DD      1070864820
-        DD      2261690268
-        DD      1070859216
-        DD      1673619518
-        DD      1070853620
-        DD      3046403514
-        DD      1070848031
-        DD      1999843716
-        DD      1070842450
-        DD      2744015967
-        DD      1070836876
-        DD      899399508
-        DD      1070831310
-        DD      676744370
-        DD      1070825751
-        DD      1992167703
-        DD      1070820199
-        DD      467152011
-        DD      1070814655
-        DD      313445281
-        DD      1070809118
-        DD      1448157352
-        DD      1070803588
-        DD      3788725476
-        DD      1070798065
-        DD      2957945300
-        DD      1070792550
-        DD      3168871046
-        DD      1070787042
-        DD      44944622
-        DD      1070781542
-        DD      2094830420
-        DD      1070776048
-        DD      647642559
-        DD      1070770562
-        DD      4212681596
-        DD      1070765082
-        DD      4119694493
-        DD      1070759610
-        DD      288676754
-        DD      1070754146
-        DD      1229870791
-        DD      1070748688
-        DD      2568927817
-        DD      1070743237
-        DD      4226775419
-        DD      1070737793
-        DD      1829681364
-        DD      1070732357
-        DD      3889121191
-        DD      1070726927
-        DD      1737005556
-        DD      1070721505
-        DD      3885417029
-        DD      1070716089
-        DD      1666870165
-        DD      1070710681
-        DD      3594048319
-        DD      1070705279
-        DD      1000063738
-        DD      1070699885
-        DD      2398194399
-        DD      1070694497
-        DD      3417111411
-        DD      1070689116
-        DD      3980746691
-        DD      1070683742
-        DD      4013324163
-        DD      1070678375
-        DD      3439358267
-        DD      1070673015
-        DD      2183652476
-        DD      1070667662
-        DD      171297820
-        DD      1070662316
-        DD      1622638721
-        DD      1070656976
-        DD      2168369647
-        DD      1070651643
-        DD      1734435555
-        DD      1070646317
-        DD      247063161
-        DD      1070640998
-        DD      1927726804
-        DD      1070635685
-        DD      2408245143
-        DD      1070630379
-        DD      1615681634
-        DD      1070625080
-        DD      3772343130
-        DD      1070619787
-        DD      215909304
-        DD      1070614502
-        DD      3759169634
-        DD      1070609222
-        DD      1445381777
-        DD      1070603950
-        DD      1792910451
-        DD      1070598684
-        DD      870975437
-        DD      1070590754
-        DD      3194096222
-        DD      1070580248
-        DD      1823716217
-        DD      1070569756
-        DD      913800688
-        DD      1070559277
-        DD      323875369
-        DD      1070548811
-        DD      4208958430
-        DD      1070538357
-        DD      3839688678
-        DD      1070527917
-        DD      3372126730
-        DD      1070517490
-        DD      2667883253
-        DD      1070507076
-        DD      1589083690
-        DD      1070496675
-        DD      4293333010
-        DD      1070486286
-        DD      2053843986
-        DD      1070475911
-        DD      3324205749
-        DD      1070465548
-        DD      3673610217
-        DD      1070455198
-        DD      2966718784
-        DD      1070444861
-        DD      1068692560
-        DD      1070434537
-        DD      2140157205
-        DD      1070424225
-        DD      1752298597
-        DD      1070413926
-        DD      4066729595
-        DD      1070403639
-        DD      360651144
-        DD      1070393366
-        DD      3386588242
-        DD      1070383104
-        DD      127747308
-        DD      1070372856
-        DD      3337621361
-        DD      1070362619
-        DD      380113
-        DD      1070352396
-        DD      2870475188
-        DD      1070342184
-        DD      3227997535
-        DD      1070331985
-        DD      943446189
-        DD      1070321799
-        DD      182758681
-        DD      1070311625
-        DD      817374162
-        DD      1070301463
-        DD      2719198427
-        DD      1070291313
-        DD      1465634365
-        DD      1070281176
-        DD      1224481606
-        DD      1070271051
-        DD      1869032404
-        DD      1070260938
-        DD      3273036717
-        DD      1070250837
-        DD      1015732707
-        DD      1070240749
-        DD      3561713742
-        DD      1070230672
-        DD      2196155141
-        DD      1070220608
-        DD      1089583089
-        DD      1070210556
-        DD      118003300
-        DD      1070200516
-        DD      3452833475
-        DD      1070190487
-        DD      2381031992
-        DD      1070180471
-        DD      1074899573
-        DD      1070170467
-        DD      3707175295
-        DD      1070160474
-        DD      1566132617
-        DD      1070150494
-        DD      3120348377
-        DD      1070140525
-        DD      3953929663
-        DD      1070130568
-        DD      3946380940
-        DD      1070120623
-        DD      2977634725
-        DD      1070110690
-        DD      928049556
-        DD      1070100769
-        DD      1973375279
-        DD      1070090859
-        DD      1699849154
-        DD      1070080961
-        DD      4284063055
-        DD      1070071074
-        DD      1018125008
-        DD      1070061200
-        DD      374428300
-        DD      1070051337
-        DD      2235845747
-        DD      1070041485
-        DD      2190695046
-        DD      1070031645
-        DD      122671437
-        DD      1070021817
-        DD      210845780
-        DD      1070012000
-        DD      2339728060
-        DD      1070002194
-        DD      2099265479
-        DD      1069992400
-        DD      3669742467
-        DD      1069982617
-        DD      2641909617
-        DD      1069972846
-        DD      3196851002
-        DD      1069963086
-        DD      926113142
-        DD      1069953338
-        DD      11572342
-        DD      1069943601
-        DD      340530969
-        DD      1069933875
-        DD      1800682930
-        DD      1069924160
-        DD      4280111857
-        DD      1069914456
-        DD      3372322013
-        DD      1069904764
-        DD      3261138386
-        DD      1069895083
-        DD      3835803021
-        DD      1069885413
-        DD      690973253
-        DD      1069875755
-        DD      2306589128
-        DD      1069866107
-        DD      4278067876
-        DD      1069856470
-        DD      2201204065
-        DD      1069846845
-        DD      262102455
-        DD      1069837231
-        DD      2647241692
-        DD      1069827627
-        DD      658570708
-        DD      1069818035
-        DD      2778278092
-        DD      1069808453
-        DD      309052031
-        DD      1069798883
-        DD      1733817001
-        DD      1069789323
-        DD      2650961017
-        DD      1069779774
-        DD      2954203158
-        DD      1069770236
-        DD      2537624622
-        DD      1069760709
-        DD      1295667077
-        DD      1069751193
-        DD      3418098326
-        DD      1069741687
-        DD      210141498
-        DD      1069732193
-        DD      157244505
-        DD      1069722709
-        DD      3155274661
-        DD      1069713235
-        DD      510517079
-        DD      1069703773
-        DD      709476866
-        DD      1069694321
-        DD      3649073763
-        DD      1069684879
-        DD      636640577
-        DD      1069675449
-        DD      159725394
-        DD      1069666029
-        DD      2116286250
-        DD      1069656619
-        DD      2109656884
-        DD      1069647220
-        DD      38479793
-        DD      1069637832
-        DD      96704707
-        DD      1069628454
-        DD      2183652476
-        DD      1069619086
-        DD      1904013563
-        DD      1069609729
-        DD      3452748429
-        DD      1069600382
-        DD      2435216853
-        DD      1069591046
-        DD      3047045639
-        DD      1069581720
-        DD      894257944
-        DD      1069572405
-        DD      173141005
-        DD      1069563100
-        DD      785342784
-        DD      1069553805
-        DD      970708326
-        DD      1069541521
-        DD      2645916898
-        DD      1069522972
-        DD      2106590683
-        DD      1069504444
-        DD      3453588195
-        DD      1069485936
-        DD      2198475040
-        DD      1069467449
-        DD      2443390270
-        DD      1069448982
-        DD      3996141691
-        DD      1069430535
-        DD      2370203065
-        DD      1069412109
-        DD      1669613218
-        DD      1069393703
-        DD      1704071394
-        DD      1069375317
-        DD      2283901796
-        DD      1069356951
-        DD      3220050856
-        DD      1069338605
-        DD      29117219
-        DD      1069320280
-        DD      1113218225
-        DD      1069301974
-        DD      1990183441
-        DD      1069283688
-        DD      2473421172
-        DD      1069265422
-        DD      2376948508
-        DD      1069247176
-        DD      1515388672
-        DD      1069228950
-        DD      3998935692
-        DD      1069210743
-        DD      1053482595
-        DD      1069192557
-        DD      1085389880
-        DD      1069174390
-        DD      3911679148
-        DD      1069156242
-        DD      760030536
-        DD      1069138115
-        DD      38583924
-        DD      1069120007
-        DD      1566132617
-        DD      1069101918
-        DD      867088104
-        DD      1069083849
-        DD      2056379433
-        DD      1069065799
-        DD      659581512
-        DD      1069047769
-        DD      792781808
-        DD      1069029758
-        DD      2277675977
-        DD      1069011766
-        DD      641565395
-        DD      1068993794
-        DD      2256601
-        DD      1068975841
-        DD      183156961
-        DD      1068957907
-        DD      1008239542
-        DD      1068939992
-        DD      2302040698
-        DD      1068922096
-        DD      3889657667
-        DD      1068904219
-        DD      1301778891
-        DD      1068886362
-        DD      2954550821
-        DD      1068868523
-        DD      84804484
-        DD      1068850704
-        DD      1109791498
-        DD      1068832903
-        DD      1562410668
-        DD      1068815121
-        DD      1271074840
-        DD      1068797358
-        DD      64741293
-        DD      1068779614
-        DD      2067876735
-        DD      1068761888
-        DD      2815553124
-        DD      1068744181
-        DD      2138347284
-        DD      1068726493
-        DD      4162338635
-        DD      1068708823
-        DD      129237761
-        DD      1068691173
-        DD      2756122533
-        DD      1068673540
-        DD      3285762921
-        DD      1068655926
-        DD      1551389854
-        DD      1068638331
-        DD      1681725707
-        DD      1068620754
-        DD      3511047527
-        DD      1068603195
-        DD      2579184841
-        DD      1068585655
-        DD      3016419377
-        DD      1068568133
-        DD      363613719
-        DD      1068550630
-        DD      3047045639
-        DD      1068533144
-        DD      2313634884
-        DD      1068515677
-        DD      296456961
-        DD      1068497513
-        DD      1367328035
-        DD      1068462651
-        DD      3221665916
-        DD      1068427825
-        DD      1242258971
-        DD      1068393036
-        DD      3697798734
-        DD      1068358282
-        DD      1678104687
-        DD      1068323565
-        DD      3453858508
-        DD      1068288883
-        DD      116861598
-        DD      1068254238
-        DD      4234736672
-        DD      1068219627
-        DD      2606283437
-        DD      1068185053
-        DD      3506114812
-        DD      1068150514
-        DD      2324914545
-        DD      1068116011
-        DD      3044269692
-        DD      1068081543
-        DD      1056797460
-        DD      1068047111
-        DD      346010435
-        DD      1068012714
-        DD      601410756
-        DD      1067978352
-        DD      1513453498
-        DD      1067944025
-        DD      2773542775
-        DD      1067909733
-        DD      4074027864
-        DD      1067875476
-        DD      813232056
-        DD      1067841255
-        DD      1275317999
-        DD      1067807068
-        DD      860480111
-        DD      1067772916
-        DD      3559777258
-        DD      1067738798
-        DD      480292498
-        DD      1067704716
-        DD      4204867691
-        DD      1067670667
-        DD      1547459502
-        DD      1067636654
-        DD      797775935
-        DD      1067602675
-        DD      1656501562
-        DD      1067568730
-        DD      3825228429
-        DD      1067534819
-        DD      2711485098
-        DD      1067500943
-        DD      2313634884
-        DD      1067467101
-        DD      376973398
-        DD      1067416219
-        DD      672386641
-        DD      1067348671
-        DD      630691842
-        DD      1067281191
-        DD      3960777458
-        DD      1067213778
-        DD      1488394470
-        DD      1067146434
-        DD      1220920383
-        DD      1067079157
-        DD      2577548405
-        DD      1067011947
-        DD      684247743
-        DD      1066944805
-        DD      3553625811
-        DD      1066877729
-        DD      2020150230
-        DD      1066810721
-        DD      4099880293
-        DD      1066743779
-        DD      630721729
-        DD      1066676905
-        DD      3927125538
-        DD      1066610096
-        DD      535440936
-        DD      1066543355
-        DD      2773516144
-        DD      1066476679
-        DD      1486051399
-        DD      1066410070
-        DD      808661260
-        DD      1066285262
-        DD      2227658502
-        DD      1066152307
-        DD      1813447778
-        DD      1066019484
-        DD      2743640746
-        DD      1065886792
-        DD      3904192454
-        DD      1065754231
-        DD      4184355568
-        DD      1065621801
-        DD      2476667369
-        DD      1065489502
-        DD      1971904113
-        DD      1065357333
-        DD      3138267131
-        DD      1065097372
-        DD      341338964
-        DD      1064833554
-        DD      1954052322
-        DD      1064569994
-        DD      1498975029
-        DD      1064306693
-        DD      2190050752
-        DD      1063782660
-        DD      1440057502
-        DD      1063257089
-        DD      1432705161
-        DD      1062208000
-        DD      0
-        DD      0
-        DB 0
-        ORG $+54
-        DB      0
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      2900053258
-        DD      1070176668
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1208323809
-        DD      3218079745
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      1431651269
-        DD      1070945621
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294965279
-        DD      3219128319
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      4294967295
-        DD      1048575
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      0
-        DD      1062207488
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294967295
-        DD      3220176895
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4294963200
-        DD      2134900735
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      4227858432
-        DD      4294967295
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      1072693248
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      4294967295
-        DD      2147483647
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      0
-        DD      1040187392
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4294966272
-        DD      4294967295
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      4277796864
-        DD      1072049730
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      3164471296
-        DD      1031600026
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1082564608
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083176960
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      1083174912
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      0
-        DD      2134900736
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      4277811695
-        DD      1072049730
-        DD      0
-        DD      2146435072
-        DD      0
-        DD      4293918720
-        DB 0
-        ORG $+46
-        DB      0
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      3220176896
-        DB 0
-        ORG $+46
-        DB      0
-        DD      0
-        DD      0
-        DD      0
-        DD      2147483648
-        DB 0
-        ORG $+46
-        DB      0
-_imldLnHATab    DD      0
-        DD      1072693248
-        DD      0
-        DD      0
-        DD      0
-        DD      0
-        DD      0
-        DD      1072660480
-        DD      1486880768
-        DD      1066410070
-        DD      1813744607
-        DD      3179892593
-        DD      0
-        DD      1072629760
-        DD      377487360
-        DD      1067416219
-        DD      919019713
-        DD      3179241129
-        DD      0
-        DD      1072599040
-        DD      1513619456
-        DD      1067944025
-        DD      874573033
-        DD      3178512940
-        DD      0
-        DD      1072570368
-        DD      3221749760
-        DD      1068427825
-        DD      4181665006
-        DD      3177478212
-        DD      0
-        DD      1072541696
-        DD      4162322432
-        DD      1068708823
-        DD      627020255
-        DD      1028629941
-        DD      0
-        DD      1072513024
-        DD      183107584
-        DD      1068957907
-        DD      2376703469
-        DD      1030233118
-        DD      0
-        DD      1072486400
-        DD      1053425664
-        DD      1069192557
-        DD      696277142
-        DD      1030474863
-        DD      0
-        DD      1072459776
-        DD      3996123136
-        DD      1069430535
-        DD      2630798680
-        DD      1028792016
-        DD      0
-        DD      1072435200
-        DD      3452764160
-        DD      1069600382
-        DD      624954044
-        DD      3177101741
-        DD      0
-        DD      1072409600
-        DD      207650816
-        DD      1069717971
-        DD      3272735636
-        DD      3175176575
-        DD      0
-        DD      1072386048
-        DD      2647228416
-        DD      1069827627
-        DD      3594228712
-        DD      1029303785
-        DD      0
-        DD      1072362496
-        DD      2712010752
-        DD      1069938736
-        DD      3653242769
-        DD      3176839013
-        DD      0
-        DD      1072338944
-        DD      374439936
-        DD      1070051337
-        DD      4072775574
-        DD      3176577495
-        DD      0
-        DD      1072316416
-        DD      3707174912
-        DD      1070160474
-        DD      1486946159
-        DD      1023930920
-        DD      0
-        DD      1072294912
-        DD      1443954688
-        DD      1070265993
-        DD      293532967
-        DD      3176278277
-        DD      0
-        DD      1072273408
-        DD      127762432
-        DD      1070372856
-        DD      3404145447
-        DD      3177023955
-        DD      0
-        DD      1072252928
-        DD      2053832704
-        DD      1070475911
-        DD      1575076358
-        DD      1029048544
-        DD      0
-        DD      1072232448
-        DD      3194093568
-        DD      1070580248
-        DD      1864169120
-        DD      1026866084
-        DD      0
-        DD      1072212992
-        DD      3917201408
-        DD      1070638340
-        DD      2362145246
-        DD      3175606197
-        DD      0
-        DD      1072193536
-        DD      3417112576
-        DD      1070689116
-        DD      70087871
-        DD      3174183577
-        DD      0
-        DD      1072175104
-        DD      4226777088
-        DD      1070737793
-        DD      1620410586
-        DD      3174700065
-        DD      0
-        DD      1072156672
-        DD      3168870400
-        DD      1070787042
-        DD      311238082
-        DD      1025781772
-        DD      0
-        DD      1072139264
-        DD      2150580224
-        DD      1070834092
-        DD      1664262457
-        DD      3175299224
-        DD      0
-        DD      1072120832
-        DD      4095672320
-        DD      1070884491
-        DD      1657121015
-        DD      3174674199
-        DD      0
-        DD      1072104448
-        DD      2595577856
-        DD      1070929805
-        DD      2014006823
-        DD      3175423830
-        DD      0
-        DD      1072087040
-        DD      3747176448
-        DD      1070978493
-        DD      144991708
-        DD      3171552042
-        DD      0
-        DD      1072070656
-        DD      1050435584
-        DD      1071024840
-        DD      3386227432
-        DD      1027876916
-        DD      0
-        DD      1072055296
-        DD      255516672
-        DD      1071068760
-        DD      2637594316
-        DD      1028049573
-        DD      0
-        DD      1072038912
-        DD      1640783872
-        DD      1071116120
-        DD      893247007
-        DD      1028452162
-        DD      0
-        DD      1072023552
-        DD      2940411904
-        DD      1071161011
-        DD      813240633
-        DD      1027664048
-        DD      0
-        DD      1072009216
-        DD      882917376
-        DD      1071203348
-        DD      2376597551
-        DD      3175828767
-        DD      0
-        DD      1071993856
-        DD      213966848
-        DD      1071249188
-        DD      2977204125
-        DD      1028350609
-        DD      0
-        DD      1071979520
-        DD      2921504768
-        DD      1071292428
-        DD      523218347
-        DD      1028007004
-        DD      0
-        DD      1071965184
-        DD      3186655232
-        DD      1071336119
-        DD      2352907891
-        DD      1026967097
-        DD      0
-        DD      1071951872
-        DD      2653364224
-        DD      1071377101
-        DD      2453418583
-        DD      3174349512
-        DD      0
-        DD      1071938560
-        DD      3759783936
-        DD      1071418487
-        DD      3685870403
-        DD      3175415611
-        DD      0
-        DD      1071925248
-        DD      2468364288
-        DD      1071460286
-        DD      1578908842
-        DD      3175510517
-        DD      0
-        DD      1071911936
-        DD      81903616
-        DD      1071502506
-        DD      770710269
-        DD      1026742353
-        DD      0
-        DD      1071899648
-        DD      2799321088
-        DD      1071541858
-        DD      3822266185
-        DD      1028434427
-        DD      0
-        DD      1071886336
-        DD      2142265344
-        DD      1071584911
-        DD      175901806
-        DD      3173871540
-        DD      0
-        DD      1071874048
-        DD      2944024576
-        DD      1071625048
-        DD      2747360403
-        DD      1027672159
-        DD      0
-        DD      1071862784
-        DD      3434301440
-        DD      1071653426
-        DD      4194662196
-        DD      3173893003
-        DD      0
-        DD      1071850496
-        DD      1547755520
-        DD      1071673870
-        DD      4248764681
-        DD      3172759087
-        DD      0
-        DD      1071839232
-        DD      4246986752
-        DD      1071692786
-        DD      2840205638
-        DD      3174430911
-        DD      0
-        DD      1071826944
-        DD      3418390528
-        DD      1071713619
-        DD      3041880823
-        DD      1025440860
-        DD      0
-        DD      1071816704
-        DD      4143093760
-        DD      1071731139
-        DD      2727587401
-        DD      3173965207
-        DD      0
-        DD      1071805440
-        DD      3121326080
-        DD      1071750582
-        DD      3173887692
-        DD      3174190163
-        DD      0
-        DD      1071794176
-        DD      1852893184
-        DD      1071770207
-        DD      3951060252
-        DD      1027348295
-        DD      0
-        DD      1071783936
-        DD      3636379648
-        DD      1071788208
-        DD      1684924001
-        DD      3174777086
-        DD      0
-        DD      1071773696
-        DD      516505600
-        DD      1071806366
-        DD      429181199
-        DD      3173211033
-        DD      0
-        DD      1071763456
-        DD      4186185728
-        DD      1071824681
-        DD      2044904577
-        DD      3174967132
-        DD      0
-        DD      1071753216
-        DD      877596672
-        DD      1071843159
-        DD      1396318105
-        DD      3173959727
-        DD      0
-        DD      1071742976
-        DD      2912784384
-        DD      1071861800
-        DD      448136789
-        DD      3174814192
-        DD      0
-        DD      1071733760
-        DD      3722825728
-        DD      1071878720
-        DD      714165913
-        DD      3173439560
-        DD      0
-        DD      1071723520
-        DD      2522374144
-        DD      1071897682
-        DD      3227240353
-        DD      3173394323
-        DD      0
-        DD      1071714304
-        DD      4165410816
-        DD      1071914895
-        DD      1365684961
-        DD      3174365060
-        DD      0
-        DD      1071705088
-        DD      3477135360
-        DD      1071932251
-        DD      368482985
-        DD      3174140821
-        DD      0
-        DD      1071695872
-        DD      2079455232
-        DD      1071949752
-        DD      1320576317
-        DD      1026822714
-        DD      0
-        DD      1071687680
-        DD      851795968
-        DD      1071965432
-        DD      3702467026
-        DD      1025224125
-        DD      0
-        DD      1071678464
-        DD      647743488
-        DD      1071983213
-        DD      772992109
-        DD      3174038459
-        DD      0
-        DD      1071670272
-        DD      26537984
-        DD      1071999146
-        DD      2360214276
-        DD      3174861275
-        DD      0
-        DD      1071661056
-        DD      1547061248
-        DD      1072017216
-        DD      2886781435
-        DD      1026423395
-        DD      0
-        DD      1071652864
-        DD      2854492160
-        DD      1072033410
-        DD      215631550
-        DD      1025638968
-        DD      0
-        DD      1071644672
-        DD      4277811200
-        DD      1072049730
-        DD      2479318832
-        DD      1026487127
-        DD      4277811200
-        DD      1072049730
-        DD      2479318832
-        DD      1026487127
-        DD      64
-        DD      1120927744
-        DD      0
-        DD      1094713344
-        DD      0
-        DD      1065615360
-        DD      0
-        DD      1135607808
-        DD      0
-        DD      0
-        DD      0
-        DD      1072693248
-        DD      0
-        DD      3219128320
-        DD      1431655955
-        DD      1070945621
-        DD      610
-        DD      3218079744
-        DD      2545118337
-        DD      1070176665
-        DD      1378399119
-        DD      3217380693
-        DD      612435357
-        DD      1069697472
-        DD      94536557
-        DD      3217031348
-_2il0floatpacket_31     DD      000000000H,043380000H,000000000H,043380000H
-_2il0floatpacket_97     DD      000000000H,080000000H,000000000H,000000000H
-_2il0floatpacket_96     DD      000000000H,03ff00000H
-_RDATA  ENDS
-_DATA   SEGMENT      'DATA'
-_DATA   ENDS
-EXTRN   __ImageBase:PROC
-EXTRN   _fltused:BYTE
-ENDIF
-        END
+        .section .rdata, "dr"
+        .align 32
+        .globl __jsvml_dlog1p_ha_data_internal_avx512
+__jsvml_dlog1p_ha_data_internal_avx512:
+        .long   0
+        .long   0
+        .long   3222405120
+        .long   3215919664
+        .long   1848311808
+        .long   3216910087
+        .long   1890025472
+        .long   3217424176
+        .long   3348791296
+        .long   3217854455
+        .long   2880159744
+        .long   3218171740
+        .long   3256631296
+        .long   3218366859
+        .long   4139499520
+        .long   3218553303
+        .long   288669696
+        .long   1070754146
+        .long   1823703040
+        .long   1070569756
+        .long   1015742464
+        .long   1070240749
+        .long   1800667136
+        .long   1069924160
+        .long   2183659520
+        .long   1069619086
+        .long   1566113792
+        .long   1069101918
+        .long   3047030784
+        .long   1068533144
+        .long   2313682944
+        .long   1067467101
+        .long   0
+        .long   0
+        .long   3496399314
+        .long   1028893491
+        .long   720371772
+        .long   1026176044
+        .long   1944193543
+        .long   3175338952
+        .long   634920691
+        .long   3175752108
+        .long   1664625295
+        .long   1029304828
+        .long   192624563
+        .long   3177103997
+        .long   3796653051
+        .long   3176138396
+        .long   1005287031
+        .long   1029411448
+        .long   3433090547
+        .long   1029291198
+        .long   1779090477
+        .long   3176336968
+        .long   3242817150
+        .long   1029626109
+        .long   3430202884
+        .long   3175842849
+        .long   2270669051
+        .long   1028809259
+        .long   1375653371
+        .long   1028457284
+        .long   4246237509
+        .long   3176626033
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   2147483648
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   0
+        .long   1072168960
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   815627376
+        .long   1069318605
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2123607906
+        .long   3217033013
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   2632876527
+        .long   1069697314
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   4213758726
+        .long   3217380691
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   2580324188
+        .long   1070176665
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   787901
+        .long   3218079744
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   1431655526
+        .long   1070945621
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4294967238
+        .long   3219128319
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   0
+        .long   1048576
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   4294967295
+        .long   2146435071
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .long   120
+        .long   0
+        .globl __jsvml_dlog1p_ha_data_internal
+__jsvml_dlog1p_ha_data_internal:
+        .long   3715793664
+        .long   3230016299
+        .long   4013928704
+        .long   3189565726
+        .long   3699038248
+        .long   3230016303
+        .long   4255595370
+        .long   3189567439
+        .long   3648859040
+        .long   3230016307
+        .long   1732833791
+        .long   3189567296
+        .long   3565385952
+        .long   3230016311
+        .long   2485752410
+        .long   3189567274
+        .long   3448748152
+        .long   3230016315
+        .long   3514744523
+        .long   3189567800
+        .long   3299074072
+        .long   3230016319
+        .long   3686511262
+        .long   3189567474
+        .long   3116491376
+        .long   3230016323
+        .long   716063611
+        .long   3189567908
+        .long   2901127016
+        .long   3230016327
+        .long   354437295
+        .long   3189567291
+        .long   2653107184
+        .long   3230016331
+        .long   3777462366
+        .long   3189567264
+        .long   2372557360
+        .long   3230016335
+        .long   3590663412
+        .long   3189567498
+        .long   2059602304
+        .long   3230016339
+        .long   1680795031
+        .long   3189567428
+        .long   1714366048
+        .long   3230016343
+        .long   2010344982
+        .long   3189567986
+        .long   1336971936
+        .long   3230016347
+        .long   166254822
+        .long   3189567184
+        .long   927542568
+        .long   3230016351
+        .long   59552610
+        .long   3189567972
+        .long   486199888
+        .long   3230016355
+        .long   2268824919
+        .long   3189567664
+        .long   13065112
+        .long   3230016359
+        .long   3005381643
+        .long   3189567835
+        .long   3803226080
+        .long   3230016362
+        .long   4018973165
+        .long   3189567825
+        .long   3266868056
+        .long   3230016366
+        .long   3693925101
+        .long   3189567457
+        .long   2699077504
+        .long   3230016370
+        .long   4005905743
+        .long   3189567697
+        .long   2099972936
+        .long   3230016374
+        .long   3580935118
+        .long   3189567215
+        .long   1469672176
+        .long   3230016378
+        .long   2928784295
+        .long   3189567129
+        .long   808292392
+        .long   3230016382
+        .long   674298833
+        .long   3189567553
+        .long   115950104
+        .long   3230016386
+        .long   2555938320
+        .long   3189567208
+        .long   3687728456
+        .long   3230016389
+        .long   532458218
+        .long   3189567130
+        .long   2933808064
+        .long   3230016393
+        .long   3888913110
+        .long   3189567192
+        .long   2149270784
+        .long   3230016397
+        .long   2365955494
+        .long   3189567756
+        .long   1334230552
+        .long   3230016401
+        .long   3325722981
+        .long   3189567206
+        .long   488800640
+        .long   3230016405
+        .long   1496133617
+        .long   3189567683
+        .long   3908061016
+        .long   3230016408
+        .long   1824836379
+        .long   3189567490
+        .long   3002189112
+        .long   3230016412
+        .long   1222174320
+        .long   3189567837
+        .long   2066263648
+        .long   3230016416
+        .long   2472769660
+        .long   3189567285
+        .long   1100395408
+        .long   3230016420
+        .long   447932460
+        .long   3189567455
+        .long   104694584
+        .long   3230016424
+        .long   1006807684
+        .long   3189567460
+        .long   3374238048
+        .long   3230016427
+        .long   4121834935
+        .long   3189567556
+        .long   2319200184
+        .long   3230016431
+        .long   3019906587
+        .long   3189567664
+        .long   1234656664
+        .long   3230016435
+        .long   3882744783
+        .long   3189567930
+        .long   120715280
+        .long   3230016439
+        .long   1927363170
+        .long   3189567242
+        .long   3272450504
+        .long   3230016442
+        .long   8203115
+        .long   3189567876
+        .long   2100034368
+        .long   3230016446
+        .long   1260625560
+        .long   3189567855
+        .long   898540192
+        .long   3230016450
+        .long   1791679111
+        .long   3189567639
+        .long   3963040720
+        .long   3230016453
+        .long   831133439
+        .long   3189567590
+        .long   2703706240
+        .long   3230016457
+        .long   2803140504
+        .long   3189567482
+        .long   1415608352
+        .long   3230016461
+        .long   2955844462
+        .long   3189568058
+        .long   98850816
+        .long   3230016465
+        .long   4017967070
+        .long   3189567455
+        .long   3048504096
+        .long   3230016468
+        .long   3974385451
+        .long   3189567871
+        .long   1674736240
+        .long   3230016472
+        .long   2424114556
+        .long   3189567887
+        .long   272616624
+        .long   3230016476
+        .long   4261883032
+        .long   3189567073
+        .long   3137214056
+        .long   3230016479
+        .long   3716750895
+        .long   3189567522
+        .long   1678694944
+        .long   3230016483
+        .long   498025304
+        .long   3189567180
+        .long   192127016
+        .long   3230016487
+        .long   1011852160
+        .long   3189567511
+        .long   2972577480
+        .long   3230016490
+        .long   558940916
+        .long   3189567850
+        .long   1430211120
+        .long   3230016494
+        .long   2550865739
+        .long   3189567935
+        .long   4155061376
+        .long   3230016497
+        .long   1930847170
+        .long   3189567371
+        .long   2557291968
+        .long   3230016501
+        .long   1716354804
+        .long   3189567130
+        .long   931967984
+        .long   3230016505
+        .long   2729403392
+        .long   3189567981
+        .long   3574154016
+        .long   3230016508
+        .long   1067280599
+        .long   3189567890
+        .long   1894012232
+        .long   3230016512
+        .long   2094260282
+        .long   3189567604
+        .long   186606176
+        .long   3230016516
+        .long   3897933165
+        .long   3189568046
+        .long   2746998904
+        .long   3230016519
+        .long   1935720459
+        .long   3189567701
+        .long   985351064
+        .long   3230016523
+        .long   2170344821
+        .long   3189567164
+        .long   3491691984
+        .long   3230016526
+        .long   4220979537
+        .long   3189567547
+        .long   1676181328
+        .long   3230016530
+        .long   1953924393
+        .long   3189567854
+        .long   4128847448
+        .long   3230016533
+        .long   1689829067
+        .long   3189567468
+        .long   2259849008
+        .long   3230016537
+        .long   2367753130
+        .long   3189567619
+        .long   364246088
+        .long   3230016541
+        .long   2263309073
+        .long   3189567722
+        .long   2737098280
+        .long   3230016544
+        .long   2366756869
+        .long   3189567856
+        .long   788562816
+        .long   3230016548
+        .long   2294653975
+        .long   3189567145
+        .long   3108665616
+        .long   3230016551
+        .long   1786494117
+        .long   3189567254
+        .long   1107562960
+        .long   3230016555
+        .long   3655887416
+        .long   3189567689
+        .long   3375279848
+        .long   3230016558
+        .long   1178948625
+        .long   3189567241
+        .long   1321971608
+        .long   3230016562
+        .long   1620080441
+        .long   3189567466
+        .long   3537662304
+        .long   3230016565
+        .long   154455618
+        .long   3189567981
+        .long   1432506360
+        .long   3230016569
+        .long   3128192125
+        .long   3189567889
+        .long   3596526920
+        .long   3230016572
+        .long   2026842750
+        .long   3189567212
+        .long   1439877480
+        .long   3230016576
+        .long   1384431897
+        .long   3189567284
+        .long   3552580280
+        .long   3230016579
+        .long   1999983129
+        .long   3189568079
+        .long   1344787944
+        .long   3230016583
+        .long   4035436820
+        .long   3189567579
+        .long   3406521808
+        .long   3230016586
+        .long   77799817
+        .long   3189567285
+        .long   1147933592
+        .long   3230016590
+        .long   1261060207
+        .long   3189567477
+        .long   3159043768
+        .long   3230016593
+        .long   2102717775
+        .long   3189567605
+        .long   850003184
+        .long   3230016597
+        .long   161472469
+        .long   3189567688
+        .long   2810831440
+        .long   3230016600
+        .long   1937336881
+        .long   3189567665
+        .long   451678520
+        .long   3230016604
+        .long   2268353549
+        .long   3189567773
+        .long   2362563168
+        .long   3230016607
+        .long   1785871595
+        .long   3189567889
+        .long   4248601816
+        .long   3230016610
+        .long   2434669991
+        .long   3189567898
+        .long   1814910472
+        .long   3230016614
+        .long   2666999375
+        .long   3189568058
+        .long   3651506624
+        .long   3230016617
+        .long   1033139811
+        .long   3189567312
+        .long   1168538136
+        .long   3230016621
+        .long   4004618418
+        .long   3189567740
+        .long   2956021672
+        .long   3230016624
+        .long   3799928764
+        .long   3189567751
+        .long   424104288
+        .long   3230016628
+        .long   3650233137
+        .long   3189567549
+        .long   2162801816
+        .long   3230016631
+        .long   437313833
+        .long   3189567438
+        .long   3877227800
+        .long   3230016634
+        .long   2138293494
+        .long   3189567140
+        .long   1272495376
+        .long   3230016638
+        .long   2891370752
+        .long   3189567168
+        .long   2938619176
+        .long   3230016641
+        .long   1704142730
+        .long   3189567114
+        .long   285744240
+        .long   3230016645
+        .long   500817607
+        .long   3189568035
+        .long   1903884424
+        .long   3230016648
+        .long   3102571944
+        .long   3189567668
+        .long   3498151272
+        .long   3230016651
+        .long   2374193154
+        .long   3189567933
+        .long   773655960
+        .long   3230016655
+        .long   2898331636
+        .long   3189568089
+        .long   2320411168
+        .long   3230016658
+        .long   1983295500
+        .long   3189567113
+        .long   3843527280
+        .long   3230016661
+        .long   2132853542
+        .long   3189567093
+        .long   1048114320
+        .long   3230016665
+        .long   3551155364
+        .long   3189567407
+        .long   2524183824
+        .long   3230016668
+        .long   2564000663
+        .long   3189567090
+        .long   3976845048
+        .long   3230016671
+        .long   361581803
+        .long   3189567196
+        .long   1111206880
+        .long   3230016675
+        .long   696765230
+        .long   3189568040
+        .long   2517279744
+        .long   3230016678
+        .long   941542475
+        .long   3189567463
+        .long   3900171776
+        .long   3230016681
+        .long   2377895552
+        .long   3189567282
+        .long   964990760
+        .long   3230016685
+        .long   1173605489
+        .long   3189567454
+        .long   2301746008
+        .long   3230016688
+        .long   3096720313
+        .long   3189567400
+        .long   3615544576
+        .long   3230016691
+        .long   1942008121
+        .long   3189567335
+        .long   611493160
+        .long   3230016695
+        .long   3375481119
+        .long   3189567537
+        .long   1879599992
+        .long   3230016698
+        .long   4103239143
+        .long   3189567624
+        .long   3124971056
+        .long   3230016701
+        .long   3773474925
+        .long   3189567869
+        .long   52711992
+        .long   3230016705
+        .long   2465315445
+        .long   3189567444
+        .long   1252829960
+        .long   3230016708
+        .long   1041581158
+        .long   3189567781
+        .long   2430429904
+        .long   3230016711
+        .long   166620501
+        .long   3189567739
+        .long   3585583704
+        .long   3230016714
+        .long   2379237630
+        .long   3189567984
+        .long   423395616
+        .long   3230016718
+        .long   134834559
+        .long   3189567178
+        .long   1533871416
+        .long   3230016721
+        .long   1449318760
+        .long   3189567373
+        .long   2622114680
+        .long   3230016724
+        .long   3042372984
+        .long   3189567127
+        .long   3688195920
+        .long   3230016727
+        .long   1265290101
+        .long   3189567921
+        .long   437218048
+        .long   3230016731
+        .long   2248549362
+        .long   3189567262
+        .long   1459185496
+        .long   3230016734
+        .long   1293250365
+        .long   3189567151
+        .long   2459200496
+        .long   3230016737
+        .long   313786605
+        .long   3189567180
+        .long   3437332240
+        .long   3230016740
+        .long   3289151823
+        .long   3189567872
+        .long   98682312
+        .long   3230016744
+        .long   2693758821
+        .long   3189567877
+        .long   1033253848
+        .long   3230016747
+        .long   4237443192
+        .long   3189567301
+        .long   1946147760
+        .long   3230016750
+        .long   4099404586
+        .long   3189567972
+        .long   2837431968
+        .long   3230016753
+        .long   343640666
+        .long   3189567552
+        .long   3707174040
+        .long   3230016756
+        .long   4238401458
+        .long   3189567983
+        .long   260473960
+        .long   3230016760
+        .long   21423548
+        .long   3189567559
+        .long   1087333264
+        .long   3230016763
+        .long   3515278593
+        .long   3189567309
+        .long   1892851296
+        .long   3230016766
+        .long   629106375
+        .long   3189567166
+        .long   2677094384
+        .long   3230016769
+        .long   2048670044
+        .long   3189567227
+        .long   3440128544
+        .long   3230016772
+        .long   3739217292
+        .long   3189568009
+        .long   4182019504
+        .long   3230016775
+        .long   3662039444
+        .long   3189567618
+        .long   607865368
+        .long   3230016779
+        .long   1766486991
+        .long   3189567112
+        .long   1307665824
+        .long   3230016782
+        .long   512689457
+        .long   3189567670
+        .long   1986518392
+        .long   3230016785
+        .long   1704577378
+        .long   3189567760
+        .long   2644487576
+        .long   3230016788
+        .long   4001935135
+        .long   3189567473
+        .long   3281637576
+        .long   3230016791
+        .long   1184452342
+        .long   3189567735
+        .long   3898032312
+        .long   3230016794
+        .long   2714793956
+        .long   3189567464
+        .long   198768096
+        .long   3230016798
+        .long   3657654418
+        .long   3189567905
+        .long   773842856
+        .long   3230016801
+        .long   2809688013
+        .long   3189567736
+        .long   1328352328
+        .long   3230016804
+        .long   390727591
+        .long   3189567393
+        .long   1862359256
+        .long   3230016807
+        .long   1135237925
+        .long   3189567248
+        .long   2375926096
+        .long   3230016810
+        .long   1377572509
+        .long   3189567837
+        .long   2869115032
+        .long   3230016813
+        .long   3148383775
+        .long   3189568032
+        .long   3341987960
+        .long   3230016816
+        .long   3809536738
+        .long   3189567313
+        .long   3794606472
+        .long   3230016819
+        .long   4243445934
+        .long   3189568034
+        .long   4227031920
+        .long   3230016822
+        .long   1302642088
+        .long   3189567451
+        .long   344358048
+        .long   3230016826
+        .long   3239125361
+        .long   3189567151
+        .long   736580224
+        .long   3230016829
+        .long   3753161736
+        .long   3189567129
+        .long   1108791648
+        .long   3230016832
+        .long   624357483
+        .long   3189568045
+        .long   1461052568
+        .long   3230016835
+        .long   3153257064
+        .long   3189567338
+        .long   1793422920
+        .long   3230016838
+        .long   2705820149
+        .long   3189567635
+        .long   2105962400
+        .long   3230016841
+        .long   911564860
+        .long   3189567737
+        .long   2398730424
+        .long   3230016844
+        .long   1086958332
+        .long   3189567948
+        .long   2671786152
+        .long   3230016847
+        .long   1598984535
+        .long   3189567210
+        .long   2925188456
+        .long   3230016850
+        .long   4113385879
+        .long   3189567401
+        .long   3158995968
+        .long   3230016853
+        .long   2426812671
+        .long   3189567396
+        .long   3373267048
+        .long   3230016856
+        .long   3480845679
+        .long   3189567359
+        .long   3568059792
+        .long   3230016859
+        .long   3306230729
+        .long   3189567924
+        .long   3743432056
+        .long   3230016862
+        .long   3853821277
+        .long   3189567317
+        .long   3899441408
+        .long   3230016865
+        .long   2049309148
+        .long   3189567699
+        .long   4036145192
+        .long   3230016868
+        .long   2667321817
+        .long   3189567166
+        .long   4153600472
+        .long   3230016871
+        .long   3540670389
+        .long   3189567114
+        .long   4251864072
+        .long   3230016874
+        .long   404207883
+        .long   3189567310
+        .long   36025272
+        .long   3230016878
+        .long   2837617046
+        .long   3189567103
+        .long   96074976
+        .long   3230016881
+        .long   1231280453
+        .long   3189567669
+        .long   137101976
+        .long   3230016884
+        .long   792492437
+        .long   3189567071
+        .long   159162080
+        .long   3230016887
+        .long   2385525292
+        .long   3189567618
+        .long   162310880
+        .long   3230016890
+        .long   3272051015
+        .long   3189567858
+        .long   146603712
+        .long   3230016893
+        .long   623573538
+        .long   3189567881
+        .long   112095672
+        .long   3230016896
+        .long   2151835939
+        .long   3189567451
+        .long   58841608
+        .long   3230016899
+        .long   958006130
+        .long   3189567217
+        .long   4281863424
+        .long   3230016901
+        .long   549948691
+        .long   3189567863
+        .long   4191280920
+        .long   3230016904
+        .long   4177689987
+        .long   3189567217
+        .long   4082115512
+        .long   3230016907
+        .long   2895765193
+        .long   3189567599
+        .long   3954421112
+        .long   3230016910
+        .long   1055606208
+        .long   3189567799
+        .long   3808251392
+        .long   3230016913
+        .long   1966521217
+        .long   3189567351
+        .long   3643659776
+        .long   3230016916
+        .long   1017382758
+        .long   3189567732
+        .long   3460699480
+        .long   3230016919
+        .long   3485890155
+        .long   3189567410
+        .long   3259423472
+        .long   3230016922
+        .long   2657419170
+        .long   3189567140
+        .long   3039884488
+        .long   3230016925
+        .long   4198858220
+        .long   3189568080
+        .long   2802135064
+        .long   3230016928
+        .long   2343740494
+        .long   3189567869
+        .long   2546227480
+        .long   3230016931
+        .long   2423084215
+        .long   3189567957
+        .long   2272213808
+        .long   3230016934
+        .long   3887273856
+        .long   3189567631
+        .long   1980145888
+        .long   3230016937
+        .long   3992755473
+        .long   3189567251
+        .long   1670075336
+        .long   3230016940
+        .long   722498073
+        .long   3189567389
+        .long   1342053552
+        .long   3230016943
+        .long   3573506400
+        .long   3189567965
+        .long   996131728
+        .long   3230016946
+        .long   714695829
+        .long   3189567392
+        .long   632360808
+        .long   3230016949
+        .long   2816704229
+        .long   3189567846
+        .long   250791552
+        .long   3230016952
+        .long   386951333
+        .long   3189567243
+        .long   4146441768
+        .long   3230016954
+        .long   2155319939
+        .long   3189567580
+        .long   3729427184
+        .long   3230016957
+        .long   4227840137
+        .long   3189567931
+        .long   3294765200
+        .long   3230016960
+        .long   1718354212
+        .long   3189567672
+        .long   2842505696
+        .long   3230016963
+        .long   4243880582
+        .long   3189567656
+        .long   2372698352
+        .long   3230016966
+        .long   3784093842
+        .long   3189567302
+        .long   1885392624
+        .long   3230016969
+        .long   2318733051
+        .long   3189567813
+        .long   1380637784
+        .long   3230016972
+        .long   497929746
+        .long   3189567210
+        .long   858482864
+        .long   3230016975
+        .long   3218883783
+        .long   3189567649
+        .long   318976720
+        .long   3230016978
+        .long   3492652862
+        .long   3189567382
+        .long   4057135272
+        .long   3230016980
+        .long   473724673
+        .long   3189568069
+        .long   3483072376
+        .long   3230016983
+        .long   150485010
+        .long   3189567757
+        .long   2891803552
+        .long   3230016986
+        .long   3028900958
+        .long   3189567173
+        .long   2283376816
+        .long   3230016989
+        .long   321242596
+        .long   3189567822
+        .long   1657840008
+        .long   3230016992
+        .long   151305746
+        .long   3189568029
+        .long   1015240760
+        .long   3230016995
+        .long   2208026401
+        .long   3189567184
+        .long   355626480
+        .long   3230016998
+        .long   2487781842
+        .long   3189567931
+        .long   3974011720
+        .long   3230017000
+        .long   2391142094
+        .long   3189567091
+        .long   3280508896
+        .long   3230017003
+        .long   734457618
+        .long   3189568092
+        .long   2570132168
+        .long   3230017006
+        .long   3070902701
+        .long   3189567794
+        .long   1842928168
+        .long   3230017009
+        .long   1110877923
+        .long   3189567896
+        .long   1098943352
+        .long   3230017012
+        .long   3880360185
+        .long   3189567898
+        .long   338223984
+        .long   3230017015
+        .long   391995809
+        .long   3189567294
+        .long   3855783416
+        .long   3230017017
+        .long   4186345433
+        .long   3189567745
+        .long   3061732952
+        .long   3230017020
+        .long   3682852050
+        .long   3189567081
+        .long   2251085560
+        .long   3230017023
+        .long   3057037137
+        .long   3189567617
+        .long   1423886760
+        .long   3230017026
+        .long   3352664894
+        .long   3189567074
+        .long   580181848
+        .long   3230017029
+        .long   1170568982
+        .long   3189567927
+        .long   4014983272
+        .long   3230017031
+        .long   671148579
+        .long   3189567293
+        .long   3138401368
+        .long   3230017034
+        .long   267496658
+        .long   3189567304
+        .long   2245448192
+        .long   3230017037
+        .long   1285167087
+        .long   3189568066
+        .long   1336168336
+        .long   3230017040
+        .long   4259909589
+        .long   3189567788
+        .long   410606184
+        .long   3230017043
+        .long   1494078902
+        .long   3189568031
+        .long   3763773256
+        .long   3230017045
+        .long   261935754
+        .long   3189567685
+        .long   2805778992
+        .long   3230017048
+        .long   3679585605
+        .long   3189567195
+        .long   1831634536
+        .long   3230017051
+        .long   809066513
+        .long   3189567664
+        .long   841383576
+        .long   3230017054
+        .long   385945238
+        .long   3189567897
+        .long   4130036912
+        .long   3230017056
+        .long   825579909
+        .long   3189567603
+        .long   3107703272
+        .long   3230017059
+        .long   3911295427
+        .long   3189567514
+        .long   2069393104
+        .long   3230017062
+        .long   3473784588
+        .long   3189567461
+        .long   1015149384
+        .long   3230017065
+        .long   629861200
+        .long   3189567515
+        .long   4239982216
+        .long   3230017067
+        .long   2659142760
+        .long   3189567083
+        .long   3153999632
+        .long   3230017070
+        .long   1251680713
+        .long   3189567080
+        .long   2052211384
+        .long   3230017073
+        .long   3168705163
+        .long   3189567992
+        .long   934659776
+        .long   3230017076
+        .long   1674797624
+        .long   3189567952
+        .long   4096354216
+        .long   3230017078
+        .long   437847902
+        .long   3189567971
+        .long   2947402064
+        .long   3230017081
+        .long   4024401533
+        .long   3189567960
+        .long   1782812400
+        .long   3230017084
+        .long   786902458
+        .long   3189567873
+        .long   602626840
+        .long   3230017087
+        .long   2593792633
+        .long   3189567812
+        .long   3701854136
+        .long   3230017089
+        .long   3989721221
+        .long   3189567126
+        .long   2490600968
+        .long   3230017092
+        .long   2545746866
+        .long   3189567591
+        .long   1263875768
+        .long   3230017095
+        .long   3115843521
+        .long   3189567377
+        .long   21719488
+        .long   3230017098
+        .long   1730226063
+        .long   3189567307
+        .long   3059140216
+        .long   3230017100
+        .long   690350922
+        .long   3189567892
+        .long   1786244008
+        .long   3230017103
+        .long   3350998585
+        .long   3189567394
+        .long   498038616
+        .long   3230017106
+        .long   1499123379
+        .long   3189568082
+        .long   3489531672
+        .long   3230017108
+        .long   2598665922
+        .long   3189567118
+        .long   2170828712
+        .long   3230017111
+        .long   2436376826
+        .long   3189567935
+        .long   836937048
+        .long   3230017114
+        .long   1977004902
+        .long   3189568052
+        .long   3782863816
+        .long   3230017116
+        .long   4027224619
+        .long   3189567373
+        .long   2418714096
+        .long   3230017119
+        .long   2616869856
+        .long   3189567271
+        .long   1039494712
+        .long   3230017122
+        .long   3775628133
+        .long   3189567616
+        .long   3940212336
+        .long   3230017124
+        .long   419018052
+        .long   3189567909
+        .long   2530971600
+        .long   3230017127
+        .long   150919657
+        .long   3189567379
+        .long   1106778856
+        .long   3230017130
+        .long   2926254537
+        .long   3189567139
+        .long   3962640312
+        .long   3230017132
+        .long   1610863810
+        .long   3189567216
+        .long   2508660136
+        .long   3230017135
+        .long   1166015244
+        .long   3189567672
+        .long   1039844240
+        .long   3230017138
+        .long   645159638
+        .long   3189567685
+        .long   3851198376
+        .long   3230017140
+        .long   2449439581
+        .long   3189567695
+        .long   2352826264
+        .long   3230017143
+        .long   1619104640
+        .long   3189567458
+        .long   839733360
+        .long   3230017146
+        .long   2427070371
+        .long   3189567165
+        .long   3606924968
+        .long   3230017148
+        .long   2166480890
+        .long   3189567544
+        .long   2064504368
+        .long   3230017151
+        .long   2283025905
+        .long   3189567907
+        .long   507476584
+        .long   3230017154
+        .long   3923356754
+        .long   3189567272
+        .long   3230846472
+        .long   3230017156
+        .long   805331677
+        .long   3189567533
+        .long   1644716880
+        .long   3230017159
+        .long   3790469685
+        .long   3189567406
+        .long   44092384
+        .long   3230017162
+        .long   2689788214
+        .long   3189567653
+        .long   2723977432
+        .long   3230017164
+        .long   2762250221
+        .long   3189567072
+        .long   1094474416
+        .long   3230017167
+        .long   2781925193
+        .long   3189567716
+        .long   3745554800
+        .long   3230017169
+        .long   593120878
+        .long   3189567817
+        .long   2087320704
+        .long   3230017172
+        .long   403414988
+        .long   3189568021
+        .long   414776008
+        .long   3230017175
+        .long   359307328
+        .long   3189567387
+        .long   3022924432
+        .long   3230017177
+        .long   3373547966
+        .long   3189567572
+        .long   1321867688
+        .long   3230017180
+        .long   3978711340
+        .long   3189567805
+        .long   3901576528
+        .long   3230017182
+        .long   2765663238
+        .long   3189568046
+        .long   2172152384
+        .long   3230017185
+        .long   1181150766
+        .long   3189568053
+        .long   428598440
+        .long   3230017188
+        .long   2473022131
+        .long   3189567471
+        .long   2965917728
+        .long   3230017190
+        .long   1621744488
+        .long   3189567971
+        .long   1194211288
+        .long   3230017193
+        .long   2931299013
+        .long   3189567190
+        .long   3703449168
+        .long   3230017195
+        .long   873154950
+        .long   3189568039
+        .long   1903732144
+        .long   3230017198
+        .long   1510784525
+        .long   3189567521
+        .long   90062704
+        .long   3230017201
+        .long   2918231590
+        .long   3189568086
+        .long   2557443240
+        .long   3230017203
+        .long   3329944838
+        .long   3189567475
+        .long   715974088
+        .long   3230017206
+        .long   2679715410
+        .long   3189568021
+        .long   3155624672
+        .long   3230017208
+        .long   1841110143
+        .long   3189567518
+        .long   1286495072
+        .long   3230017211
+        .long   3881638924
+        .long   3189567497
+        .long   3698554440
+        .long   3230017213
+        .long   167906931
+        .long   3189567169
+        .long   1801902600
+        .long   3230017216
+        .long   1468264167
+        .long   3189567597
+        .long   4186508448
+        .long   3230017218
+        .long   2400624638
+        .long   3189567691
+        .long   2262471560
+        .long   3230017221
+        .long   3796182064
+        .long   3189567357
+        .long   324793264
+        .long   3230017224
+        .long   2801238958
+        .long   3189567581
+        .long   2668474776
+        .long   3230017226
+        .long   2273142813
+        .long   3189567436
+        .long   703615288
+        .long   3230017229
+        .long   831867571
+        .long   3189567237
+        .long   3020183048
+        .long   3230017231
+        .long   2238048829
+        .long   3189567595
+        .long   1028277008
+        .long   3230017234
+        .long   1163763070
+        .long   3189567452
+        .long   3317865168
+        .long   3230017236
+        .long   1206450788
+        .long   3189567228
+        .long   1299046216
+        .long   3230017239
+        .long   737162226
+        .long   3189567879
+        .long   3561787920
+        .long   3230017241
+        .long   2433253277
+        .long   3189567901
+        .long   1516188728
+        .long   3230017244
+        .long   3561277099
+        .long   3189567506
+        .long   3752216144
+        .long   3230017246
+        .long   1385095507
+        .long   3189567674
+        .long   1679968384
+        .long   3230017249
+        .long   829462408
+        .long   3189567156
+        .long   3889412704
+        .long   3230017251
+        .long   2939266725
+        .long   3189567673
+        .long   1790647080
+        .long   3230017254
+        .long   4214100827
+        .long   3189567848
+        .long   3973638544
+        .long   3230017256
+        .long   2537954451
+        .long   3189567376
+        .long   1848484816
+        .long   3230017259
+        .long   1128740312
+        .long   3189567098
+        .long   4005152680
+        .long   3230017261
+        .long   1932232434
+        .long   3189568053
+        .long   1853739648
+        .long   3230017264
+        .long   1359710694
+        .long   3189567457
+        .long   3984212256
+        .long   3230017266
+        .long   1268482287
+        .long   3189567990
+        .long   1806667776
+        .long   3230017269
+        .long   839689017
+        .long   3189567631
+        .long   3911072520
+        .long   3230017271
+        .long   3727165601
+        .long   3189567921
+        .long   1707523520
+        .long   3230017274
+        .long   1836550952
+        .long   3189567895
+        .long   3785986872
+        .long   3230017276
+        .long   172951407
+        .long   3189567220
+        .long   1556559360
+        .long   3230017279
+        .long   1166449891
+        .long   3189567294
+        .long   3609206856
+        .long   3230017281
+        .long   28625366
+        .long   3189567222
+        .long   1354025920
+        .long   3230017284
+        .long   4038426582
+        .long   3189567978
+        .long   3380982208
+        .long   3230017286
+        .long   2756284659
+        .long   3189567362
+        .long   1100172048
+        .long   3230017289
+        .long   848830252
+        .long   3189567230
+        .long   3101560856
+        .long   3230017291
+        .long   1868170309
+        .long   3189567423
+        .long   795244752
+        .long   3230017294
+        .long   3128260908
+        .long   3189567885
+        .long   2771188936
+        .long   3230017296
+        .long   1691261279
+        .long   3189567706
+        .long   439489304
+        .long   3230017299
+        .long   2886711298
+        .long   3189567236
+        .long   2390110824
+        .long   3230017301
+        .long   1311431101
+        .long   3189567133
+        .long   33149176
+        .long   3230017304
+        .long   3042183093
+        .long   3189567401
+        .long   1958569120
+        .long   3230017306
+        .long   3174208880
+        .long   3189567462
+        .long   3871433416
+        .long   3230017308
+        .long   302374021
+        .long   3189567243
+        .long   1476804712
+        .long   3230017311
+        .long   712531519
+        .long   3189567241
+        .long   3364647440
+        .long   3230017313
+        .long   3705318448
+        .long   3189567568
+        .long   945056744
+        .long   3230017316
+        .long   2424171915
+        .long   3189568016
+        .long   2807996856
+        .long   3230017318
+        .long   199511961
+        .long   3189567094
+        .long   363562688
+        .long   3230017321
+        .long   3766234060
+        .long   3189567214
+        .long   2201718256
+        .long   3230017323
+        .long   1956195829
+        .long   3189567592
+        .long   4027525584
+        .long   3230017325
+        .long   2891794585
+        .long   3189567375
+        .long   1546046576
+        .long   3230017328
+        .long   843173017
+        .long   3189567760
+        .long   3347244936
+        .long   3230017330
+        .long   1609532414
+        .long   3189567955
+        .long   841215080
+        .long   3230017333
+        .long   3356704285
+        .long   3189567294
+        .long   2617920488
+        .long   3230017335
+        .long   1641729240
+        .long   3189567346
+        .long   87455368
+        .long   3230017338
+        .long   1455753222
+        .long   3189567878
+        .long   1839783016
+        .long   3230017340
+        .long   1936589978
+        .long   3189567944
+        .long   3579964728
+        .long   3230017342
+        .long   1006586129
+        .long   3189567993
+        .long   1013061704
+        .long   3230017345
+        .long   2766825484
+        .long   3189567880
+        .long   2729036928
+        .long   3230017347
+        .long   1888685184
+        .long   3189567954
+        .long   137984104
+        .long   3230017350
+        .long   848046306
+        .long   3189568090
+        .long   1829866024
+        .long   3230017352
+        .long   4178224056
+        .long   3189567750
+        .long   3509743488
+        .long   3230017354
+        .long   2637072474
+        .long   3189567070
+        .long   882677184
+        .long   3230017357
+        .long   3133305384
+        .long   3189567936
+        .long   2538629624
+        .long   3230017359
+        .long   1343200028
+        .long   3189567905
+        .long   4182661312
+        .long   3230017361
+        .long   107195460
+        .long   3189567427
+        .long   1519832648
+        .long   3230017364
+        .long   602154914
+        .long   3189567857
+        .long   3140105848
+        .long   3230017366
+        .long   659160740
+        .long   3189567417
+        .long   453573824
+        .long   3230017369
+        .long   236889930
+        .long   3189567396
+        .long   2050198592
+        .long   3230017371
+        .long   1175634921
+        .long   3189567087
+        .long   3635040168
+        .long   3230017373
+        .long   1241855527
+        .long   3189567941
+        .long   913158504
+        .long   3230017376
+        .long   3947904414
+        .long   3189567477
+        .long   2474515312
+        .long   3230017378
+        .long   1206979822
+        .long   3189567534
+        .long   4024170344
+        .long   3230017380
+        .long   1847397805
+        .long   3189567152
+        .long   1267183240
+        .long   3230017383
+        .long   2916539301
+        .long   3189567754
+        .long   2793515456
+        .long   3230017385
+        .long   2568213263
+        .long   3189568078
+        .long   13259168
+        .long   3230017388
+        .long   3003245330
+        .long   3189567303
+        .long   1516375624
+        .long   3230017390
+        .long   3472633477
+        .long   3189567153
+        .long   3007924104
+        .long   3230017392
+        .long   532406289
+        .long   3189567855
+        .long   192963816
+        .long   3230017395
+        .long   4149310663
+        .long   3189567165
+        .long   1661455728
+        .long   3230017397
+        .long   946970842
+        .long   3189567598
+        .long   3118458864
+        .long   3230017399
+        .long   2040517972
+        .long   3189567254
+        .long   269032128
+        .long   3230017402
+        .long   3669971831
+        .long   3189568072
+        .long   1703136256
+        .long   3230017404
+        .long   2375197389
+        .long   3189567687
+        .long   3125829976
+        .long   3230017406
+        .long   296757744
+        .long   3189567673
+        .long   242171944
+        .long   3230017409
+        .long   611424102
+        .long   3189567452
+        .long   1642122608
+        .long   3230017411
+        .long   1700968423
+        .long   3189567419
+        .long   3030740440
+        .long   3230017413
+        .long   2947762668
+        .long   3189567968
+        .long   113083840
+        .long   3230017416
+        .long   690901756
+        .long   3189567496
+        .long   1479112984
+        .long   3230017418
+        .long   121139903
+        .long   3189567571
+        .long   2833886088
+        .long   3230017420
+        .long   173386055
+        .long   3189567866
+        .long   4177428584
+        .long   3230017422
+        .long   2964718132
+        .long   3189567231
+        .long   1214798496
+        .long   3230017425
+        .long   541562024
+        .long   3189567842
+        .long   2535955680
+        .long   3230017427
+        .long   3368765612
+        .long   3189568076
+        .long   3845958008
+        .long   3230017429
+        .long   3194541507
+        .long   3189567689
+        .long   849863256
+        .long   3230017432
+        .long   3443356552
+        .long   3189567858
+        .long   2137631024
+        .long   3230017434
+        .long   1180679397
+        .long   3189567138
+        .long   3414318912
+        .long   3230017436
+        .long   2261929999
+        .long   3189567651
+        .long   384984464
+        .long   3230017439
+        .long   954057098
+        .long   3189567971
+        .long   1639587024
+        .long   3230017441
+        .long   1346995839
+        .long   3189567263
+        .long   2883183944
+        .long   3230017443
+        .long   3253373727
+        .long   3189567382
+        .long   4115799808
+        .long   3230017445
+        .long   4143791142
+        .long   3189567800
+        .long   1042491824
+        .long   3230017448
+        .long   4240432954
+        .long   3189567700
+        .long   2253218992
+        .long   3230017450
+        .long   1891708033
+        .long   3189568072
+        .long   3453038360
+        .long   3230017452
+        .long   710292621
+        .long   3189567662
+        .long   347006880
+        .long   3230017455
+        .long   2712254611
+        .long   3189567116
+        .long   1525083304
+        .long   3230017457
+        .long   349583280
+        .long   3189568004
+        .long   2692324448
+        .long   3230017459
+        .long   1803227864
+        .long   3189567740
+        .long   3848754312
+        .long   3230017461
+        .long   3644606976
+        .long   3189567826
+        .long   699429536
+        .long   3230017464
+        .long   1067153346
+        .long   3189567751
+        .long   1834308568
+        .long   3230017466
+        .long   1335350692
+        .long   3189567081
+        .long   2958447872
+        .long   3230017468
+        .long   1803696599
+        .long   3189567557
+        .long   4071871152
+        .long   3230017470
+        .long   1232152547
+        .long   3189568017
+        .long   879634736
+        .long   3230017473
+        .long   1455437901
+        .long   3189567512
+        .long   1971696744
+        .long   3230017475
+        .long   3708110750
+        .long   3189567399
+        .long   3053113344
+        .long   3230017477
+        .long   3907324819
+        .long   3189567290
+        .long   4123907920
+        .long   3230017479
+        .long   4080000314
+        .long   3189567141
+        .long   889136480
+        .long   3230017482
+        .long   1286519001
+        .long   3189567298
+        .long   1938756848
+        .long   3230017484
+        .long   1292347423
+        .long   3189567513
+        .long   2977824880
+        .long   3230017486
+        .long   1159725249
+        .long   3189568015
+        .long   4006363664
+        .long   3230017488
+        .long   895621348
+        .long   3189567502
+        .long   729428896
+        .long   3230017491
+        .long   1212894155
+        .long   3189567280
+        .long   1736978096
+        .long   3230017493
+        .long   296117275
+        .long   3189567210
+        .long   2734066816
+        .long   3230017495
+        .long   2463481211
+        .long   3189567796
+        .long   3720717848
+        .long   3230017497
+        .long   76524950
+        .long   3189567159
+        .long   401986584
+        .long   3230017500
+        .long   1718551671
+        .long   3189567216
+        .long   1367830248
+        .long   3230017502
+        .long   3568874946
+        .long   3189567584
+        .long   2323304104
+        .long   3230017504
+        .long   2763456396
+        .long   3189567666
+        .long   3268430632
+        .long   3230017506
+        .long   1208592501
+        .long   3189567715
+        .long   4203232240
+        .long   3230017508
+        .long   4148835618
+        .long   3189567851
+        .long   832763976
+        .long   3230017511
+        .long   610418007
+        .long   3189567082
+        .long   1746982680
+        .long   3230017513
+        .long   3035714190
+        .long   3189567431
+        .long   2650943256
+        .long   3230017515
+        .long   85931336
+        .long   3189567843
+        .long   3544667832
+        .long   3230017517
+        .long   3006685957
+        .long   3189567286
+        .long   133211144
+        .long   3230017520
+        .long   878859600
+        .long   3189567873
+        .long   1006529776
+        .long   3230017522
+        .long   854333969
+        .long   3189567724
+        .long   1869678336
+        .long   3230017524
+        .long   3058646748
+        .long   3189567155
+        .long   2722678648
+        .long   3230017526
+        .long   360733640
+        .long   3189567693
+        .long   3565552488
+        .long   3230017528
+        .long   3015564990
+        .long   3189568013
+        .long   103354256
+        .long   3230017531
+        .long   2286095909
+        .long   3189568081
+        .long   926040176
+        .long   3230017533
+        .long   1899270393
+        .long   3189567137
+        .long   1738664488
+        .long   3230017535
+        .long   1377641292
+        .long   3189567833
+        .long   2541248696
+        .long   3230017537
+        .long   4266686523
+        .long   3189568077
+        .long   3333814224
+        .long   3230017539
+        .long   4018775563
+        .long   3189567218
+        .long   4116382408
+        .long   3230017541
+        .long   3373913644
+        .long   3189567103
+        .long   594007232
+        .long   3230017544
+        .long   2818265402
+        .long   3189568021
+        .long   1356644520
+        .long   3230017546
+        .long   1075601108
+        .long   3189567716
+        .long   2109348112
+        .long   3230017548
+        .long   3342127702
+        .long   3189567566
+        .long   2852139088
+        .long   3230017550
+        .long   2910355434
+        .long   3189567504
+        .long   3585038464
+        .long   3230017552
+        .long   611858749
+        .long   3189567074
+        .long   13099880
+        .long   3230017555
+        .long   1954698831
+        .long   3189567516
+        .long   726278816
+        .long   3230017557
+        .long   550712630
+        .long   3189567710
+        .long   1429628792
+        .long   3230017559
+        .long   3672474493
+        .long   3189567278
+        .long   2123170544
+        .long   3230017561
+        .long   1160875209
+        .long   3189567651
+        .long   2806924760
+        .long   3230017563
+        .long   2242524344
+        .long   3189568000
+        .long   3480912064
+        .long   3230017565
+        .long   2823138691
+        .long   3189567327
+        .long   4145152992
+        .long   3230017567
+        .long   3521079748
+        .long   3189567568
+        .long   504700744
+        .long   3230017570
+        .long   1136670137
+        .long   3189567486
+        .long   1149510328
+        .long   3230017572
+        .long   806933442
+        .long   3189567823
+        .long   1784634816
+        .long   3230017574
+        .long   1606084669
+        .long   3189567242
+        .long   2410094488
+        .long   3230017576
+        .long   2841342625
+        .long   3189567480
+        .long   3025909584
+        .long   3230017578
+        .long   984188059
+        .long   3189567239
+        .long   3632100264
+        .long   3230017580
+        .long   3011730434
+        .long   3189567337
+        .long   4228686632
+        .long   3230017582
+        .long   328432041
+        .long   3189567676
+        .long   520721440
+        .long   3230017585
+        .long   2057225622
+        .long   3189567268
+        .long   1098159248
+        .long   3230017587
+        .long   3150727306
+        .long   3189567348
+        .long   1666052680
+        .long   3230017589
+        .long   3291380622
+        .long   3189567307
+        .long   2224421584
+        .long   3230017591
+        .long   3570771984
+        .long   3189567798
+        .long   2773285760
+        .long   3230017593
+        .long   2427604440
+        .long   3189567698
+        .long   3312664936
+        .long   3230017595
+        .long   3733848165
+        .long   3189567211
+        .long   3842578768
+        .long   3230017597
+        .long   2673912350
+        .long   3189567904
+        .long   68079584
+        .long   3230017600
+        .long   960995892
+        .long   3189567616
+        .long   579121512
+        .long   3230017602
+        .long   4150493479
+        .long   3189567659
+        .long   1080756744
+        .long   3230017604
+        .long   1054941272
+        .long   3189567735
+        .long   1573004704
+        .long   3230017606
+        .long   2574365292
+        .long   3189568007
+        .long   2055884768
+        .long   3230017608
+        .long   2507498673
+        .long   3189567092
+        .long   2529416224
+        .long   3230017610
+        .long   2082176323
+        .long   3189567207
+        .long   2993618320
+        .long   3230017612
+        .long   3719982601
+        .long   3189568058
+        .long   3448510256
+        .long   3230017614
+        .long   4104247904
+        .long   3189567897
+        .long   3894111152
+        .long   3230017616
+        .long   3735557011
+        .long   3189567647
+        .long   35472776
+        .long   3230017619
+        .long   2914260983
+        .long   3189567862
+        .long   462548736
+        .long   3230017621
+        .long   1334094042
+        .long   3189567734
+        .long   880390688
+        .long   3230017623
+        .long   1291097379
+        .long   3189567171
+        .long   1289017512
+        .long   3230017625
+        .long   1627119803
+        .long   3189567853
+        .long   1688448064
+        .long   3230017627
+        .long   3886873723
+        .long   3189567117
+        .long   2078701104
+        .long   3230017629
+        .long   627887757
+        .long   3189567206
+        .long   2459795360
+        .long   3230017631
+        .long   1722013861
+        .long   3189567101
+        .long   2831749488
+        .long   3230017633
+        .long   4163262354
+        .long   3189567678
+        .long   3194582104
+        .long   3230017635
+        .long   4170237688
+        .long   3189567639
+        .long   3548311752
+        .long   3230017637
+        .long   47563772
+        .long   3189567637
+        .long   3892956928
+        .long   3230017639
+        .long   2990136007
+        .long   3189567231
+        .long   4228536056
+        .long   3230017641
+        .long   4294532248
+        .long   3189567995
+        .long   260100240
+        .long   3230017644
+        .long   2060709623
+        .long   3189567397
+        .long   577602376
+        .long   3230017646
+        .long   1488525373
+        .long   3189568044
+        .long   886093456
+        .long   3230017648
+        .long   1657840200
+        .long   3189567474
+        .long   1185591680
+        .long   3230017650
+        .long   3155771782
+        .long   3189567399
+        .long   1476115208
+        .long   3230017652
+        .long   2195162329
+        .long   3189567591
+        .long   1757682144
+        .long   3230017654
+        .long   1292806663
+        .long   3189567956
+        .long   2030310544
+        .long   3230017656
+        .long   2151451208
+        .long   3189567540
+        .long   2294018392
+        .long   3230017658
+        .long   2224122735
+        .long   3189567630
+        .long   2548823632
+        .long   3230017660
+        .long   3554417607
+        .long   3189567684
+        .long   2794744152
+        .long   3230017662
+        .long   3831650627
+        .long   3189567409
+        .long   3031797776
+        .long   3230017664
+        .long   4024246224
+        .long   3189567811
+        .long   3260002296
+        .long   3230017666
+        .long   2530219738
+        .long   3189567128
+        .long   3479375416
+        .long   3230017668
+        .long   1618145996
+        .long   3189568024
+        .long   3689934832
+        .long   3230017670
+        .long   392379700
+        .long   3189567378
+        .long   3891698144
+        .long   3230017672
+        .long   55874694
+        .long   3189567574
+        .long   4084682928
+        .long   3230017674
+        .long   4294251475
+        .long   3189567312
+        .long   4268906688
+        .long   3230017676
+        .long   1899705040
+        .long   3189567783
+        .long   149419600
+        .long   3230017679
+        .long   357699389
+        .long   3189567568
+        .long   316173656
+        .long   3230017681
+        .long   3025711727
+        .long   3189567790
+        .long   474218920
+        .long   3230017683
+        .long   2921891821
+        .long   3189568046
+        .long   623572704
+        .long   3230017685
+        .long   1716968749
+        .long   3189567453
+        .long   764252248
+        .long   3230017687
+        .long   2393171526
+        .long   3189567748
+        .long   896274768
+        .long   3230017689
+        .long   1343317993
+        .long   3189567172
+        .long   1019657400
+        .long   3230017691
+        .long   1388235839
+        .long   3189567661
+        .long   1134417256
+        .long   3230017693
+        .long   2766147125
+        .long   3189567706
+        .long   1240571384
+        .long   3230017695
+        .long   2162068842
+        .long   3189567499
+        .long   1338136776
+        .long   3230017697
+        .long   4075455588
+        .long   3189567932
+        .long   1427130392
+        .long   3230017699
+        .long   1579647664
+        .long   3189567555
+        .long   1507569120
+        .long   3230017701
+        .long   3785749868
+        .long   3189567715
+        .long   1579469816
+        .long   3230017703
+        .long   2639950365
+        .long   3189567469
+        .long   1642849272
+        .long   3230017705
+        .long   3611501026
+        .long   3189567698
+        .long   1697724240
+        .long   3230017707
+        .long   15422953
+        .long   3189568066
+        .long   1744111424
+        .long   3230017709
+        .long   2642213241
+        .long   3189568062
+        .long   1782027472
+        .long   3230017711
+        .long   143606300
+        .long   3189568058
+        .long   1811488992
+        .long   3230017713
+        .long   501328690
+        .long   3189567276
+        .long   1832512520
+        .long   3230017715
+        .long   3258054578
+        .long   3189567915
+        .long   1845114576
+        .long   3230017717
+        .long   1297851139
+        .long   3189568007
+        .long   1849311616
+        .long   3230017719
+        .long   3589200000
+        .long   3189567580
+        .byte 0
+        .org .+46
+        .byte   0
+        .long   0
+        .long   2147483648
+        .long   2846560486
+        .long   3210737666
+        .long   2729511872
+        .long   3211784202
+        .long   3956813460
+        .long   3212307985
+        .long   1796237193
+        .long   3212828714
+        .long   1562748889
+        .long   3213092649
+        .long   1602292343
+        .long   3213352007
+        .long   745814092
+        .long   3213610865
+        .long   2969306084
+        .long   3213869224
+        .long   3953060839
+        .long   3214006263
+        .long   1128703349
+        .long   3214134948
+        .long   1371067273
+        .long   3214263386
+        .long   131445019
+        .long   3214391579
+        .long   1427948820
+        .long   3214519527
+        .long   665817496
+        .long   3214647232
+        .long   1817459908
+        .long   3214774694
+        .long   242758400
+        .long   3214901915
+        .long   2082038134
+        .long   3214981455
+        .long   2300828032
+        .long   3215044825
+        .long   571795571
+        .long   3215108076
+        .long   3120479584
+        .long   3215171207
+        .long   3276640540
+        .long   3215234220
+        .long   2949178581
+        .long   3215297115
+        .long   4036279704
+        .long   3215359892
+        .long   4130528508
+        .long   3215422552
+        .long   813954767
+        .long   3215485096
+        .long   248046571
+        .long   3215547523
+        .long   4288926261
+        .long   3215609833
+        .long   1897492927
+        .long   3215672029
+        .long   3499237165
+        .long   3215734109
+        .long   2329611090
+        .long   3215796075
+        .long   203907094
+        .long   3215857927
+        .long   3222364838
+        .long   3215919664
+        .long   295408387
+        .long   3215981289
+        .long   899212401
+        .long   3216012696
+        .long   2606049022
+        .long   3216043395
+        .long   4003691233
+        .long   3216074038
+        .long   1675303236
+        .long   3216104626
+        .long   789189655
+        .long   3216135158
+        .long   2213928479
+        .long   3216165634
+        .long   2518405585
+        .long   3216196055
+        .long   2561783534
+        .long   3216226421
+        .long   3198568176
+        .long   3216256732
+        .long   983674944
+        .long   3216286989
+        .long   1057364031
+        .long   3216317191
+        .long   4260371496
+        .long   3216347338
+        .long   2838974660
+        .long   3216377432
+        .long   1919860988
+        .long   3216407472
+        .long   2330291020
+        .long   3216437458
+        .long   598130195
+        .long   3216467391
+        .long   1836782285
+        .long   3216497270
+        .long   2565351466
+        .long   3216527096
+        .long   3593575201
+        .long   3216556869
+        .long   1431920350
+        .long   3216586590
+        .long   1176515501
+        .long   3216616258
+        .long   3624279252
+        .long   3216645873
+        .long   977982819
+        .long   3216675437
+        .long   2616083454
+        .long   3216704948
+        .long   733015457
+        .long   3216734408
+        .long   403990373
+        .long   3216763816
+        .long   2405156675
+        .long   3216793172
+        .long   3213628385
+        .long   3216822477
+        .long   3597448029
+        .long   3216851731
+        .long   25680167
+        .long   3216880935
+        .long   1848308454
+        .long   3216910087
+        .long   1231492199
+        .long   3216939189
+        .long   3222364838
+        .long   3216968240
+        .long   4274224607
+        .long   3216997241
+        .long   836496059
+        .long   3217026193
+        .long   1119829323
+        .long   3217043131
+        .long   315251054
+        .long   3217057557
+        .long   518461891
+        .long   3217071958
+        .long   2094042713
+        .long   3217086334
+        .long   1109735857
+        .long   3217100686
+        .long   2221359788
+        .long   3217115013
+        .long   1492952593
+        .long   3217129316
+        .long   3576653728
+        .long   3217143594
+        .long   237880003
+        .long   3217157849
+        .long   420109003
+        .long   3217172079
+        .long   180120274
+        .long   3217186285
+        .long   4162843939
+        .long   3217200466
+        .long   4126536273
+        .long   3217214624
+        .long   417628115
+        .long   3217228759
+        .long   1970736719
+        .long   3217242869
+        .long   538873716
+        .long   3217256956
+        .long   758227830
+        .long   3217271019
+        .long   2968307242
+        .long   3217285058
+        .long   3211951040
+        .long   3217299074
+        .long   1825275166
+        .long   3217313067
+        .long   3437683677
+        .long   3217327036
+        .long   4086978021
+        .long   3217340982
+        .long   4104270002
+        .long   3217354905
+        .long   3819025464
+        .long   3217368805
+        .long   3559075183
+        .long   3217382682
+        .long   3650625670
+        .long   3217396536
+        .long   123302585
+        .long   3217410368
+        .long   1890030548
+        .long   3217424176
+        .long   682272600
+        .long   3217437962
+        .long   1114811729
+        .long   3217451725
+        .long   3505892050
+        .long   3217465465
+        .long   3877229085
+        .long   3217479183
+        .long   2543954549
+        .long   3217492879
+        .long   4114626469
+        .long   3217506552
+        .long   311370023
+        .long   3217520204
+        .long   34658569
+        .long   3217533833
+        .long   3593519732
+        .long   3217547439
+        .long   2705545195
+        .long   3217561024
+        .long   1971736889
+        .long   3217574587
+        .long   1696647441
+        .long   3217588128
+        .long   2183357019
+        .long   3217601647
+        .long   3733482817
+        .long   3217615144
+        .long   2352221150
+        .long   3217628620
+        .long   2633258676
+        .long   3217642074
+        .long   578912458
+        .long   3217655507
+        .long   780008323
+        .long   3217668918
+        .long   3530988084
+        .long   3217682307
+        .long   534951267
+        .long   3217695676
+        .long   673467853
+        .long   3217709023
+        .long   4236783385
+        .long   3217722348
+        .long   2923827788
+        .long   3217735653
+        .long   1317060595
+        .long   3217748937
+        .long   3997577740
+        .long   3217762199
+        .long   2660218276
+        .long   3217775441
+        .long   1883376699
+        .long   3217788662
+        .long   1949142230
+        .long   3217801862
+        .long   3138274530
+        .long   3217815041
+        .long   1435244737
+        .long   3217828200
+        .long   1413145637
+        .long   3217841338
+        .long   3348797986
+        .long   3217854455
+        .long   3222758658
+        .long   3217867552
+        .long   1309263324
+        .long   3217880629
+        .long   2176234471
+        .long   3217893685
+        .long   1800387473
+        .long   3217906721
+        .long   452140382
+        .long   3217919737
+        .long   2695621757
+        .long   3217932732
+        .long   208809263
+        .long   3217945708
+        .long   1848308454
+        .long   3217958663
+        .long   3584589359
+        .long   3217971598
+        .long   1386895968
+        .long   3217984514
+        .long   4108155659
+        .long   3217997409
+        .long   3420215606
+        .long   3218010285
+        .long   3878621277
+        .long   3218023141
+        .long   1447787319
+        .long   3218035978
+        .long   680874053
+        .long   3218048795
+        .long   1834892843
+        .long   3218061592
+        .long   870713292
+        .long   3218074370
+        .long   1168986141
+        .long   3218083436
+        .long   3245089583
+        .long   3218089805
+        .long   2494877761
+        .long   3218096165
+        .long   3338922950
+        .long   3218102515
+        .long   1607293197
+        .long   3218108856
+        .long   1719424943
+        .long   3218115187
+        .long   3799224547
+        .long   3218121508
+        .long   3675071677
+        .long   3218127820
+        .long   1469757259
+        .long   3218134123
+        .long   1600486820
+        .long   3218140416
+        .long   4188949205
+        .long   3218146699
+        .long   766352567
+        .long   3218152974
+        .long   43231408
+        .long   3218159239
+        .long   2139646042
+        .long   3218165494
+        .long   2880153102
+        .long   3218171740
+        .long   2383743325
+        .long   3218177977
+        .long   768877423
+        .long   3218184205
+        .long   2448456521
+        .long   3218190423
+        .long   3244923387
+        .long   3218196632
+        .long   3275167422
+        .long   3218202832
+        .long   2655560435
+        .long   3218209023
+        .long   1501959692
+        .long   3218215205
+        .long   4224678246
+        .long   3218221377
+        .long   2348618756
+        .long   3218227541
+        .long   283080250
+        .long   3218233696
+        .long   2436859197
+        .long   3218239841
+        .long   333350563
+        .long   3218245978
+        .long   2675321801
+        .long   3218252105
+        .long   985177381
+        .long   3218258224
+        .long   3964700035
+        .long   3218264333
+        .long   3135315249
+        .long   3218270434
+        .long   2902865164
+        .long   3218276526
+        .long   3377742213
+        .long   3218282609
+        .long   374891912
+        .long   3218288684
+        .long   2593684821
+        .long   3218294749
+        .long   1553148222
+        .long   3218300806
+        .long   1656739931
+        .long   3218306854
+        .long   3012481825
+        .long   3218312893
+        .long   1432962538
+        .long   3218318924
+        .long   1320242026
+        .long   3218324946
+        .long   2780952336
+        .long   3218330959
+        .long   1626300240
+        .long   3218336964
+        .long   2256971748
+        .long   3218342960
+        .long   483265518
+        .long   3218348948
+        .long   704964628
+        .long   3218354927
+        .long   3026437244
+        .long   3218360897
+        .long   3256639170
+        .long   3218366859
+        .long   1499050969
+        .long   3218372813
+        .long   2151680465
+        .long   3218378758
+        .long   1022163351
+        .long   3218384695
+        .long   2507634849
+        .long   3218390623
+        .long   2414862975
+        .long   3218396543
+        .long   845152874
+        .long   3218402455
+        .long   2194349235
+        .long   3218408358
+        .long   2267936813
+        .long   3218414253
+        .long   1165944702
+        .long   3218420140
+        .long   3282948707
+        .long   3218426018
+        .long   128204514
+        .long   3218431889
+        .long   390421100
+        .long   3218437751
+        .long   4167959282
+        .long   3218443604
+        .long   2968834018
+        .long   3218449450
+        .long   1185553177
+        .long   3218455288
+        .long   3210217930
+        .long   3218461117
+        .long   549623114
+        .long   3218466939
+        .long   1890030548
+        .long   3218472752
+        .long   3032400188
+        .long   3218478557
+        .long   4072261525
+        .long   3218484354
+        .long   3450874911
+        .long   1070995813
+        .long   2331021804
+        .long   1070990032
+        .long   1029453230
+        .long   1070984259
+        .long   3747176240
+        .long   1070978493
+        .long   1800682930
+        .long   1070972736
+        .long   3686719393
+        .long   1070966986
+        .long   722545241
+        .long   1070961245
+        .long   1405669883
+        .long   1070955511
+        .long   1349079372
+        .long   1070949785
+        .long   461103529
+        .long   1070944067
+        .long   2945413886
+        .long   1070938356
+        .long   121152472
+        .long   1070932654
+        .long   487700860
+        .long   1070926959
+        .long   3954874384
+        .long   1070921271
+        .long   1842920138
+        .long   1070915592
+        .long   2652318780
+        .long   1070909920
+        .long   1999011482
+        .long   1070904256
+        .long   4089234463
+        .long   1070898599
+        .long   244680560
+        .long   1070892951
+        .long   3262235675
+        .long   1070887309
+        .long   169336595
+        .long   1070881676
+        .long   3763576649
+        .long   1070876049
+        .long   1073096258
+        .long   1070870431
+        .long   601221319
+        .long   1070864820
+        .long   2261690268
+        .long   1070859216
+        .long   1673619518
+        .long   1070853620
+        .long   3046403514
+        .long   1070848031
+        .long   1999843716
+        .long   1070842450
+        .long   2744015967
+        .long   1070836876
+        .long   899399508
+        .long   1070831310
+        .long   676744370
+        .long   1070825751
+        .long   1992167703
+        .long   1070820199
+        .long   467152011
+        .long   1070814655
+        .long   313445281
+        .long   1070809118
+        .long   1448157352
+        .long   1070803588
+        .long   3788725476
+        .long   1070798065
+        .long   2957945300
+        .long   1070792550
+        .long   3168871046
+        .long   1070787042
+        .long   44944622
+        .long   1070781542
+        .long   2094830420
+        .long   1070776048
+        .long   647642559
+        .long   1070770562
+        .long   4212681596
+        .long   1070765082
+        .long   4119694493
+        .long   1070759610
+        .long   288676754
+        .long   1070754146
+        .long   1229870791
+        .long   1070748688
+        .long   2568927817
+        .long   1070743237
+        .long   4226775419
+        .long   1070737793
+        .long   1829681364
+        .long   1070732357
+        .long   3889121191
+        .long   1070726927
+        .long   1737005556
+        .long   1070721505
+        .long   3885417029
+        .long   1070716089
+        .long   1666870165
+        .long   1070710681
+        .long   3594048319
+        .long   1070705279
+        .long   1000063738
+        .long   1070699885
+        .long   2398194399
+        .long   1070694497
+        .long   3417111411
+        .long   1070689116
+        .long   3980746691
+        .long   1070683742
+        .long   4013324163
+        .long   1070678375
+        .long   3439358267
+        .long   1070673015
+        .long   2183652476
+        .long   1070667662
+        .long   171297820
+        .long   1070662316
+        .long   1622638721
+        .long   1070656976
+        .long   2168369647
+        .long   1070651643
+        .long   1734435555
+        .long   1070646317
+        .long   247063161
+        .long   1070640998
+        .long   1927726804
+        .long   1070635685
+        .long   2408245143
+        .long   1070630379
+        .long   1615681634
+        .long   1070625080
+        .long   3772343130
+        .long   1070619787
+        .long   215909304
+        .long   1070614502
+        .long   3759169634
+        .long   1070609222
+        .long   1445381777
+        .long   1070603950
+        .long   1792910451
+        .long   1070598684
+        .long   870975437
+        .long   1070590754
+        .long   3194096222
+        .long   1070580248
+        .long   1823716217
+        .long   1070569756
+        .long   913800688
+        .long   1070559277
+        .long   323875369
+        .long   1070548811
+        .long   4208958430
+        .long   1070538357
+        .long   3839688678
+        .long   1070527917
+        .long   3372126730
+        .long   1070517490
+        .long   2667883253
+        .long   1070507076
+        .long   1589083690
+        .long   1070496675
+        .long   4293333010
+        .long   1070486286
+        .long   2053843986
+        .long   1070475911
+        .long   3324205749
+        .long   1070465548
+        .long   3673610217
+        .long   1070455198
+        .long   2966718784
+        .long   1070444861
+        .long   1068692560
+        .long   1070434537
+        .long   2140157205
+        .long   1070424225
+        .long   1752298597
+        .long   1070413926
+        .long   4066729595
+        .long   1070403639
+        .long   360651144
+        .long   1070393366
+        .long   3386588242
+        .long   1070383104
+        .long   127747308
+        .long   1070372856
+        .long   3337621361
+        .long   1070362619
+        .long   380113
+        .long   1070352396
+        .long   2870475188
+        .long   1070342184
+        .long   3227997535
+        .long   1070331985
+        .long   943446189
+        .long   1070321799
+        .long   182758681
+        .long   1070311625
+        .long   817374162
+        .long   1070301463
+        .long   2719198427
+        .long   1070291313
+        .long   1465634365
+        .long   1070281176
+        .long   1224481606
+        .long   1070271051
+        .long   1869032404
+        .long   1070260938
+        .long   3273036717
+        .long   1070250837
+        .long   1015732707
+        .long   1070240749
+        .long   3561713742
+        .long   1070230672
+        .long   2196155141
+        .long   1070220608
+        .long   1089583089
+        .long   1070210556
+        .long   118003300
+        .long   1070200516
+        .long   3452833475
+        .long   1070190487
+        .long   2381031992
+        .long   1070180471
+        .long   1074899573
+        .long   1070170467
+        .long   3707175295
+        .long   1070160474
+        .long   1566132617
+        .long   1070150494
+        .long   3120348377
+        .long   1070140525
+        .long   3953929663
+        .long   1070130568
+        .long   3946380940
+        .long   1070120623
+        .long   2977634725
+        .long   1070110690
+        .long   928049556
+        .long   1070100769
+        .long   1973375279
+        .long   1070090859
+        .long   1699849154
+        .long   1070080961
+        .long   4284063055
+        .long   1070071074
+        .long   1018125008
+        .long   1070061200
+        .long   374428300
+        .long   1070051337
+        .long   2235845747
+        .long   1070041485
+        .long   2190695046
+        .long   1070031645
+        .long   122671437
+        .long   1070021817
+        .long   210845780
+        .long   1070012000
+        .long   2339728060
+        .long   1070002194
+        .long   2099265479
+        .long   1069992400
+        .long   3669742467
+        .long   1069982617
+        .long   2641909617
+        .long   1069972846
+        .long   3196851002
+        .long   1069963086
+        .long   926113142
+        .long   1069953338
+        .long   11572342
+        .long   1069943601
+        .long   340530969
+        .long   1069933875
+        .long   1800682930
+        .long   1069924160
+        .long   4280111857
+        .long   1069914456
+        .long   3372322013
+        .long   1069904764
+        .long   3261138386
+        .long   1069895083
+        .long   3835803021
+        .long   1069885413
+        .long   690973253
+        .long   1069875755
+        .long   2306589128
+        .long   1069866107
+        .long   4278067876
+        .long   1069856470
+        .long   2201204065
+        .long   1069846845
+        .long   262102455
+        .long   1069837231
+        .long   2647241692
+        .long   1069827627
+        .long   658570708
+        .long   1069818035
+        .long   2778278092
+        .long   1069808453
+        .long   309052031
+        .long   1069798883
+        .long   1733817001
+        .long   1069789323
+        .long   2650961017
+        .long   1069779774
+        .long   2954203158
+        .long   1069770236
+        .long   2537624622
+        .long   1069760709
+        .long   1295667077
+        .long   1069751193
+        .long   3418098326
+        .long   1069741687
+        .long   210141498
+        .long   1069732193
+        .long   157244505
+        .long   1069722709
+        .long   3155274661
+        .long   1069713235
+        .long   510517079
+        .long   1069703773
+        .long   709476866
+        .long   1069694321
+        .long   3649073763
+        .long   1069684879
+        .long   636640577
+        .long   1069675449
+        .long   159725394
+        .long   1069666029
+        .long   2116286250
+        .long   1069656619
+        .long   2109656884
+        .long   1069647220
+        .long   38479793
+        .long   1069637832
+        .long   96704707
+        .long   1069628454
+        .long   2183652476
+        .long   1069619086
+        .long   1904013563
+        .long   1069609729
+        .long   3452748429
+        .long   1069600382
+        .long   2435216853
+        .long   1069591046
+        .long   3047045639
+        .long   1069581720
+        .long   894257944
+        .long   1069572405
+        .long   173141005
+        .long   1069563100
+        .long   785342784
+        .long   1069553805
+        .long   970708326
+        .long   1069541521
+        .long   2645916898
+        .long   1069522972
+        .long   2106590683
+        .long   1069504444
+        .long   3453588195
+        .long   1069485936
+        .long   2198475040
+        .long   1069467449
+        .long   2443390270
+        .long   1069448982
+        .long   3996141691
+        .long   1069430535
+        .long   2370203065
+        .long   1069412109
+        .long   1669613218
+        .long   1069393703
+        .long   1704071394
+        .long   1069375317
+        .long   2283901796
+        .long   1069356951
+        .long   3220050856
+        .long   1069338605
+        .long   29117219
+        .long   1069320280
+        .long   1113218225
+        .long   1069301974
+        .long   1990183441
+        .long   1069283688
+        .long   2473421172
+        .long   1069265422
+        .long   2376948508
+        .long   1069247176
+        .long   1515388672
+        .long   1069228950
+        .long   3998935692
+        .long   1069210743
+        .long   1053482595
+        .long   1069192557
+        .long   1085389880
+        .long   1069174390
+        .long   3911679148
+        .long   1069156242
+        .long   760030536
+        .long   1069138115
+        .long   38583924
+        .long   1069120007
+        .long   1566132617
+        .long   1069101918
+        .long   867088104
+        .long   1069083849
+        .long   2056379433
+        .long   1069065799
+        .long   659581512
+        .long   1069047769
+        .long   792781808
+        .long   1069029758
+        .long   2277675977
+        .long   1069011766
+        .long   641565395
+        .long   1068993794
+        .long   2256601
+        .long   1068975841
+        .long   183156961
+        .long   1068957907
+        .long   1008239542
+        .long   1068939992
+        .long   2302040698
+        .long   1068922096
+        .long   3889657667
+        .long   1068904219
+        .long   1301778891
+        .long   1068886362
+        .long   2954550821
+        .long   1068868523
+        .long   84804484
+        .long   1068850704
+        .long   1109791498
+        .long   1068832903
+        .long   1562410668
+        .long   1068815121
+        .long   1271074840
+        .long   1068797358
+        .long   64741293
+        .long   1068779614
+        .long   2067876735
+        .long   1068761888
+        .long   2815553124
+        .long   1068744181
+        .long   2138347284
+        .long   1068726493
+        .long   4162338635
+        .long   1068708823
+        .long   129237761
+        .long   1068691173
+        .long   2756122533
+        .long   1068673540
+        .long   3285762921
+        .long   1068655926
+        .long   1551389854
+        .long   1068638331
+        .long   1681725707
+        .long   1068620754
+        .long   3511047527
+        .long   1068603195
+        .long   2579184841
+        .long   1068585655
+        .long   3016419377
+        .long   1068568133
+        .long   363613719
+        .long   1068550630
+        .long   3047045639
+        .long   1068533144
+        .long   2313634884
+        .long   1068515677
+        .long   296456961
+        .long   1068497513
+        .long   1367328035
+        .long   1068462651
+        .long   3221665916
+        .long   1068427825
+        .long   1242258971
+        .long   1068393036
+        .long   3697798734
+        .long   1068358282
+        .long   1678104687
+        .long   1068323565
+        .long   3453858508
+        .long   1068288883
+        .long   116861598
+        .long   1068254238
+        .long   4234736672
+        .long   1068219627
+        .long   2606283437
+        .long   1068185053
+        .long   3506114812
+        .long   1068150514
+        .long   2324914545
+        .long   1068116011
+        .long   3044269692
+        .long   1068081543
+        .long   1056797460
+        .long   1068047111
+        .long   346010435
+        .long   1068012714
+        .long   601410756
+        .long   1067978352
+        .long   1513453498
+        .long   1067944025
+        .long   2773542775
+        .long   1067909733
+        .long   4074027864
+        .long   1067875476
+        .long   813232056
+        .long   1067841255
+        .long   1275317999
+        .long   1067807068
+        .long   860480111
+        .long   1067772916
+        .long   3559777258
+        .long   1067738798
+        .long   480292498
+        .long   1067704716
+        .long   4204867691
+        .long   1067670667
+        .long   1547459502
+        .long   1067636654
+        .long   797775935
+        .long   1067602675
+        .long   1656501562
+        .long   1067568730
+        .long   3825228429
+        .long   1067534819
+        .long   2711485098
+        .long   1067500943
+        .long   2313634884
+        .long   1067467101
+        .long   376973398
+        .long   1067416219
+        .long   672386641
+        .long   1067348671
+        .long   630691842
+        .long   1067281191
+        .long   3960777458
+        .long   1067213778
+        .long   1488394470
+        .long   1067146434
+        .long   1220920383
+        .long   1067079157
+        .long   2577548405
+        .long   1067011947
+        .long   684247743
+        .long   1066944805
+        .long   3553625811
+        .long   1066877729
+        .long   2020150230
+        .long   1066810721
+        .long   4099880293
+        .long   1066743779
+        .long   630721729
+        .long   1066676905
+        .long   3927125538
+        .long   1066610096
+        .long   535440936
+        .long   1066543355
+        .long   2773516144
+        .long   1066476679
+        .long   1486051399
+        .long   1066410070
+        .long   808661260
+        .long   1066285262
+        .long   2227658502
+        .long   1066152307
+        .long   1813447778
+        .long   1066019484
+        .long   2743640746
+        .long   1065886792
+        .long   3904192454
+        .long   1065754231
+        .long   4184355568
+        .long   1065621801
+        .long   2476667369
+        .long   1065489502
+        .long   1971904113
+        .long   1065357333
+        .long   3138267131
+        .long   1065097372
+        .long   341338964
+        .long   1064833554
+        .long   1954052322
+        .long   1064569994
+        .long   1498975029
+        .long   1064306693
+        .long   2190050752
+        .long   1063782660
+        .long   1440057502
+        .long   1063257089
+        .long   1432705161
+        .long   1062208000
+        .long   0
+        .long   0
+        .byte 0
+        .org .+54
+        .byte   0
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   2900053258
+        .long   1070176668
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1208323809
+        .long   3218079745
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   1431651269
+        .long   1070945621
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294965279
+        .long   3219128319
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   4294967295
+        .long   1048575
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   0
+        .long   1062207488
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294967295
+        .long   3220176895
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4294963200
+        .long   2134900735
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   4227858432
+        .long   4294967295
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   1072693248
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   4294967295
+        .long   2147483647
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   0
+        .long   1040187392
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4294966272
+        .long   4294967295
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   4277796864
+        .long   1072049730
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   3164471296
+        .long   1031600026
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1082564608
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083176960
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   1083174912
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   0
+        .long   2134900736
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   4277811695
+        .long   1072049730
+        .long   0
+        .long   2146435072
+        .long   0
+        .long   4293918720
+        .byte 0
+        .org .+46
+        .byte   0
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   3220176896
+        .byte 0
+        .org .+46
+        .byte   0
+        .long   0
+        .long   0
+        .long   0
+        .long   2147483648
+        .byte 0
+        .org .+46
+        .byte   0
+_imldLnHATab:
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   0
+        .long   0
+        .long   0
+        .long   0
+        .long   1072660480
+        .long   1486880768
+        .long   1066410070
+        .long   1813744607
+        .long   3179892593
+        .long   0
+        .long   1072629760
+        .long   377487360
+        .long   1067416219
+        .long   919019713
+        .long   3179241129
+        .long   0
+        .long   1072599040
+        .long   1513619456
+        .long   1067944025
+        .long   874573033
+        .long   3178512940
+        .long   0
+        .long   1072570368
+        .long   3221749760
+        .long   1068427825
+        .long   4181665006
+        .long   3177478212
+        .long   0
+        .long   1072541696
+        .long   4162322432
+        .long   1068708823
+        .long   627020255
+        .long   1028629941
+        .long   0
+        .long   1072513024
+        .long   183107584
+        .long   1068957907
+        .long   2376703469
+        .long   1030233118
+        .long   0
+        .long   1072486400
+        .long   1053425664
+        .long   1069192557
+        .long   696277142
+        .long   1030474863
+        .long   0
+        .long   1072459776
+        .long   3996123136
+        .long   1069430535
+        .long   2630798680
+        .long   1028792016
+        .long   0
+        .long   1072435200
+        .long   3452764160
+        .long   1069600382
+        .long   624954044
+        .long   3177101741
+        .long   0
+        .long   1072409600
+        .long   207650816
+        .long   1069717971
+        .long   3272735636
+        .long   3175176575
+        .long   0
+        .long   1072386048
+        .long   2647228416
+        .long   1069827627
+        .long   3594228712
+        .long   1029303785
+        .long   0
+        .long   1072362496
+        .long   2712010752
+        .long   1069938736
+        .long   3653242769
+        .long   3176839013
+        .long   0
+        .long   1072338944
+        .long   374439936
+        .long   1070051337
+        .long   4072775574
+        .long   3176577495
+        .long   0
+        .long   1072316416
+        .long   3707174912
+        .long   1070160474
+        .long   1486946159
+        .long   1023930920
+        .long   0
+        .long   1072294912
+        .long   1443954688
+        .long   1070265993
+        .long   293532967
+        .long   3176278277
+        .long   0
+        .long   1072273408
+        .long   127762432
+        .long   1070372856
+        .long   3404145447
+        .long   3177023955
+        .long   0
+        .long   1072252928
+        .long   2053832704
+        .long   1070475911
+        .long   1575076358
+        .long   1029048544
+        .long   0
+        .long   1072232448
+        .long   3194093568
+        .long   1070580248
+        .long   1864169120
+        .long   1026866084
+        .long   0
+        .long   1072212992
+        .long   3917201408
+        .long   1070638340
+        .long   2362145246
+        .long   3175606197
+        .long   0
+        .long   1072193536
+        .long   3417112576
+        .long   1070689116
+        .long   70087871
+        .long   3174183577
+        .long   0
+        .long   1072175104
+        .long   4226777088
+        .long   1070737793
+        .long   1620410586
+        .long   3174700065
+        .long   0
+        .long   1072156672
+        .long   3168870400
+        .long   1070787042
+        .long   311238082
+        .long   1025781772
+        .long   0
+        .long   1072139264
+        .long   2150580224
+        .long   1070834092
+        .long   1664262457
+        .long   3175299224
+        .long   0
+        .long   1072120832
+        .long   4095672320
+        .long   1070884491
+        .long   1657121015
+        .long   3174674199
+        .long   0
+        .long   1072104448
+        .long   2595577856
+        .long   1070929805
+        .long   2014006823
+        .long   3175423830
+        .long   0
+        .long   1072087040
+        .long   3747176448
+        .long   1070978493
+        .long   144991708
+        .long   3171552042
+        .long   0
+        .long   1072070656
+        .long   1050435584
+        .long   1071024840
+        .long   3386227432
+        .long   1027876916
+        .long   0
+        .long   1072055296
+        .long   255516672
+        .long   1071068760
+        .long   2637594316
+        .long   1028049573
+        .long   0
+        .long   1072038912
+        .long   1640783872
+        .long   1071116120
+        .long   893247007
+        .long   1028452162
+        .long   0
+        .long   1072023552
+        .long   2940411904
+        .long   1071161011
+        .long   813240633
+        .long   1027664048
+        .long   0
+        .long   1072009216
+        .long   882917376
+        .long   1071203348
+        .long   2376597551
+        .long   3175828767
+        .long   0
+        .long   1071993856
+        .long   213966848
+        .long   1071249188
+        .long   2977204125
+        .long   1028350609
+        .long   0
+        .long   1071979520
+        .long   2921504768
+        .long   1071292428
+        .long   523218347
+        .long   1028007004
+        .long   0
+        .long   1071965184
+        .long   3186655232
+        .long   1071336119
+        .long   2352907891
+        .long   1026967097
+        .long   0
+        .long   1071951872
+        .long   2653364224
+        .long   1071377101
+        .long   2453418583
+        .long   3174349512
+        .long   0
+        .long   1071938560
+        .long   3759783936
+        .long   1071418487
+        .long   3685870403
+        .long   3175415611
+        .long   0
+        .long   1071925248
+        .long   2468364288
+        .long   1071460286
+        .long   1578908842
+        .long   3175510517
+        .long   0
+        .long   1071911936
+        .long   81903616
+        .long   1071502506
+        .long   770710269
+        .long   1026742353
+        .long   0
+        .long   1071899648
+        .long   2799321088
+        .long   1071541858
+        .long   3822266185
+        .long   1028434427
+        .long   0
+        .long   1071886336
+        .long   2142265344
+        .long   1071584911
+        .long   175901806
+        .long   3173871540
+        .long   0
+        .long   1071874048
+        .long   2944024576
+        .long   1071625048
+        .long   2747360403
+        .long   1027672159
+        .long   0
+        .long   1071862784
+        .long   3434301440
+        .long   1071653426
+        .long   4194662196
+        .long   3173893003
+        .long   0
+        .long   1071850496
+        .long   1547755520
+        .long   1071673870
+        .long   4248764681
+        .long   3172759087
+        .long   0
+        .long   1071839232
+        .long   4246986752
+        .long   1071692786
+        .long   2840205638
+        .long   3174430911
+        .long   0
+        .long   1071826944
+        .long   3418390528
+        .long   1071713619
+        .long   3041880823
+        .long   1025440860
+        .long   0
+        .long   1071816704
+        .long   4143093760
+        .long   1071731139
+        .long   2727587401
+        .long   3173965207
+        .long   0
+        .long   1071805440
+        .long   3121326080
+        .long   1071750582
+        .long   3173887692
+        .long   3174190163
+        .long   0
+        .long   1071794176
+        .long   1852893184
+        .long   1071770207
+        .long   3951060252
+        .long   1027348295
+        .long   0
+        .long   1071783936
+        .long   3636379648
+        .long   1071788208
+        .long   1684924001
+        .long   3174777086
+        .long   0
+        .long   1071773696
+        .long   516505600
+        .long   1071806366
+        .long   429181199
+        .long   3173211033
+        .long   0
+        .long   1071763456
+        .long   4186185728
+        .long   1071824681
+        .long   2044904577
+        .long   3174967132
+        .long   0
+        .long   1071753216
+        .long   877596672
+        .long   1071843159
+        .long   1396318105
+        .long   3173959727
+        .long   0
+        .long   1071742976
+        .long   2912784384
+        .long   1071861800
+        .long   448136789
+        .long   3174814192
+        .long   0
+        .long   1071733760
+        .long   3722825728
+        .long   1071878720
+        .long   714165913
+        .long   3173439560
+        .long   0
+        .long   1071723520
+        .long   2522374144
+        .long   1071897682
+        .long   3227240353
+        .long   3173394323
+        .long   0
+        .long   1071714304
+        .long   4165410816
+        .long   1071914895
+        .long   1365684961
+        .long   3174365060
+        .long   0
+        .long   1071705088
+        .long   3477135360
+        .long   1071932251
+        .long   368482985
+        .long   3174140821
+        .long   0
+        .long   1071695872
+        .long   2079455232
+        .long   1071949752
+        .long   1320576317
+        .long   1026822714
+        .long   0
+        .long   1071687680
+        .long   851795968
+        .long   1071965432
+        .long   3702467026
+        .long   1025224125
+        .long   0
+        .long   1071678464
+        .long   647743488
+        .long   1071983213
+        .long   772992109
+        .long   3174038459
+        .long   0
+        .long   1071670272
+        .long   26537984
+        .long   1071999146
+        .long   2360214276
+        .long   3174861275
+        .long   0
+        .long   1071661056
+        .long   1547061248
+        .long   1072017216
+        .long   2886781435
+        .long   1026423395
+        .long   0
+        .long   1071652864
+        .long   2854492160
+        .long   1072033410
+        .long   215631550
+        .long   1025638968
+        .long   0
+        .long   1071644672
+        .long   4277811200
+        .long   1072049730
+        .long   2479318832
+        .long   1026487127
+        .long   4277811200
+        .long   1072049730
+        .long   2479318832
+        .long   1026487127
+        .long   64
+        .long   1120927744
+        .long   0
+        .long   1094713344
+        .long   0
+        .long   1065615360
+        .long   0
+        .long   1135607808
+        .long   0
+        .long   0
+        .long   0
+        .long   1072693248
+        .long   0
+        .long   3219128320
+        .long   1431655955
+        .long   1070945621
+        .long   610
+        .long   3218079744
+        .long   2545118337
+        .long   1070176665
+        .long   1378399119
+        .long   3217380693
+        .long   612435357
+        .long   1069697472
+        .long   94536557
+        .long   3217031348
+_2il0floatpacket_31:
+        .long   0x00000000, 0x43380000, 0x00000000, 0x43380000
+_2il0floatpacket_97:
+        .long   0x00000000, 0x80000000, 0x00000000, 0x00000000
+_2il0floatpacket_96:
+        .long   0x00000000, 0x3ff00000
+        .data
+#endif

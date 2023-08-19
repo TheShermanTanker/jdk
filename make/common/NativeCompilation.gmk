@@ -52,7 +52,7 @@ include native/Paths.gmk
 #   TYPE Type of binary (EXECUTABLE, LIBRARY or STATIC_LIBRARY). Default is LIBRARY.
 #   SUFFIX Override the default suffix for the output file
 #   TARGET_TYPE The type to target, BUILD or TARGET. Defaults to TARGET.
-#   LINK_TYPE The language to use for the linker, C or C++. Defaults to C.
+#   LANG The language to use for the linker, C or C++. Defaults to C.
 #   SRC one or more directory roots to scan for C/C++ files.
 #   CFLAGS the compiler flags to be used, used both for C and C++.
 #   CXXFLAGS the compiler flags to be used for c++, if set overrides CFLAGS.
@@ -98,7 +98,6 @@ include native/Paths.gmk
 #   SYSROOT_CFLAGS the compiler flags for using the specific sysroot
 #   SYSROOT_LDFLAGS the linker flags for using the specific sysroot
 #   OPTIMIZATION sets optimization level to NONE, LOW, HIGH, HIGHEST, HIGHEST_JVM, SIZE
-#   LINK_TIME_OPTIMIZATION if set to true, enables link time optimization
 #   DISABLED_WARNINGS_<toolchain> Disable the given warnings for the specified toolchain
 #   DISABLED_WARNINGS_<toolchain>_<OS> Disable the given warnings for the specified
 #       toolchain and target OS
@@ -306,7 +305,7 @@ define SetupToolchain
     $$(call SetIfEmpty, $1_STRIP, $$(BUILD_STRIP))
     $$(call SetIfEmpty, $1_SYSROOT_CFLAGS, $$(BUILD_SYSROOT_CFLAGS))
     $$(call SetIfEmpty, $1_SYSROOT_LDFLAGS, $$(BUILD_SYSROOT_LDFLAGS))
-    ifeq ($$($1_LINK_TYPE), C++)
+    ifeq ($$($1_LANG), C++)
       $$(call SetIfEmpty, $1_LD, $$(BUILD_LDCXX))
     else
       $$(call SetIfEmpty, $1_LD, $$(BUILD_LD))
@@ -323,7 +322,7 @@ define SetupToolchain
     $$(call SetIfEmpty, $1_STRIP, $$(STRIP))
     $$(call SetIfEmpty, $1_SYSROOT_CFLAGS, $$(SYSROOT_CFLAGS))
     $$(call SetIfEmpty, $1_SYSROOT_LDFLAGS, $$(SYSROOT_LDFLAGS))
-    ifeq ($$($1_LINK_TYPE), C++)
+    ifeq ($$($1_LANG), C++)
       $$(call SetIfEmpty, $1_LD, $$(LDCXX))
     else
       $$(call SetIfEmpty, $1_LD, $$(LD))

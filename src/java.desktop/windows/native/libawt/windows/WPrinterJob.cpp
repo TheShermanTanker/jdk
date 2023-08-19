@@ -688,7 +688,7 @@ static BOOL IsDCPostscript( HDC hDC )
                      (LPSTR)szTechnology ) <= 0 )
         return FALSE;
     _strupr_s(szTechnology, MAX_PATH);
-    if(!strstr( szTechnology, "POSTSCRIPT" ) == NULL )
+    if(strstr( szTechnology, "POSTSCRIPT" ) != NULL )
         return TRUE;
 
     // The word "postscript" was not found and it didn't support

@@ -159,7 +159,7 @@ struct ActionData {
 class ActionStatus {
 public:
     ActionStatus(UINT value=ERROR_SUCCESS, const std::string& comment=""):
-                                            value(value), comment(comment) {
+                                            comment(comment), value(value) {
     }
 
     explicit operator bool() const;

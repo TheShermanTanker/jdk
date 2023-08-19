@@ -86,14 +86,26 @@ ifeq ($(call isTargetOs, windows), true)
     JGSS_ZIP_NAME = jgss-windows-i586-bin.zip
   endif
 
-  $(eval $(call SetupZipArchive, BUILD_JGSS_BIN_ZIP, \
-      SRC := $(SUPPORT_OUTPUTDIR), \
-      INCLUDE_FILES := modules_libs/java.security.jgss/w2k_lsa_auth.dll \
-          modules_libs/java.security.jgss/w2k_lsa_auth.dll.diz \
-          modules_libs/java.security.jgss/w2k_lsa_auth.dll.map \
-          modules_libs/java.security.jgss/w2k_lsa_auth.dll.pdb, \
-      ZIP := $(IMAGES_OUTPUTDIR)/$(JGSS_ZIP_NAME), \
-  ))
+  ifeq ($(TOOLCHAIN_TYPE), gcc)
+    $(eval $(call SetupZipArchive, BUILD_JGSS_BIN_ZIP, \
+        SRC := $(SUPPORT_OUTPUTDIR), \
+        INCLUDE_FILES := modules_libs/java.security.jgss/w2k_lsa_auth.dll \
+            modules_libs/java.security.jgss/w2k_lsa_auth.dll.diz \
+            $(if $(filter codeview, $(NATIVE_DEBUG_SYMBOLS_FORMAT)), \
+                modules_libs/java.security.jgss/w2k_lsa_auth.dll.pdb, \
+                modules_libs/java.security.jgss/w2k_lsa_auth.dll.debuginfo), \
+        ZIP := $(IMAGES_OUTPUTDIR)/$(JGSS_ZIP_NAME), \
+    ))
+  else ifeq ($(TOOLCHAIN_TYPE), microsoft)
+    $(eval $(call SetupZipArchive, BUILD_JGSS_BIN_ZIP, \
+        SRC := $(SUPPORT_OUTPUTDIR), \
+        INCLUDE_FILES := modules_libs/java.security.jgss/w2k_lsa_auth.dll \
+            modules_libs/java.security.jgss/w2k_lsa_auth.dll.diz \
+            modules_libs/java.security.jgss/w2k_lsa_auth.dll.map \
+            modules_libs/java.security.jgss/w2k_lsa_auth.dll.pdb, \
+        ZIP := $(IMAGES_OUTPUTDIR)/$(JGSS_ZIP_NAME), \
+    ))
+  endif
 
   TARGETS += $(IMAGES_OUTPUTDIR)/$(JGSS_ZIP_NAME)
 endif

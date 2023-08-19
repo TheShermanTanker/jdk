@@ -33,14 +33,16 @@
 // malloc out of memory handler. The handler attempts to correct the
 // out of memory condition by initiating a Java GC.
 class NewHandler {
+
+    static int handler(size_t);
+
 public:
     static void init();
 
-private:
     // Don't construct instances of this class.
-    NewHandler();
+    NewHandler(const NewHandler&) = delete;
 
-    static int handler(size_t);
+    
 
 };
 

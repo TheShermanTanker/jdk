@@ -159,6 +159,6 @@ TEST_VM_F(ShenandoahNumberSeqMergeTest, merge_test) {
   EXPECT_NEAR(merged.sd(),  seq3.sd(),  err);
 
   // These are not implemented
-  EXPECT_TRUE(isnan(merged.davg()));
-  EXPECT_TRUE(isnan(merged.dvariance()));
+  EXPECT_TRUE(std::isnan(merged.davg()));
+  EXPECT_TRUE(std::isnan(merged.dvariance()));
 }

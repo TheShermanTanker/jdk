@@ -34,9 +34,10 @@ include LibCommon.gmk
 $(eval $(call SetupJdkLibrary, BUILD_LIBATTACH, \
     NAME := attach, \
     OPTIMIZATION := LOW, \
-    CFLAGS_windows := -Gy, \
+    CFLAGS_microsoft_windows := -Gy, \
+    DISABLED_WARNINGS_gcc_windows := unknown-pragmas cast-function-type, \
     JDK_LIBS := java.base:libjava, \
-    LIBS_windows := advapi32.lib, \
+    LIBS_microsoft_windows := advapi32.lib, \
 ))
 
 TARGETS += $(BUILD_LIBATTACH)
