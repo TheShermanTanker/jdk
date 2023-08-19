@@ -66,24 +66,24 @@ int Executor::execAndWaitForExit() const {
     if (theSuspended) {
         LOG_TRACE(tstrings::any() << "ResumeThread()");
         if (((DWORD)-1) == ResumeThread(threadHandle.get())) {
-            JP_THROW(SysError("ResumeThread() failed", ResumeThread));
+            JP_THROW(SysError("ResumeThread() failed", reinterpret_cast<uintptr_t>(ResumeThread)));
         }
     }
 
     const DWORD res = ::WaitForSingleObject(h.get(), INFINITE);
     if (WAIT_FAILED ==  res) {
-        JP_THROW(SysError("WaitForSingleObject() failed", WaitForSingleObject));
+        JP_THROW(SysError("WaitForSingleObject() failed", reinterpret_cast<uintptr_t>(WaitForSingleObject)));
     }
 
     DWORD exitCode = 0;
     if (!GetExitCodeProcess(h.get(), &exitCode)) {
         // Error reading process's exit code.
-        JP_THROW(SysError("GetExitCodeProcess() failed", GetExitCodeProcess));
+        JP_THROW(SysError("GetExitCodeProcess() failed", reinterpret_cast<uintptr_t>(GetExitCodeProcess)));
     }
 
     const DWORD processId = GetProcessId(h.get());
     if (!processId) {
-        JP_THROW(SysError("GetProcessId() failed.", GetProcessId));
+        JP_THROW(SysError("GetProcessId() failed.", reinterpret_cast<uintptr_t>(GetProcessId)));
     }
 
     LOG_TRACE(tstrings::any() << "Process with PID=" << processId
@@ -138,7 +138,7 @@ UniqueHandle Executor::startProcess(UniqueHandle* threadHandle) const {
                       theInherit ? TRUE : FALSE, creationFlags, NULL, NULL,
                       &startupInfo, &processInfo)) {
         msg << " failed";
-        JP_THROW(SysError(msg, CreateProcess));
+        JP_THROW(SysError(msg, reinterpret_cast<uintptr_t>(CreateProcess)));
     }
 
     msg << " succeeded; PID=" << processInfo.dwProcessId;
@@ -157,7 +157,7 @@ UniqueHandle Executor::startProcess(UniqueHandle* threadHandle) const {
         if (!AssignProcessToJobObject(jobHandle, processInfo.hProcess)) {
             JP_THROW(SysError(tstrings::any() <<
                     "AssignProcessToJobObject() failed",
-                    AssignProcessToJobObject));
+                    reinterpret_cast<uintptr_t>(AssignProcessToJobObject)));
         }
     }
 
