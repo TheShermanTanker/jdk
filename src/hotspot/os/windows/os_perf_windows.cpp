@@ -361,7 +361,10 @@ static int number_of_live_process_instances() {
   int instances = 0;
   const char* const end = buffer + size;
   for (char* next = buffer; next != end && (*next != '\0'); next = &next[strlen(next) + 1], ++instances);
+PRAGMA_DIAG_PUSH
+PRAGMA_DISABLE_GCC_WARNING("-Wmisleading-indentation")
   assert(instances > 0, "invariant");
+PRAGMA_DIAG_POP
   return instances;
 }
 

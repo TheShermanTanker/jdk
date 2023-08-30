@@ -29,8 +29,8 @@
 #include "utilities/compilerWarnings.hpp"
 #include "utilities/macros.hpp"
 
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 class oopDesc;
 
@@ -148,12 +148,13 @@ public:
 // Note: The signature is vmassert(p, format, ...), but the solaris
 // compiler can't handle an empty ellipsis in a macro without a warning.
 #define vmassert_with_file_and_line(p, file, line, ...)                \
-do {                                                                   \
+{                                                                      \
   if (! VMASSERT_CHECK_PASSED(p)) {                                    \
     TOUCH_ASSERT_POISON;                                               \
     report_vm_error(file, line, "assert(" #p ") failed", __VA_ARGS__); \
   }                                                                    \
-} while (0)
+}                                                                      \
+static_cast<void>(0)
 #define vmassert(p, ...) vmassert_with_file_and_line(p, __FILE__, __LINE__, __VA_ARGS__)
 #endif
 
@@ -175,13 +176,14 @@ do {                                                                   \
 // an extra arg and use strerror to convert it to a meaningful string
 // like "Invalid argument", "out of memory" etc
 #define vmassert_status(p, status, msg) \
-do {                                                                           \
+{                                                                              \
   if (! VMASSERT_CHECK_PASSED(p)) {                                            \
     TOUCH_ASSERT_POISON;                                                       \
     report_vm_status_error(__FILE__, __LINE__, "assert(" #p ") failed",        \
                            status, msg);                                       \
   }                                                                            \
-} while (0)
+}                                                                              \
+static_cast<void>(0)
 #endif // ASSERT
 
 // For backward compatibility.
@@ -192,58 +194,66 @@ do {                                                                           \
 // guarantee is also used for Verify options.
 // guarantee is not subject to DebuggingContext bypass.
 #define guarantee(p, ...)                                                         \
-do {                                                                              \
+{                                                                                 \
   if (!(p)) {                                                                     \
     TOUCH_ASSERT_POISON;                                                          \
     report_vm_error(__FILE__, __LINE__, "guarantee(" #p ") failed", __VA_ARGS__); \
   }                                                                               \
-} while (0)
+}                                                                                 \
+static_cast<void>(0)
 
 #define fatal(...)                                                                \
-do {                                                                              \
+{                                                                                 \
   TOUCH_ASSERT_POISON;                                                            \
   report_fatal(INTERNAL_ERROR, __FILE__, __LINE__, __VA_ARGS__);                  \
-} while (0)
+}                                                                                 \
+static_cast<void>(0)
 
 // out of memory
 #define vm_exit_out_of_memory(size, vm_err_type, ...)                             \
-do {                                                                              \
+{                                                                                 \
   report_vm_out_of_memory(__FILE__, __LINE__, size, vm_err_type, __VA_ARGS__);    \
-} while (0)
+}                                                                                 \
+static_cast<void>(0)
 
 #define check_with_errno(check_type, cond, msg)                                   \
-  do {                                                                            \
+  {                                                                               \
     int err = errno;                                                              \
     check_type(cond, "%s; error='%s' (errno=%s)", msg, os::strerror(err),         \
                os::errno_name(err));                                              \
-} while (false)
+}                                                                                 \
+static_cast<void>(0)
 
 #define assert_with_errno(cond, msg)    check_with_errno(assert, cond, msg)
 #define guarantee_with_errno(cond, msg) check_with_errno(guarantee, cond, msg)
 
 #define ShouldNotCallThis()                                                       \
-do {                                                                              \
+{                                                                                 \
   TOUCH_ASSERT_POISON;                                                            \
   report_should_not_call(__FILE__, __LINE__);                                     \
-} while (0)
+}                                                                                 \
+static_cast<void>(0)
 
 #define ShouldNotReachHere()                                                      \
-do {                                                                              \
+{                                                                                 \
   TOUCH_ASSERT_POISON;                                                            \
   report_should_not_reach_here(__FILE__, __LINE__);                               \
-} while (0)
+}                                                                                 \
+static_cast<void>(0)
 
 #define Unimplemented()                                                           \
-do {                                                                              \
+{                                                                                 \
   TOUCH_ASSERT_POISON;                                                            \
   report_unimplemented(__FILE__, __LINE__);                                       \
-} while (0)
+}                                                                                 \
+static_cast<void>(0)
 
 #define Untested(msg)                                                             \
-do {                                                                              \
+{                                                                                 \
   report_untested(__FILE__, __LINE__, msg);                                       \
   BREAKPOINT;                                                                     \
-} while (0);
+}                                                                                 \
+static_cast<void>(0)
 
 
 // types of VM error - originally in vmError.hpp
