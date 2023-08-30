@@ -361,7 +361,10 @@ static int number_of_live_process_instances() {
   int instances = 0;
   const char* const end = buffer + size;
   for (char* next = buffer; next != end && (*next != '\0'); next = &next[strlen(next) + 1], ++instances);
+PRAGMA_DIAG_PUSH
+PRAGMA_DISABLE_GCC_WARNING("-Wmisleading-indentation")
   assert(instances > 0, "invariant");
+PRAGMA_DIAG_POP
   return instances;
 }
 
@@ -825,8 +828,11 @@ static int count_logical_cpus(const char* instances) {
   DWORD count;
   char* tmp;
   for (count = 0, tmp = const_cast<char*>(instances); *tmp != '\0'; tmp = &tmp[strlen(tmp) + 1], count++);
+PRAGMA_DIAG_PUSH
+PRAGMA_DISABLE_GCC_WARNING("-Wmisleading-indentation")
   // PDH reports an instance for each logical processor plus an instance for the total (_Total)
   assert(count == os::processor_count() + 1, "invalid enumeration!");
+PRAGMA_DIAG_POP
   return count - 1;
 }
 
