@@ -33,28 +33,31 @@
 #include "utilities/numberSeq.hpp"
 
 #define SHENANDOAH_ERGO_DISABLE_FLAG(name)                                  \
-  do {                                                                      \
+  {                                                                         \
     if (FLAG_IS_DEFAULT(name) && (name)) {                                  \
       log_info(gc)("Heuristics ergonomically sets -XX:-" #name);            \
       FLAG_SET_ERGO(name, false);                                           \
     }                                                                       \
-  } while (0)
+  }                                                                         \
+  static_cast<void>(0)
 
 #define SHENANDOAH_ERGO_ENABLE_FLAG(name)                                   \
-  do {                                                                      \
+  {                                                                         \
     if (FLAG_IS_DEFAULT(name) && !(name)) {                                 \
       log_info(gc)("Heuristics ergonomically sets -XX:+" #name);            \
       FLAG_SET_ERGO(name, true);                                            \
     }                                                                       \
-  } while (0)
+  }                                                                         \
+  static_cast<void>(0)
 
 #define SHENANDOAH_ERGO_OVERRIDE_DEFAULT(name, value)                       \
-  do {                                                                      \
+  {                                                                         \
     if (FLAG_IS_DEFAULT(name)) {                                            \
       log_info(gc)("Heuristics ergonomically sets -XX:" #name "=" #value);  \
       FLAG_SET_ERGO(name, value);                                           \
     }                                                                       \
-  } while (0)
+  }                                                                         \
+  static_cast<void>(0)
 
 class ShenandoahCollectionSet;
 class ShenandoahHeapRegion;

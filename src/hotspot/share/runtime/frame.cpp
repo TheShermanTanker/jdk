@@ -388,7 +388,10 @@ frame frame::java_sender() const {
                   RegisterMap::WalkContinuation::skip);
   frame s;
   for (s = sender(&map); !(s.is_java_frame() || s.is_first_frame()); s = s.sender(&map)) ;
+PRAGMA_DIAG_PUSH
+PRAGMA_DISABLE_GCC_WARNING("-Wmisleading-indentation")
   guarantee(s.is_java_frame(), "tried to get caller of first java frame");
+PRAGMA_DIAG_POP
   return s;
 }
 

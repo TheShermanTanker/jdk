@@ -61,19 +61,21 @@
 // ASAN_UNPOISON_MEMORY_REGION is defined in <sanitizer/asan_interface.h>
 #else
 #define ASAN_POISON_MEMORY_REGION(addr, size) \
-  do {                                        \
+  {                                           \
     if (false) {                              \
       ((void) (addr));                        \
       ((void) (size));                        \
     }                                         \
-  } while (false)
+  }                                           \
+  static_cast<void>(0)
 #define ASAN_UNPOISON_MEMORY_REGION(addr, size) \
-  do {                                          \
+  {                                             \
     if (false) {                                \
       ((void) (addr));                          \
       ((void) (size));                          \
     }                                           \
-  } while (false)
+  }                                             \
+  static_cast<void>(0)
 #endif
 
 class outputStream;
