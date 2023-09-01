@@ -36,8 +36,14 @@
 #ifndef _JAVASOFT_JNI_H_
 #define _JAVASOFT_JNI_H_
 
+#ifdef __cplusplus
+#include <cstdio>
+#include <cstdarg>
+#else
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdbool.h>
+#endif
 
 /* jni_md.h contains the machine-dependent typedefs for jbyte, jint
    and jlong */
@@ -56,7 +62,7 @@ extern "C" {
 
 #ifndef JNI_TYPES_ALREADY_DEFINED_IN_JNI_MD_H
 
-typedef unsigned char   jboolean;
+typedef bool            jboolean;
 typedef unsigned short  jchar;
 typedef short           jshort;
 typedef float           jfloat;
@@ -152,8 +158,8 @@ typedef enum _jobjectType {
  * jboolean constants
  */
 
-#define JNI_FALSE 0
-#define JNI_TRUE 1
+#define JNI_FALSE false
+#define JNI_TRUE true
 
 /*
  * possible return values for JNI functions.

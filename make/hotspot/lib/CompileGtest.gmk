@@ -113,6 +113,7 @@ $(eval $(call SetupJdkLibrary, BUILD_GTEST_LIBJVM, \
     DISABLED_WARNINGS_microsoft := $(DISABLED_WARNINGS_microsoft) 4530, \
     LD_SET_ORIGIN := false, \
     DEFAULT_LDFLAGS := false, \
+    DISABLED_WARNINGS_microsoft_test_typeArrayOop.cpp := 4305, \
     LDFLAGS := $(JVM_LDFLAGS), \
     JDK_LIBS := gtest:libgtest, \
     LIBS := $(JVM_LIBS), \
