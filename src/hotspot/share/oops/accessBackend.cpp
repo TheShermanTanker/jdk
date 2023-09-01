@@ -63,6 +63,11 @@ namespace AccessInternal {
   }
 
   template<> NOT_WINDOWS([[gnu::visibility ("hidden")]])
+  void arraycopy_conjoint<jubyte>(jubyte* src, jubyte* dst, size_t length) {
+    Copy::conjoint_jbytes(reinterpret_cast<jbyte*>(src), reinterpret_cast<jbyte*>(dst), length);
+  }
+
+  template<> NOT_WINDOWS([[gnu::visibility ("hidden")]])
   void arraycopy_conjoint<jbyte>(jbyte* src, jbyte* dst, size_t length) {
     Copy::conjoint_jbytes(src, dst, length);
   }
