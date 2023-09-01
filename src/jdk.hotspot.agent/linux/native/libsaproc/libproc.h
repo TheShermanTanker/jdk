@@ -50,6 +50,15 @@
 // This C bool type must be int for compatibility with Linux calls and
 // it would be a mistake to equivalence it to C++ bool on many platforms
 #ifndef __cplusplus
+#ifdef bool
+#undef bool
+#endif
+#ifdef true
+#undef true
+#endif
+#ifdef false
+#undef false
+#endif
 typedef int bool;
 #define true  1
 #define false 0

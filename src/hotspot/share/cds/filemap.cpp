@@ -2051,7 +2051,7 @@ ClassFileStream* FileMapInfo::get_stream_from_class_loader(Handle class_loader,
   typeArrayOop ba = typeArrayOop(obj);
   jint len = ba->length();
   u1* buffer = NEW_RESOURCE_ARRAY(u1, len);
-  ArrayAccess<>::arraycopy_to_native<>(ba, typeArrayOopDesc::element_offset<jbyte>(0), buffer, len);
+  ArrayAccess<>::arraycopy_to_native<void>(ba, typeArrayOopDesc::element_offset<jbyte>(0), buffer, len);
 
   return new ClassFileStream(buffer, len, cpe->name());
 }

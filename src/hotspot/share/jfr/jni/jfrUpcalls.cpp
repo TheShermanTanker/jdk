@@ -306,7 +306,7 @@ ClassFileStream* JfrUpcalls::on_method_trace(InstanceKlass* ik, const ClassFileS
     typeArrayOop byte_array = typeArrayOop(return_object);
     int length = byte_array->length();
     u1* buffer = NEW_RESOURCE_ARRAY_IN_THREAD_RETURN_NULL(THREAD, u1, length);
-    ArrayAccess<>::arraycopy_to_native<>(byte_array, typeArrayOopDesc::element_offset<jbyte>(0), buffer, length);
+    ArrayAccess<>::arraycopy_to_native<void>(byte_array, typeArrayOopDesc::element_offset<jbyte>(0), buffer, length);
     return new ClassFileStream(buffer, length, stream->source(), stream->from_boot_loader_modules_image());
   }
   return nullptr;
