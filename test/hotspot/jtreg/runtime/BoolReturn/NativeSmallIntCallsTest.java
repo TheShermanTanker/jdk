@@ -55,7 +55,7 @@ public class NativeSmallIntCallsTest {
         // Call a constructor or method that passes jboolean values into Java from native
         nativeCallBoolConstructor(1, true);
         nativeCallBoolConstructor(0x10, true);
-        nativeCallBoolConstructor(0x100, false);
-        nativeCallBoolConstructor(0x1000, false);
+        nativeCallBoolConstructor(0x000, false);
+        nativeCallBoolConstructor(0x0000, false);
     }
 }
