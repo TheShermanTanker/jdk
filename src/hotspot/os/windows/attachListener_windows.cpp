@@ -182,6 +182,9 @@ private:
 
   Win32AttachOperationRequest* _next;
 
+#if !defined(__clang__) && defined(__GNUC__)
+  [[gnu::nothrow]]
+#endif
   void set_value(char* dst, const char* str, size_t dst_size) {
     if (str != nullptr) {
         assert(strlen(str) < dst_size, "exceeds maximum length");
@@ -197,7 +200,7 @@ public:
            const char* cmd = nullptr,
            const char* arg0 = nullptr,
            const char* arg1 = nullptr,
-           const char* arg2 = nullptr) {
+           const char* arg2 = nullptr) throw() {
       _ver = ver;
       set_value(_name, cmd, sizeof(_name));
       set_value(_arg[0], arg0, sizeof(_arg[0]));
@@ -205,28 +208,28 @@ public:
       set_value(_arg[2], arg2, sizeof(_arg[2]));
       set_value(_pipe, pipename, sizeof(_pipe));
   }
-  AttachAPIVersion ver() const {
+  AttachAPIVersion ver() const throw() {
     return _ver;
   }
-  const char* cmd() const {
+  const char* cmd() const throw() {
     return _name;
   }
-  const char* arg(int i) const {
+  const char* arg(int i) const throw() {
     return (i >= 0 && i < AttachOperation::arg_count_max) ? _arg[i] : nullptr;
   }
-  const char* pipe() const {
+  const char* pipe() const throw() {
     return _pipe;
   }
 
-  Win32AttachOperationRequest* next() const {
+  Win32AttachOperationRequest* next() const throw() {
     return _next;
   }
-  void set_next(Win32AttachOperationRequest* next) {
+  void set_next(Win32AttachOperationRequest* next) throw() {
     _next = next;
   }
 
   // noarg constructor as operation is preallocated
-  Win32AttachOperationRequest() {
+  Win32AttachOperationRequest() throw() {
     set(ATTACH_API_V1, "<nopipe>");
     set_next(nullptr);
   }
@@ -250,11 +253,11 @@ class Win32AttachListener: AllStatic {
   static Win32AttachOperationRequest* _tail;
 
 
-  static Win32AttachOperationRequest* head()                       { return _head; }
-  static void set_head(Win32AttachOperationRequest* head)          { _head = head; }
+  static Win32AttachOperationRequest* head() throw()               { return _head; }
+  static void set_head(Win32AttachOperationRequest* head) throw()  { _head = head; }
 
-  static Win32AttachOperationRequest* tail()                       { return _tail; }
-  static void set_tail(Win32AttachOperationRequest* tail)          { _tail = tail; }
+  static Win32AttachOperationRequest* tail() throw()               { return _tail; }
+  static void set_tail(Win32AttachOperationRequest* tail) throw()  { _tail = tail; }
 
 
   // A semaphore is used for communication about enqueued operations.

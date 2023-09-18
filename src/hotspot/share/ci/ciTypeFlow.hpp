@@ -576,8 +576,8 @@ public:
 
     // accessors
     ciTypeFlow* outer() const { return state()->outer(); }
-    int start() const         { return _ciblock->start_bci(); }
-    int limit() const         { return _ciblock->limit_bci(); }
+    int start() const throw() { return _ciblock->start_bci(); }
+    int limit() const throw() { return _ciblock->limit_bci(); }
     int control() const       { return _ciblock->control_bci(); }
     JsrSet* jsrs() const      { return _jsrs; }
 

@@ -390,7 +390,7 @@ class Instruction: public CompilationResourceObj {
   }
 
   // creation
-  Instruction(ValueType* type, ValueStack* state_before = nullptr, bool type_is_constant = false)
+  Instruction(ValueType* type, ValueStack* state_before = nullptr, bool type_is_constant = false) throw()
   : _id(Compilation::current()->get_next_id()),
 #ifndef PRODUCT
   _printable_bci(-99),
@@ -412,11 +412,11 @@ class Instruction: public CompilationResourceObj {
   }
 
   // accessors
-  int id() const                                 { return _id; }
+  int id() const throw()                         { return _id; }
 #ifndef PRODUCT
-  bool has_printable_bci() const                 { return _printable_bci != -99; }
+  bool has_printable_bci() const throw()         { return _printable_bci != -99; }
   int printable_bci() const                      { assert(has_printable_bci(), "_printable_bci should have been set"); return _printable_bci; }
-  void set_printable_bci(int bci)                { _printable_bci = bci; }
+  void set_printable_bci(int bci) throw()        { _printable_bci = bci; }
 #endif
   int dominator_depth();
   int use_count() const                          { return _use_count; }
@@ -444,8 +444,8 @@ class Instruction: public CompilationResourceObj {
   XHandlers* exception_handlers() const          { return _exception_handlers; }
 
   // manipulation
-  void pin(PinReason reason)                     { _pin_state |= reason; }
-  void pin()                                     { _pin_state |= PinUnknown; }
+  void pin(PinReason reason) throw()             { _pin_state |= reason; }
+  void pin() throw()                             { _pin_state |= PinUnknown; }
   // DANGEROUS: only used by EliminateStores
   void unpin(PinReason reason)                   { assert((reason & PinUnknown) == 0, "can't unpin unknown state"); _pin_state &= ~reason; }
 
@@ -707,13 +707,13 @@ LEAF(Local, Instruction)
 LEAF(Constant, Instruction)
  public:
   // creation
-  Constant(ValueType* type):
+  Constant(ValueType* type) throw() :
       Instruction(type, nullptr, /*type_is_constant*/ true)
   {
     assert(type->is_constant(), "must be a constant");
   }
 
-  Constant(ValueType* type, ValueStack* state_before, bool kills_memory = false):
+  Constant(ValueType* type, ValueStack* state_before, bool kills_memory = false) throw() :
     Instruction(type, state_before, /*type_is_constant*/ true)
   {
     assert(state_before != nullptr, "only used for constants which need patching");
@@ -763,7 +763,7 @@ BASE(AccessField, Instruction)
  public:
   // creation
   AccessField(Value obj, int offset, ciField* field, bool is_static,
-              ValueStack* state_before, bool needs_patching)
+              ValueStack* state_before, bool needs_patching) throw()
   : Instruction(as_ValueType(field->type()->basic_type()), state_before)
   , _obj(obj)
   , _offset(offset)
@@ -811,7 +811,7 @@ LEAF(LoadField, AccessField)
  public:
   // creation
   LoadField(Value obj, int offset, ciField* field, bool is_static,
-            ValueStack* state_before, bool needs_patching)
+            ValueStack* state_before, bool needs_patching) throw()
   : AccessField(obj, offset, field, is_static, state_before, needs_patching)
   {}
 
@@ -1195,7 +1195,7 @@ BASE(StateSplit, Instruction)
 
  public:
   // creation
-  StateSplit(ValueType* type, ValueStack* state_before = nullptr)
+  StateSplit(ValueType* type, ValueStack* state_before = nullptr) throw()
   : Instruction(type, state_before)
   , _state(nullptr)
   {
@@ -1628,7 +1628,7 @@ LEAF(BlockBegin, StateSplit)
   }
 
   // creation
-  BlockBegin(int bci)
+  BlockBegin(int bci) throw()
   : StateSplit(illegalType)
   , _block_id(Compilation::current()->get_next_block_id())
   , _bci(bci)
@@ -1663,8 +1663,8 @@ LEAF(BlockBegin, StateSplit)
   }
 
   // accessors
-  int block_id() const                           { return _block_id; }
-  int bci() const                                { return _bci; }
+  int block_id() const throw()                   { return _block_id; }
+  int bci() const throw()                        { return _bci; }
   BlockList* dominates()                         { return &_dominates; }
   BlockBegin* dominator() const                  { return _dominator; }
   int loop_depth() const                         { return _loop_depth; }

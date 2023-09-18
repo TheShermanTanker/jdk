@@ -89,10 +89,10 @@ public:
   };
 
   ciBlock(ciMethod *method, int index, int start_bci);
-  int start_bci() const         { return _start_bci; }
-  int limit_bci() const         { return _limit_bci; }
+  int start_bci() const throw() { return _start_bci; }
+  int limit_bci() const throw() { return _limit_bci; }
   int control_bci() const       { return _control_bci; }
-  int index() const             { return _idx; }
+  int index() const throw()     { return _idx; }
   void set_start_bci(int bci)   { _start_bci = bci; }
   void set_limit_bci(int bci)   { _limit_bci = bci; }
   void set_control_bci(int bci) { _control_bci = bci;}

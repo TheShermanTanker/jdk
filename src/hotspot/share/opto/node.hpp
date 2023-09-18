@@ -264,7 +264,7 @@ public:
   // field is a local cache of a value defined in some "program fragment" for
   // which these Nodes are just a part of.
 
-  inline void* operator new(size_t x) throw() {
+  inline void* operator new(size_t x) noexcept {
     Compile* C = Compile::current();
     Node* n = (Node*)C->node_arena()->AmallocWords(x);
     return (void*)n;
@@ -900,14 +900,14 @@ public:
 
   // Other interesting Node properties
   #define DEFINE_CLASS_QUERY(type)                           \
-  bool is_##type() const {                                   \
+  bool is_##type() const throw() {                           \
     return ((_class_id & ClassMask_##type) == Class_##type); \
   }                                                          \
-  type##Node *as_##type() const {                            \
+  type##Node *as_##type() const throw() {                    \
     assert(is_##type(), "invalid node class: %s", Name());   \
     return (type##Node*)this;                                \
   }                                                          \
-  type##Node* isa_##type() const {                           \
+  type##Node* isa_##type() const throw() {                   \
     return (is_##type()) ? as_##type() : nullptr;            \
   }
 

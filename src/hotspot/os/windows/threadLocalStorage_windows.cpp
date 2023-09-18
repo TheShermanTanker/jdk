@@ -39,7 +39,7 @@ void ThreadLocalStorage::init() {
   _initialized = true;
 }
 
-bool ThreadLocalStorage::is_initialized() {
+bool ThreadLocalStorage::is_initialized() throw() {
   return _initialized;
 }
 

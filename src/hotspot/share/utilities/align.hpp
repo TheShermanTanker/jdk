@@ -36,7 +36,7 @@
 // The alignment must be a power of 2. Returns alignment - 1, which is
 // a mask with all bits set below alignment's single bit.
 template<typename T, ENABLE_IF(std::is_integral<T>::value)>
-static constexpr T alignment_mask(T alignment) {
+static constexpr T alignment_mask(T alignment) throw() {
   assert(is_power_of_2(alignment),
          "must be a power of 2: " UINT64_FORMAT, (uint64_t)alignment);
   return alignment - 1;
@@ -44,7 +44,7 @@ static constexpr T alignment_mask(T alignment) {
 
 // Some "integral" constant alignments are defined via enum.
 template<typename T, ENABLE_IF(std::is_enum<T>::value)>
-static constexpr auto alignment_mask(T alignment) {
+static constexpr auto alignment_mask(T alignment) throw() {
   return alignment_mask(static_cast<std::underlying_type_t<T>>(alignment));
 }
 
@@ -55,7 +55,7 @@ static constexpr auto alignment_mask(T alignment) {
 // as "integral" constants that need aligning.
 
 template<typename T, typename A, ENABLE_IF(std::is_integral<T>::value)>
-constexpr bool is_aligned(T size, A alignment) {
+constexpr bool is_aligned(T size, A alignment) throw() {
   return (size & alignment_mask(alignment)) == 0;
 }
 
@@ -109,7 +109,7 @@ inline T* align_down(T* ptr, A alignment) {
 }
 
 template <typename T, typename A>
-inline bool is_aligned(T* ptr, A alignment) {
+inline bool is_aligned(T* ptr, A alignment) throw() {
   return is_aligned((uintptr_t)ptr, alignment);
 }
 

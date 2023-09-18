@@ -53,7 +53,10 @@ private:
   ciInstanceKlass* _known_to_link_with_get;
   ciConstant       _constant_value;
 
-  ciType* compute_type();
+  ciType* compute_type() throw();
+#if !defined(__clang__) && defined(__GNUC__)
+  [[gnu::nothrow]]
+#endif
   ciType* compute_type_impl();
 
   ciField(ciInstanceKlass* klass, int index, Bytecodes::Code bc);
@@ -99,7 +102,7 @@ public:
   ciSymbol* signature() const { return _signature; }
 
   // Of what type is this field?
-  ciType* type() { return (_type == nullptr) ? compute_type() : _type; }
+  ciType* type() throw() { return (_type == nullptr) ? compute_type() : _type; }
 
   // How is this field actually stored in memory?
   BasicType layout_type() { return type2field[(_type == nullptr) ? T_OBJECT : _type->basic_type()]; }

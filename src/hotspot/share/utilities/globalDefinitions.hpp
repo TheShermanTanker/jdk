@@ -469,17 +469,17 @@ typedef const u_char* const_address;
 // are safe because we know that top() is at least size below end().
 inline size_t pointer_delta(const volatile void* high,
                             const volatile void* low,
-                            size_t element_size) {
+                            size_t element_size) throw() {
   assert(high >= low, "avoid underflow - high address: " PTR_FORMAT " low address: " PTR_FORMAT, p2i(high), p2i(low));
   return (((uintptr_t) high) - ((uintptr_t) low)) / element_size;
 }
 
 // A version specialized for HeapWord*'s.
-inline size_t pointer_delta(const HeapWord* high, const HeapWord* low) {
+inline size_t pointer_delta(const HeapWord* high, const HeapWord* low) throw() {
   return pointer_delta(high, low, sizeof(HeapWord));
 }
 // A version specialized for MetaWord*'s.
-inline size_t pointer_delta(const MetaWord* high, const MetaWord* low) {
+inline size_t pointer_delta(const MetaWord* high, const MetaWord* low) throw() {
   return pointer_delta(high, low, sizeof(MetaWord));
 }
 

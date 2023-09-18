@@ -43,7 +43,7 @@ constexpr T max_power_of_2() {
 
 // Returns true iff there exists integer i such that (T(1) << i) == value.
 template <typename T, ENABLE_IF(std::is_integral<T>::value)>
-constexpr bool is_power_of_2(T value) {
+constexpr bool is_power_of_2(T value) throw() {
   return (value > T(0)) && ((value & (value - 1)) == T(0));
 }
 

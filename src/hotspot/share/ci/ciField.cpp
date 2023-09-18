@@ -311,7 +311,7 @@ ciConstant ciField::constant_value_of(ciObject* object) {
 // ciField::compute_type
 //
 // Lazily compute the type, if it is an instance klass.
-ciType* ciField::compute_type() {
+ciType* ciField::compute_type() throw() {
   GUARDED_VM_ENTRY(return compute_type_impl();)
 }
 

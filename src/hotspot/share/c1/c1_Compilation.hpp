@@ -128,7 +128,7 @@ class Compilation: public StackObj {
   ~Compilation();
 
 
-  static Compilation* current() {
+  static Compilation* current() throw() {
     return (Compilation*) ciEnv::current()->compiler_data();
   }
 
@@ -152,18 +152,18 @@ class Compilation: public StackObj {
   CodeBuffer* code()                             { return &_code; }
   C1_MacroAssembler* masm() const                { return _masm; }
   CodeOffsets* offsets()                         { return &_offsets; }
-  Arena* arena()                                 { return _arena; }
+  Arena* arena() throw()                         { return _arena; }
   bool has_access_indexed()                      { return _has_access_indexed; }
   bool should_install_code()                     { return _install_code; }
   LinearScan* allocator()                        { return _allocator; }
 
   // Instruction ids
-  int get_next_id()                              { return _next_id++; }
-  int number_of_instructions() const             { return _next_id; }
+  int get_next_id() throw()                      { return _next_id++; }
+  int number_of_instructions() const throw()     { return _next_id; }
 
   // BlockBegin ids
-  int get_next_block_id()                        { return _next_block_id++; }
-  int number_of_blocks() const                   { return _next_block_id; }
+  int get_next_block_id() throw()                { return _next_block_id++; }
+  int number_of_blocks() const throw()           { return _next_block_id; }
 
   // setters
   void set_has_exception_handlers(bool f)        { _has_exception_handlers = f; }

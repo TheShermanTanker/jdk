@@ -254,6 +254,9 @@ void DumpRegion::commit_to(char* newtop) {
 }
 
 // Basic allocation. Any alignment gaps will be wasted.
+#if !defined(__clang__) && defined(__GNUC__)
+[[gnu::nothrow]]
+#endif
 char* DumpRegion::allocate(size_t num_bytes, size_t alignment) {
   // Always align to at least minimum alignment
   alignment = MAX2(SharedSpaceObjectAlignment, alignment);

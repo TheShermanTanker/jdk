@@ -180,7 +180,7 @@ private:
 
   NativeCall* _call;
 
-  CompiledDirectCall(NativeCall* call) : _call(call) {}
+  CompiledDirectCall(NativeCall* call) throw() : _call(call) {}
 
  public:
   // Returns null if CodeBuffer::expand fails
@@ -190,13 +190,13 @@ private:
   static int reloc_to_interp_stub();
 
   static inline CompiledDirectCall* before(address return_addr) {
-    CompiledDirectCall* st = new CompiledDirectCall(nativeCall_before(return_addr));
+    CompiledDirectCall* st = new CompiledDirectCall(reinterpret_cast<NativeCall *(*)(address) throw()>(&nativeCall_before)(return_addr));
     if (VerifyInlineCaches) st->verify();
     return st;
   }
 
   static inline CompiledDirectCall* at(address native_call) {
-    CompiledDirectCall* st = new CompiledDirectCall(nativeCall_at(native_call));
+    CompiledDirectCall* st = new CompiledDirectCall(reinterpret_cast<NativeCall *(*)(address) throw()>(&nativeCall_at)(native_call));
     if (VerifyInlineCaches) st->verify();
     return st;
   }

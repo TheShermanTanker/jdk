@@ -38,10 +38,10 @@ ifeq ($(call check-jvm-feature, compiler2), true)
   # Flags depending on the build platform/tool chain
   # NOTE: No optimization or debug flags set here
   ifeq ($(call isBuildOs, linux), true)
-    ADLC_CFLAGS := -fno-exceptions -DLINUX
+    ADLC_CFLAGS := -DLINUX
   else ifeq ($(call isBuildOs, aix), true)
     ADLC_LDFLAGS += -m64
-    ADLC_CFLAGS := -fno-rtti -fexceptions -ffunction-sections -m64 -DAIX -mcpu=pwr8
+    ADLC_CFLAGS := -fexceptions -ffunction-sections -m64 -DAIX -mcpu=pwr8
   else ifeq ($(call isBuildOs, windows), true)
     ifeq ($(TOOLCHAIN_TYPE), microsoft)
       ADLC_CFLAGS := -nologo -EHsc

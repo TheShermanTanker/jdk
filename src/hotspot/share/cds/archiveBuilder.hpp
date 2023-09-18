@@ -359,18 +359,18 @@ public:
   bool gather_one_source_obj(MetaspaceClosure::Ref* ref, bool read_only);
   void remember_embedded_pointer_in_enclosing_obj(MetaspaceClosure::Ref* ref);
 
-  DumpRegion* pz_region() { return &_pz_region; }
-  DumpRegion* rw_region() { return &_rw_region; }
-  DumpRegion* ro_region() { return &_ro_region; }
-  DumpRegion* ac_region() { return &_ac_region; }
+  DumpRegion* pz_region() throw() { return &_pz_region; }
+  DumpRegion* rw_region() throw() { return &_rw_region; }
+  DumpRegion* ro_region() throw() { return &_ro_region; }
+  DumpRegion* ac_region() throw() { return &_ac_region; }
 
-  static char* rw_region_alloc(size_t num_bytes) {
+  static char* rw_region_alloc(size_t num_bytes) throw() {
     return current()->rw_region()->allocate(num_bytes);
   }
-  static char* ro_region_alloc(size_t num_bytes) {
+  static char* ro_region_alloc(size_t num_bytes) throw() {
     return current()->ro_region()->allocate(num_bytes);
   }
-  static char* ac_region_alloc(size_t num_bytes) {
+  static char* ac_region_alloc(size_t num_bytes) throw() {
     return current()->ac_region()->allocate(num_bytes);
   }
 
@@ -451,7 +451,7 @@ public:
     NOT_CDS(return false;)
   }
 
-  static ArchiveBuilder* current() {
+  static ArchiveBuilder* current() throw() {
     assert(_current != nullptr, "ArchiveBuilder must be active");
     return _current;
   }

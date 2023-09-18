@@ -144,9 +144,12 @@ protected:
   char* _max;                   // and max in current chunk
 
   // Get a new Chunk of at least size x
+#if !defined(__clang__) && defined(__GNUC__)
+  [[gnu::nothrow]]
+#endif
   void* grow(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM);
 
-  void* internal_amalloc(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM)  {
+  void* internal_amalloc(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM) throw() {
     assert(is_aligned(x, BytesPerWord), "misaligned size");
     if (pointer_delta(_max, _hwm, 1) >= x) {
       char *old = _hwm;
@@ -169,7 +172,7 @@ protected:
 
   // Fast allocate in the arena.  Common case aligns to the size of jlong which is 64 bits
   // on both 32 and 64 bit platforms. Required for atomic jlong operations on 32 bits.
-  void* Amalloc(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM) {
+  void* Amalloc(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM) throw() {
     x = ARENA_ALIGN(x);  // note for 32 bits this should align _hwm as well.
     // Amalloc guarantees 64-bit alignment and we need to ensure that in case the preceding
     // allocation was AmallocWords. Only needed on 32-bit - on 64-bit Amalloc and AmallocWords are
@@ -181,7 +184,7 @@ protected:
 
   // Allocate in the arena, assuming the size has been aligned to size of pointer, which
   // is 4 bytes on 32 bits, hence the name.
-  void* AmallocWords(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM) {
+  void* AmallocWords(size_t x, AllocFailType alloc_failmode = AllocFailStrategy::EXIT_OOM) throw() {
     assert(is_aligned(x, BytesPerWord), "misaligned size");
     return internal_amalloc(x, alloc_failmode);
   }

@@ -1015,7 +1015,7 @@ public:
 
  public:
   // Returns the running thread as a JavaThread
-  static JavaThread* current() {
+  static JavaThread* current() throw() {
     return JavaThread::cast(Thread::current());
   }
 
@@ -1023,7 +1023,7 @@ public:
   static inline JavaThread* current_or_null();
 
   // Casts
-  static JavaThread* cast(Thread* t) {
+  static JavaThread* cast(Thread* t) throw() {
     assert(t->is_Java_thread(), "incorrect cast to JavaThread");
     return static_cast<JavaThread*>(t);
   }

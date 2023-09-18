@@ -551,11 +551,11 @@ public:
   // Accessors
 
   // The Compile instance currently active in this (compiler) thread.
-  static Compile* current() {
+  static Compile* current() throw() {
     return (Compile*) ciEnv::current()->compiler_data();
   }
 
-  int interpreter_frame_size() const            { return _interpreter_frame_size; }
+  int interpreter_frame_size() const throw()    { return _interpreter_frame_size; }
 
   PhaseOutput*      output() const              { return _output; }
   void              set_output(PhaseOutput* o)  { _output = o; }
@@ -824,9 +824,9 @@ public:
   void sort_expensive_nodes();
 
   // Compilation environment.
-  Arena*      comp_arena()           { return &_comp_arena; }
-  ciEnv*      env() const            { return _env; }
-  CompileLog* log() const            { return _log; }
+  Arena*      comp_arena() throw()   { return &_comp_arena; }
+  ciEnv*      env() const throw()    { return _env; }
+  CompileLog* log() const throw()    { return _log; }
 
   bool        failing_internal() const {
     return _env->failing() ||

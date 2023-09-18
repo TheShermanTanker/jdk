@@ -83,11 +83,11 @@ class CompilerThread : public JavaThread {
   Timeout*              _timeout;
  public:
 
-  static CompilerThread* current() {
+  static CompilerThread* current() throw() {
     return CompilerThread::cast(JavaThread::current());
   }
 
-  static CompilerThread* cast(Thread* t) {
+  static CompilerThread* cast(Thread* t) throw() {
     assert(t->is_Compiler_thread(), "incorrect cast to CompilerThread");
     return static_cast<CompilerThread*>(t);
   }
@@ -110,8 +110,8 @@ class CompilerThread : public JavaThread {
   void set_arenastat(ArenaStatCounter* v)        { _arena_stat = v; }
 
   // Get/set the thread's compilation environment.
-  ciEnv*        env()                            { return _env; }
-  void          set_env(ciEnv* env)              { _env = env; }
+  ciEnv*        env() throw()                    { return _env; }
+  void          set_env(ciEnv* env) throw()      { _env = env; }
 
   BufferBlob*   get_buffer_blob() const          { return _buffer_blob; }
   void          set_buffer_blob(BufferBlob* b)   { _buffer_blob = b; }

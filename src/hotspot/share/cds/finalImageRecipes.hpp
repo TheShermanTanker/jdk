@@ -56,7 +56,7 @@ class FinalImageRecipes {
   Array<Array<int>*>* _cp_recipes;
   Array<int>* _flags;
 
-  FinalImageRecipes() : _all_klasses(nullptr), _cp_recipes(nullptr), _flags(nullptr) {}
+  FinalImageRecipes() throw() : _all_klasses(nullptr), _cp_recipes(nullptr), _flags(nullptr) {}
 
   void* operator new(size_t size) throw();
 

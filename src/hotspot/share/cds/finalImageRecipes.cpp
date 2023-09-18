@@ -217,7 +217,7 @@ void FinalImageRecipes::load_all_classes(TRAPS) {
 
 void FinalImageRecipes::record_recipes() {
   assert(CDSConfig::is_dumping_preimage_static_archive(), "must be");
-  _final_image_recipes = new FinalImageRecipes();
+  _final_image_recipes = ::new (ArchiveBuilder::current()->ro_region_alloc(sizeof (FinalImageRecipes))) FinalImageRecipes();
   _final_image_recipes->record_all_classes();
   _final_image_recipes->record_recipes_for_constantpool();
 }

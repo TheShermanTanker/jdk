@@ -173,19 +173,19 @@ class Parse : public GraphKit {
     // Set up the block's relations to other blocks.
     void init_graph(Parse* outer);
 
-    ciTypeFlow::Block* flow() const        { return _flow; }
-    int pred_count() const                 { return _pred_count; }
-    int preds_parsed() const               { return _preds_parsed; }
-    bool is_parsed() const                 { return _is_parsed; }
-    bool is_handler() const                { return _is_handler; }
-    void set_count( uint x )               { _count = x; }
-    uint count() const                     { return _count; }
+    ciTypeFlow::Block* flow() const throw(){ return _flow; }
+    int pred_count() const throw()         { return _pred_count; }
+    int preds_parsed() const throw()       { return _preds_parsed; }
+    bool is_parsed() const throw()         { return _is_parsed; }
+    bool is_handler() const throw()        { return _is_handler; }
+    void set_count( uint x ) throw()       { _count = x; }
+    uint count() const throw()             { return _count; }
 
     SafePointNode* start_map() const       { assert(is_merged(),"");   return _start_map; }
     void set_start_map(SafePointNode* m)   { assert(!is_merged(), ""); _start_map = m; }
 
     // True after any predecessor flows control into this block
-    bool is_merged() const                 { return _start_map != nullptr; }
+    bool is_merged() const throw()         { return _start_map != nullptr; }
 
 #ifdef ASSERT
     // True after backedge predecessor flows control into this block
@@ -213,8 +213,8 @@ class Parse : public GraphKit {
     }
     Block* successor_for_bci(int bci);
 
-    int start() const                      { return flow()->start(); }
-    int limit() const                      { return flow()->limit(); }
+    int start() const throw()              { return flow()->start(); }
+    int limit() const throw()              { return flow()->limit(); }
     int rpo() const                        { return flow()->rpo(); }
     int start_sp() const                   { return flow()->stack_size(); }
 
@@ -633,7 +633,7 @@ class UnstableIfTrap {
   int _next_bci;
 
 public:
-  UnstableIfTrap(CallStaticJavaNode* call, Parse::Block* path): _unc(call), _modified(false) {
+  UnstableIfTrap(CallStaticJavaNode* call, Parse::Block* path) throw() : _unc(call), _modified(false) {
     assert(_unc != nullptr && Deoptimization::trap_request_reason(_unc->uncommon_trap_request()) == Deoptimization::Reason_unstable_if,
           "invalid uncommon_trap call!");
     _next_bci = path != nullptr ? path->start() : -1;

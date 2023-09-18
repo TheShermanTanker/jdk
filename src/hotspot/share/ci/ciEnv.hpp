@@ -443,14 +443,14 @@ public:
   Arena*    arena() { return _arena; }
 
   // What is the current compilation environment?
-  static ciEnv* current() { return CompilerThread::current()->env(); }
+  static ciEnv* current() throw() { return CompilerThread::current()->env(); }
 
   // Overload with current thread argument
-  static ciEnv* current(CompilerThread *thread) { return thread->env(); }
+  static ciEnv* current(CompilerThread *thread) throw() { return thread->env(); }
 
   // Per-compiler data.  (Used by C2 to publish the Compile* pointer.)
-  void* compiler_data() const { return _compiler_data; }
-  void set_compiler_data(void* x) { _compiler_data = x; }
+  void* compiler_data() const throw() { return _compiler_data; }
+  void set_compiler_data(void* x) throw() { _compiler_data = x; }
 
   // Notice that a method has been inlined in the current compile;
   // used only for statistics.
