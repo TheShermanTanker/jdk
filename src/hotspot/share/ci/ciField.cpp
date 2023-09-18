@@ -315,11 +315,11 @@ ciConstant ciField::constant_value_of(ciObject* object) {
 // ciField::compute_type
 //
 // Lazily compute the type, if it is an instance klass.
-ciType* ciField::compute_type() {
+ciType* ciField::compute_type() noexcept {
   GUARDED_VM_ENTRY(return compute_type_impl();)
 }
 
-ciType* ciField::compute_type_impl() {
+ciType* ciField::compute_type_impl() noexcept {
   ciKlass* type = CURRENT_ENV->get_klass_by_name_impl(_holder, constantPoolHandle(), _signature, false);
   if (!type->is_primitive_type() && is_shared()) {
     // We must not cache a pointer to an unshared type, in a shared field.

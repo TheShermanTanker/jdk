@@ -1088,7 +1088,7 @@ public:
 
  public:
   // Returns the running thread as a JavaThread
-  static JavaThread* current() {
+  static JavaThread* current() noexcept {
     return JavaThread::cast(Thread::current());
   }
 

@@ -339,9 +339,9 @@ class Thread: public ThreadShadow {
   virtual const char* type_name() const { return "Thread"; }
 
   // Returns the current thread (ASSERTS if null)
-  static inline Thread* current();
+  static inline Thread* current() noexcept;
   // Returns the current thread, or null if not attached
-  static inline Thread* current_or_null();
+  static inline Thread* current_or_null() noexcept;
   // Returns the current thread, or null if not attached, and is
   // safe for use from signal-handlers
   static inline Thread* current_or_null_safe();
@@ -647,13 +647,13 @@ class ThreadInAsgct {
 };
 
 // Inline implementation of Thread::current()
-inline Thread* Thread::current() {
+inline Thread* Thread::current() noexcept {
   Thread* current = current_or_null();
   assert(current != nullptr, "Thread::current() called on detached thread");
   return current;
 }
 
-inline Thread* Thread::current_or_null() {
+inline Thread* Thread::current_or_null() throw() {
   return _thr_current;
 }
 

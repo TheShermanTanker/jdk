@@ -122,7 +122,7 @@ ciObject* ObjectConstant::constant_value() const                   { return _val
 ciObject* ArrayConstant::constant_value() const                    { return _value; }
 ciObject* InstanceConstant::constant_value() const                 { return _value; }
 
-ValueType* as_ValueType(BasicType type) {
+ValueType* as_ValueType(BasicType type) noexcept {
   switch (type) {
     case T_VOID   : return voidType;
     case T_BYTE   : // fall through

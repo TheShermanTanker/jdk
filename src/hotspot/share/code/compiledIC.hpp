@@ -102,7 +102,7 @@ private:
   CompiledICData* _data;
   NativeCall* _call;
 
-  CompiledIC(RelocIterator* iter);
+  CompiledIC(RelocIterator* iter) noexcept;
 
   // CompiledICData wrappers
   void ensure_initialized(CallInfo* call_info, Klass* receiver_klass);
@@ -114,10 +114,10 @@ private:
 
 public:
   // conversion (machine PC to CompiledIC*)
-  friend CompiledIC* CompiledIC_before(nmethod* nm, address return_addr);
-  friend CompiledIC* CompiledIC_at(nmethod* nm, address call_site);
-  friend CompiledIC* CompiledIC_at(Relocation* call_site);
-  friend CompiledIC* CompiledIC_at(RelocIterator* reloc_iter);
+  friend CompiledIC* CompiledIC_before(nmethod* nm, address return_addr) noexcept;
+  friend CompiledIC* CompiledIC_at(nmethod* nm, address call_site) noexcept;
+  friend CompiledIC* CompiledIC_at(Relocation* call_site) noexcept;
+  friend CompiledIC* CompiledIC_at(RelocIterator* reloc_iter) noexcept;
 
   CompiledICData* data() const;
 
@@ -146,10 +146,10 @@ public:
   void verify()            PRODUCT_RETURN;
 };
 
-CompiledIC* CompiledIC_before(nmethod* nm, address return_addr);
-CompiledIC* CompiledIC_at(nmethod* nm, address call_site);
-CompiledIC* CompiledIC_at(Relocation* call_site);
-CompiledIC* CompiledIC_at(RelocIterator* reloc_iter);
+CompiledIC* CompiledIC_before(nmethod* nm, address return_addr) noexcept;
+CompiledIC* CompiledIC_at(nmethod* nm, address call_site) noexcept;
+CompiledIC* CompiledIC_at(Relocation* call_site) noexcept;
+CompiledIC* CompiledIC_at(RelocIterator* reloc_iter) noexcept;
 
 //-----------------------------------------------------------------------------
 // The CompiledDirectCall represents a call to a method in the compiled code
@@ -181,7 +181,7 @@ private:
 
   NativeCall* _call;
 
-  CompiledDirectCall(NativeCall* call) : _call(call) {}
+  CompiledDirectCall(NativeCall* call) noexcept : _call(call) {}
 
  public:
   // Returns null if CodeBuffer::expand fails
@@ -190,13 +190,13 @@ private:
   static int to_trampoline_stub_size();
   static int reloc_to_interp_stub();
 
-  static inline CompiledDirectCall* before(address return_addr) {
+  static inline CompiledDirectCall* before(address return_addr) noexcept {
     CompiledDirectCall* st = new CompiledDirectCall(nativeCall_before(return_addr));
     if (VerifyInlineCaches) st->verify();
     return st;
   }
 
-  static inline CompiledDirectCall* at(address native_call) {
+  static inline CompiledDirectCall* at(address native_call) noexcept {
     CompiledDirectCall* st = new CompiledDirectCall(nativeCall_at(native_call));
     if (VerifyInlineCaches) st->verify();
     return st;

@@ -105,7 +105,7 @@ inline NativeInstruction* nativeInstruction_at(address address) {
 }
 
 class NativeCall;
-inline NativeCall* nativeCall_at(address address);
+inline NativeCall* nativeCall_at(address address) noexcept;
 // The NativeCall is an abstraction for accessing/manipulating native call imm32/rel32off
 // instructions (used to manipulate inline caches, primitive & dll calls, etc.).
 
@@ -140,8 +140,8 @@ class NativeCall: public NativeInstruction {
   void  print();
 
   // Creation
-  inline friend NativeCall* nativeCall_at(address address);
-  inline friend NativeCall* nativeCall_before(address return_address);
+  inline friend NativeCall* nativeCall_at(address address) noexcept;
+  inline friend NativeCall* nativeCall_before(address return_address) noexcept;
 
   static bool is_call_at(address instr) {
     return ((*instr) & 0xFF) == NativeCall::instruction_code;
@@ -162,7 +162,7 @@ class NativeCall: public NativeInstruction {
   static void replace_mt_safe(address instr_addr, address code_buffer);
 };
 
-inline NativeCall* nativeCall_at(address address) {
+inline NativeCall* nativeCall_at(address address) noexcept {
   NativeCall* call = (NativeCall*)(address - NativeCall::instruction_offset);
 #ifdef ASSERT
   call->verify();
@@ -170,7 +170,7 @@ inline NativeCall* nativeCall_at(address address) {
   return call;
 }
 
-inline NativeCall* nativeCall_before(address return_address) {
+inline NativeCall* nativeCall_before(address return_address) noexcept {
   NativeCall* call = (NativeCall*)(return_address - NativeCall::return_address_offset);
 #ifdef ASSERT
   call->verify();

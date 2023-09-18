@@ -128,7 +128,7 @@ class Compilation: public StackObj {
   ~Compilation();
 
 
-  static Compilation* current() {
+  static Compilation* current() noexcept {
     return (Compilation*) ciEnv::current()->compiler_data();
   }
 
@@ -162,7 +162,7 @@ class Compilation: public StackObj {
   int number_of_instructions() const             { return _next_id; }
 
   // BlockBegin ids
-  int get_next_block_id()                        { return _next_block_id++; }
+  int get_next_block_id() noexcept               { return _next_block_id++; }
   int number_of_blocks() const                   { return _next_block_id; }
 
   // setters

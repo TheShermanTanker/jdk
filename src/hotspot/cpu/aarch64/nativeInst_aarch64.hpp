@@ -153,7 +153,7 @@ inline NativeInstruction* nativeInstruction_at(uint32_t* address) {
   return (NativeInstruction*)address;
 }
 
-inline NativeCall* nativeCall_at(address address);
+inline NativeCall* nativeCall_at(address address) noexcept;
 // The NativeCall is an abstraction for accessing/manipulating native
 // call instructions (used to manipulate inline caches, primitive &
 // DSO calls, etc.).
@@ -190,8 +190,8 @@ public:
   void verify();
 
   // Creation
-  inline friend NativeCall* nativeCall_at(address address);
-  inline friend NativeCall* nativeCall_before(address return_address);
+  inline friend NativeCall* nativeCall_at(address address) noexcept;
+  inline friend NativeCall* nativeCall_before(address return_address) noexcept;
 
   static bool is_call_before(address return_address) {
     return is_call_at(return_address - NativeCall::return_address_offset);
@@ -221,13 +221,13 @@ public:
 #endif
 };
 
-inline NativeCall* nativeCall_at(address address) {
+inline NativeCall* nativeCall_at(address address) noexcept {
   NativeCall* call = (NativeCall*)(address - NativeCall::instruction_offset);
   DEBUG_ONLY(call->verify());
   return call;
 }
 
-inline NativeCall* nativeCall_before(address return_address) {
+inline NativeCall* nativeCall_before(address return_address) noexcept {
   NativeCall* call = (NativeCall*)(return_address - NativeCall::return_address_offset);
   DEBUG_ONLY(call->verify());
   return call;

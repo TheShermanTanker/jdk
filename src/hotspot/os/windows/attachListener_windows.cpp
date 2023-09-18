@@ -182,7 +182,7 @@ private:
 
   Win32AttachOperationRequest* _next;
 
-  void set_value(char* dst, const char* str, size_t dst_size) {
+  void set_value(char* dst, const char* str, size_t dst_size) noexcept {
     if (str != nullptr) {
         assert(strlen(str) < dst_size, "exceeds maximum length");
         strncpy(dst, str, dst_size - 1);
@@ -197,7 +197,7 @@ public:
            const char* cmd = nullptr,
            const char* arg0 = nullptr,
            const char* arg1 = nullptr,
-           const char* arg2 = nullptr) {
+           const char* arg2 = nullptr) noexcept {
       _ver = ver;
       set_value(_name, cmd, sizeof(_name));
       set_value(_arg[0], arg0, sizeof(_arg[0]));
@@ -205,28 +205,28 @@ public:
       set_value(_arg[2], arg2, sizeof(_arg[2]));
       set_value(_pipe, pipename, sizeof(_pipe));
   }
-  AttachAPIVersion ver() const {
+  AttachAPIVersion ver() const noexcept {
     return _ver;
   }
-  const char* cmd() const {
+  const char* cmd() const noexcept {
     return _name;
   }
-  const char* arg(int i) const {
+  const char* arg(int i) const noexcept {
     return (i >= 0 && i < AttachOperation::arg_count_max) ? _arg[i] : nullptr;
   }
-  const char* pipe() const {
+  const char* pipe() const noexcept {
     return _pipe;
   }
 
-  Win32AttachOperationRequest* next() const {
+  Win32AttachOperationRequest* next() const noexcept {
     return _next;
   }
-  void set_next(Win32AttachOperationRequest* next) {
+  void set_next(Win32AttachOperationRequest* next) noexcept {
     _next = next;
   }
 
   // noarg constructor as operation is preallocated
-  Win32AttachOperationRequest() {
+  Win32AttachOperationRequest() noexcept {
     set(ATTACH_API_V1, "<nopipe>");
     set_next(nullptr);
   }
