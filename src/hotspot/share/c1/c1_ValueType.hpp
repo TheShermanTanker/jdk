@@ -99,7 +99,7 @@ class ValueType: public CompilationResourceObj {
   const ValueTag _tag;
   ValueType();
  protected:
-  ValueType(ValueTag tag, int size): _size(size), _tag(tag) {}
+  ValueType(ValueTag tag, int size) noexcept : _size(size), _tag(tag) {}
 
  public:
   // initialization
@@ -114,7 +114,7 @@ class ValueType: public CompilationResourceObj {
   }
   virtual char tchar() const                     = 0; // the type 'character' for printing
   virtual const char* name() const               = 0; // the type name for printing
-  virtual bool is_constant() const               { return false; }
+  virtual bool is_constant() const noexcept      { return false; }
 
   // testers
   bool is_void()                                 { return tag() == voidTag;   }
@@ -173,7 +173,7 @@ class ValueType: public CompilationResourceObj {
 
 class VoidType: public ValueType {
  public:
-  VoidType(): ValueType(voidTag, 0) {}
+  VoidType() noexcept : ValueType(voidTag, 0) {}
   virtual ValueType* base() const                { return voidType; }
   virtual char tchar() const                     { return 'v'; }
   virtual const char* name() const               { return "void"; }
@@ -183,7 +183,7 @@ class VoidType: public ValueType {
 
 class IntType: public ValueType {
  public:
-  IntType(): ValueType(intTag, 1) {}
+  IntType() noexcept : ValueType(intTag, 1) {}
   virtual ValueType* base() const                { return intType; }
   virtual char tchar() const                     { return 'i'; }
   virtual const char* name() const               { return "int"; }
@@ -196,18 +196,18 @@ class IntConstant: public IntType {
   jint _value;
 
  public:
-  IntConstant(jint value)                        { _value = value; }
+  IntConstant(jint value) noexcept               { _value = value; }
 
   jint value() const                             { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual IntConstant* as_IntConstant()          { return this; }
 };
 
 
 class LongType: public ValueType {
  public:
-  LongType(): ValueType(longTag, 2) {}
+  LongType() noexcept : ValueType(longTag, 2) {}
   virtual ValueType* base() const                { return longType; }
   virtual char tchar() const                     { return 'l'; }
   virtual const char* name() const               { return "long"; }
@@ -220,18 +220,18 @@ class LongConstant: public LongType {
   jlong _value;
 
  public:
-  LongConstant(jlong value)                      { _value = value; }
+  LongConstant(jlong value) noexcept             { _value = value; }
 
   jlong value() const                            { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual LongConstant* as_LongConstant()        { return this; }
 };
 
 
 class FloatType: public ValueType {
  public:
-  FloatType(): ValueType(floatTag, 1) {}
+  FloatType() noexcept : ValueType(floatTag, 1) {}
   virtual ValueType* base() const                { return floatType; }
   virtual char tchar() const                     { return 'f'; }
   virtual const char* name() const               { return "float"; }
@@ -244,18 +244,18 @@ class FloatConstant: public FloatType {
   jfloat _value;
 
  public:
-  FloatConstant(jfloat value)                    { _value = value; }
+  FloatConstant(jfloat value) noexcept           { _value = value; }
 
   jfloat value() const                           { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual FloatConstant* as_FloatConstant()      { return this; }
 };
 
 
 class DoubleType: public ValueType {
  public:
-  DoubleType(): ValueType(doubleTag, 2) {}
+  DoubleType() noexcept : ValueType(doubleTag, 2) {}
   virtual ValueType* base() const                { return doubleType; }
   virtual char tchar() const                     { return 'd'; }
   virtual const char* name() const               { return "double"; }
@@ -268,18 +268,18 @@ class DoubleConstant: public DoubleType {
   jdouble _value;
 
  public:
-  DoubleConstant(jdouble value)                  { _value = value; }
+  DoubleConstant(jdouble value) noexcept         { _value = value; }
 
   jdouble value() const                          { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual DoubleConstant* as_DoubleConstant()    { return this; }
 };
 
 
 class ObjectType: public ValueType {
  public:
-  ObjectType(): ValueType(objectTag, 1) {}
+  ObjectType() noexcept : ValueType(objectTag, 1) {}
   virtual ValueType* base() const                { return objectType; }
   virtual char tchar() const                     { return 'a'; }
   virtual const char* name() const               { return "object"; }
@@ -296,11 +296,11 @@ class ObjectConstant: public ObjectType {
   ciObject* _value;
 
  public:
-  ObjectConstant(ciObject* value)                { _value = value; }
+  ObjectConstant(ciObject* value) noexcept       { _value = value; }
 
   ciObject* value() const                        { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual ObjectConstant* as_ObjectConstant()    { return this; }
   virtual ciObject* constant_value() const;
   virtual ciType* exact_type() const;
@@ -318,11 +318,11 @@ class ArrayConstant: public ArrayType {
   ciArray* _value;
 
  public:
-  ArrayConstant(ciArray* value)                  { _value = value; }
+  ArrayConstant(ciArray* value) noexcept         { _value = value; }
 
   ciArray* value() const                         { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual ArrayConstant* as_ArrayConstant()      { return this; }
   virtual ciObject* constant_value() const;
   virtual ciType* exact_type() const;
@@ -333,7 +333,7 @@ class StableArrayConstant: public ArrayConstant {
   jint _dimension;
 
  public:
-  StableArrayConstant(ciArray* value, jint dimension) : ArrayConstant(value) {
+  StableArrayConstant(ciArray* value, jint dimension) noexcept : ArrayConstant(value) {
     assert(dimension > 0, "not a stable array");
     _dimension = dimension;
   }
@@ -354,11 +354,11 @@ class InstanceConstant: public InstanceType {
   ciInstance* _value;
 
  public:
-  InstanceConstant(ciInstance* value)            { _value = value; }
+  InstanceConstant(ciInstance* value) noexcept   { _value = value; }
 
   ciInstance* value() const                      { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual InstanceConstant* as_InstanceConstant(){ return this; }
   virtual ciObject* constant_value() const;
   virtual ciType* exact_type() const;
@@ -367,7 +367,7 @@ class InstanceConstant: public InstanceType {
 
 class MetadataType: public ValueType {
  public:
-  MetadataType(): ValueType(metaDataTag, 1) {}
+  MetadataType() noexcept : ValueType(metaDataTag, 1) {}
   virtual ValueType* base() const                       { return objectType; }
   virtual char tchar() const                            { return 'a'; }
   virtual const char* name() const                      { return "object"; }
@@ -389,11 +389,11 @@ class ClassConstant: public ClassType {
   ciInstanceKlass* _value;
 
  public:
-  ClassConstant(ciInstanceKlass* value)          { _value = value; }
+  ClassConstant(ciInstanceKlass* value) noexcept { _value = value; }
 
   ciInstanceKlass* value() const                 { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
   virtual ClassConstant* as_ClassConstant()      { return this; }
   virtual ciMetadata* constant_value() const            { return _value; }
   virtual ciType* exact_type() const;
@@ -411,11 +411,11 @@ class MethodConstant: public MethodType {
   ciMethod* _value;
 
  public:
-  MethodConstant(ciMethod* value)                       { _value = value; }
+  MethodConstant(ciMethod* value) noexcept              { _value = value; }
 
   ciMethod* value() const                               { return _value; }
 
-  virtual bool is_constant() const                      { return true; }
+  virtual bool is_constant() const noexcept             { return true; }
 
   virtual MethodConstant* as_MethodConstant()           { return this; }
   virtual ciMetadata* constant_value() const            { return _value; }
@@ -424,7 +424,7 @@ class MethodConstant: public MethodType {
 
 class AddressType: public ValueType {
  public:
-  AddressType(): ValueType(addressTag, 1) {}
+  AddressType() noexcept : ValueType(addressTag, 1) {}
   virtual ValueType* base() const                { return addressType; }
   virtual char tchar() const                     { return 'r'; }
   virtual const char* name() const               { return "address"; }
@@ -437,11 +437,11 @@ class AddressConstant: public AddressType {
   jint _value;
 
  public:
-  AddressConstant(jint value)                    { _value = value; }
+  AddressConstant(jint value) noexcept           { _value = value; }
 
   jint value() const                             { return _value; }
 
-  virtual bool is_constant() const               { return true; }
+  virtual bool is_constant() const noexcept      { return true; }
 
   virtual AddressConstant* as_AddressConstant()  { return this; }
 };
@@ -449,7 +449,7 @@ class AddressConstant: public AddressType {
 
 class IllegalType: public ValueType {
  public:
-  IllegalType(): ValueType(illegalTag, -1) {}
+  IllegalType() noexcept : ValueType(illegalTag, -1) {}
   virtual ValueType* base() const                { return illegalType; }
   virtual char tchar() const                     { return ' '; }
   virtual const char* name() const               { return "illegal"; }
@@ -458,7 +458,7 @@ class IllegalType: public ValueType {
 
 
 // conversion between ValueTypes, BasicTypes, and ciConstants
-ValueType* as_ValueType(BasicType type);
+ValueType* as_ValueType(BasicType type) noexcept;
 ValueType* as_ValueType(ciConstant value);
 BasicType  as_BasicType(ValueType* type);
 

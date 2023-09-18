@@ -39,11 +39,11 @@ void ThreadLocalStorage::init() {
   _initialized = true;
 }
 
-bool ThreadLocalStorage::is_initialized() {
+bool ThreadLocalStorage::is_initialized() noexcept {
   return _initialized;
 }
 
-Thread* ThreadLocalStorage::thread() {
+Thread* ThreadLocalStorage::thread() noexcept {
   // If this assert fails we will get a recursive assertion failure
   // and not see the actual error message or get a hs_err file.
   // Which most likely indicates we have taken an error path early in
