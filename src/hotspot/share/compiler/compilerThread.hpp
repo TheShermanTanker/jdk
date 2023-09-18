@@ -59,11 +59,11 @@ class CompilerThread : public JavaThread {
 
  public:
 
-  static CompilerThread* current() {
+  static CompilerThread* current() noexcept {
     return CompilerThread::cast(JavaThread::current());
   }
 
-  static CompilerThread* cast(Thread* t) {
+  static CompilerThread* cast(Thread* t) noexcept {
     assert(t->is_Compiler_thread(), "incorrect cast to CompilerThread");
     return static_cast<CompilerThread*>(t);
   }
