@@ -529,7 +529,7 @@ AC_DEFUN([FLAGS_SETUP_CFLAGS_HELPER],
   # CFLAGS BASIC
   if test "x$TOOLCHAIN_TYPE" = xgcc || test "x$TOOLCHAIN_TYPE" = xclang; then
     # COMMON to gcc and clang
-    TOOLCHAIN_CFLAGS_JVM="-pipe -fno-rtti -fno-exceptions \
+    TOOLCHAIN_CFLAGS_JVM="-pipe \
         -fvisibility=hidden -fno-strict-aliasing -fno-omit-frame-pointer"
   fi
 

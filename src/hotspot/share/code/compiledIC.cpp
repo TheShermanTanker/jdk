@@ -157,7 +157,7 @@ CompiledICData* data_from_reloc_iter(RelocIterator* iter) {
   return (CompiledICData*)value->data();
 }
 
-CompiledIC::CompiledIC(RelocIterator* iter)
+CompiledIC::CompiledIC(RelocIterator* iter) noexcept
   : _method(iter->code()),
     _data(data_from_reloc_iter(iter)),
     _call(nativeCall_at(iter->addr()))
@@ -167,24 +167,24 @@ CompiledIC::CompiledIC(RelocIterator* iter)
   assert(CompiledICLocker::is_safe(_method), "mt unsafe call");
 }
 
-CompiledIC* CompiledIC_before(nmethod* nm, address return_addr) {
+CompiledIC* CompiledIC_before(nmethod* nm, address return_addr) noexcept {
   address call_site = nativeCall_before(return_addr)->instruction_address();
   return CompiledIC_at(nm, call_site);
 }
 
-CompiledIC* CompiledIC_at(nmethod* nm, address call_site) {
+CompiledIC* CompiledIC_at(nmethod* nm, address call_site) noexcept {
   RelocIterator iter(nm, call_site, call_site + 1);
   iter.next();
   return CompiledIC_at(&iter);
 }
 
-CompiledIC* CompiledIC_at(Relocation* call_reloc) {
+CompiledIC* CompiledIC_at(Relocation* call_reloc) noexcept {
   address call_site = call_reloc->addr();
   nmethod* nm = CodeCache::find_blob(call_reloc->addr())->as_nmethod();
   return CompiledIC_at(nm, call_site);
 }
 
-CompiledIC* CompiledIC_at(RelocIterator* reloc_iter) {
+CompiledIC* CompiledIC_at(RelocIterator* reloc_iter) noexcept {
   CompiledIC* c_ic = new CompiledIC(reloc_iter);
   c_ic->verify();
   return c_ic;
