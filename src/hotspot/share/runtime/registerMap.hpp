@@ -74,8 +74,12 @@ class RegisterMap : public StackObj {
   enum class ProcessFrames { skip, include };
   enum class WalkContinuation { skip, include };
  private:
+#ifdef ZERO
+  intptr_t*         _location[1];
+#else
   intptr_t*         _location[reg_count];     // Location of registers (intptr_t* looks better than address in the debugger)
-  LocationValidType _location_valid[location_valid_size];
+#endif
+  LocationValidType _location_valid[location_valid_size > 0 ? location_valid_size : 1];
   bool              _include_argument_oops;   // Should include argument_oop marked locations for compiler
   JavaThread*       _thread;                  // Reference to current thread
   stackChunkHandle  _chunk;                   // The current continuation stack chunk, if any

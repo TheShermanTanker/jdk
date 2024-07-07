@@ -151,7 +151,7 @@ class vframeArray: public CHeapObj<mtCompiler> {
 
   int                          _frames; // number of javavframes in the array (does not count any adapter)
 
-  intptr_t                     _callee_registers[RegisterMap::reg_count];
+  intptr_t                     _callee_registers[RegisterMap::reg_count > 0 ? RegisterMap::reg_count : 1];
 
   vframeArrayElement           _elements[1];   // First variable section.
 

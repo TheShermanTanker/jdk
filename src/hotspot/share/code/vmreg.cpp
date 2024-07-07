@@ -37,7 +37,7 @@ const int VMRegImpl::slots_per_word = wordSize / stack_slot_size;
 
 const int VMRegImpl::register_count = ConcreteRegisterImpl::number_of_registers;
 // Register names
-const char *VMRegImpl::regName[ConcreteRegisterImpl::number_of_registers];
+const char *VMRegImpl::regName[ConcreteRegisterImpl::number_of_registers > 0 ? ConcreteRegisterImpl::number_of_registers : 1];
 
 void VMRegImpl::print_on(outputStream* st) const {
   if (is_reg()) {
