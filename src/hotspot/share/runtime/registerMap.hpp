@@ -74,8 +74,10 @@ class RegisterMap : public StackObj {
   enum class ProcessFrames { skip, include };
   enum class WalkContinuation { skip, include };
  private:
+#ifndef ZERO
   intptr_t*         _location[reg_count];     // Location of registers (intptr_t* looks better than address in the debugger)
   LocationValidType _location_valid[location_valid_size];
+#endif
   bool              _include_argument_oops;   // Should include argument_oop marked locations for compiler
   JavaThread*       _thread;                  // Reference to current thread
   stackChunkHandle  _chunk;                   // The current continuation stack chunk, if any
@@ -105,11 +107,15 @@ class RegisterMap : public StackObj {
     int index = reg->value() / location_valid_type_size;
     assert(0 <= reg->value() && reg->value() < reg_count, "range check");
     assert(0 <= index && index < location_valid_size, "range check");
+#ifndef ZERO
     if (_location_valid[index] & ((LocationValidType)1 << (reg->value() % location_valid_type_size))) {
       return (address) _location[reg->value()];
     } else {
+#endif
       return pd_location(reg);
+#ifndef ZERO
     }
+#endif
   }
 
   address location(VMReg base_reg, int slot_idx) const {
@@ -125,8 +131,10 @@ class RegisterMap : public StackObj {
     assert(0 <= reg->value() && reg->value() < reg_count, "range check");
     assert(0 <= index && index < location_valid_size, "range check");
     assert(_update_map, "updating map that does not need updating");
+#ifndef ZERO
     _location[reg->value()] = (intptr_t*) loc;
     _location_valid[index] |= ((LocationValidType)1 << (reg->value() % location_valid_type_size));
+#endif
     check_location_valid();
   }
 

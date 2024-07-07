@@ -66,7 +66,7 @@ private:
 
   static constexpr VMReg first();
   // Names for registers
-  static const char *regName[];
+  NOT_ZERO(static const char *regName[];)
   static const int register_count;
 
 public:
@@ -82,7 +82,7 @@ public:
 
   const char* name() {
     if (is_reg()) {
-      return regName[value()];
+      return NOT_ZERO(regName[value()]) ZERO_ONLY(nullptr);
     } else if (!is_valid()) {
       return "BAD";
     } else {

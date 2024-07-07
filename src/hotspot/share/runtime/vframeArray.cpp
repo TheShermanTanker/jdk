@@ -565,6 +565,7 @@ void vframeArray::fill_in(JavaThread* thread,
     element(i)->fill_in(chunk->at(i), realloc_failures);
   }
 
+#ifndef ZERO
   // Copy registers for callee-saved registers
   if (reg_map != nullptr) {
     for(int i = 0; i < RegisterMap::reg_count; i++) {
@@ -595,6 +596,7 @@ void vframeArray::fill_in(JavaThread* thread,
       }
     }
   }
+#endif
 }
 
 void vframeArray::unpack_to_stack(frame &unpack_frame, int exec_mode, int caller_actual_parameters) {
@@ -715,7 +717,7 @@ bool vframeArray::structural_compare(JavaThread* thread, GrowableArray<compiledV
 
 address vframeArray::register_location(int i) const {
   assert(0 <= i && i < RegisterMap::reg_count, "index out of bounds");
-  return (address) & _callee_registers[i];
+  return (address) NOT_ZERO(& _callee_registers[i]) ZERO_ONLY(nullptr);
 }
 
 

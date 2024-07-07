@@ -2580,6 +2580,7 @@ const char* os::exception_name(int exception_code, char *buf, size_t size) {
   return nullptr;
 }
 
+#ifndef ZERO
 //-----------------------------------------------------------------------------
 LONG Handle_IDiv_Exception(struct _EXCEPTION_POINTERS* exceptionInfo) {
   // handle exception caused by idiv; should only happen for -MinInt/-1
@@ -2617,6 +2618,11 @@ LONG Handle_IDiv_Exception(struct _EXCEPTION_POINTERS* exceptionInfo) {
 #endif
   return EXCEPTION_CONTINUE_EXECUTION;
 }
+#endif
+
+#if defined(_M_AMD64) && !defined(ZERO)
+bool handle_FLT_exception(struct _EXCEPTION_POINTERS* exceptionInfo);
+#endif
 
 static inline void report_error(Thread* t, DWORD exception_code,
                                 address addr, void* siginfo, void* context) {
@@ -2639,7 +2645,7 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
   if (handle_safefetch(exception_code, pc, (void*)exceptionInfo->ContextRecord)) {
     return EXCEPTION_CONTINUE_EXECUTION;
   }
-#elif defined(_M_AMD64)
+#elif defined(_M_AMD64) && !defined(ZERO)
   address pc = (address) exceptionInfo->ContextRecord->Rip;
 
   if ((exception_code == EXCEPTION_ACCESS_VIOLATION) &&
@@ -2677,6 +2683,7 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
     if (exception_code == EXCEPTION_STACK_OVERFLOW) {
       StackOverflow* overflow_state = thread->stack_overflow_state();
       if (overflow_state->stack_guards_enabled()) {
+#ifndef ZERO
         if (in_java) {
           frame fr;
           if (os::win32::get_frame_at_stack_banging_point(thread, exceptionInfo, pc, &fr)) {
@@ -2684,6 +2691,7 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
             SharedRuntime::look_for_reserved_stack_annotated_method(thread, fr);
           }
         }
+#endif
         // Yellow zone violation.  The o/s has unprotected the first yellow
         // zone page for us.  Note:  must call disable_stack_yellow_zone to
         // update the enabled status, even if the zone contains only one page.
@@ -2731,11 +2739,13 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
                             !ExecMem);
           return EXCEPTION_CONTINUE_EXECUTION;
         }
+#ifndef ZERO
         // Null pointer exception.
         if (MacroAssembler::uses_implicit_null_check((void*)addr)) {
           address stub = SharedRuntime::continuation_for_implicit_exception(thread, pc, SharedRuntime::IMPLICIT_NULL);
           if (stub != nullptr) return Handle_Exception(exceptionInfo, stub);
         }
+#endif
         report_error(t, exception_code, pc, exception_record,
                       exceptionInfo->ContextRecord);
         return EXCEPTION_CONTINUE_SEARCH;
@@ -2763,6 +2773,7 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
         nm = (cb != nullptr) ? cb->as_nmethod_or_null() : nullptr;
       }
 
+#ifndef ZERO
       bool is_unsafe_memory_access = (in_native || in_java) && UnsafeMemoryAccess::contains_pc(pc);
       if (((in_vm || in_native || is_unsafe_memory_access) && thread->doing_unsafe_access()) ||
           (nm != nullptr && nm->has_unsafe_access())) {
@@ -2772,6 +2783,7 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
         }
         return Handle_Exception(exceptionInfo, SharedRuntime::handle_unsafe_access(thread, next_pc));
       }
+#endif
     }
 
     if (in_java) {
@@ -2779,14 +2791,15 @@ LONG WINAPI topLevelExceptionFilter(struct _EXCEPTION_POINTERS* exceptionInfo) {
       case EXCEPTION_INT_DIVIDE_BY_ZERO:
         return Handle_Exception(exceptionInfo, SharedRuntime::continuation_for_implicit_exception(thread, pc, SharedRuntime::IMPLICIT_DIVIDE_BY_ZERO));
 
+#ifndef ZERO
       case EXCEPTION_INT_OVERFLOW:
         return Handle_IDiv_Exception(exceptionInfo);
+#endif
 
       } // switch
     }
 
-#if defined(_M_AMD64)
-    extern bool handle_FLT_exception(struct _EXCEPTION_POINTERS* exceptionInfo);
+#if defined(_M_AMD64) && !defined(ZERO)
     if ((in_java || in_native) && handle_FLT_exception(exceptionInfo)) {
       return EXCEPTION_CONTINUE_EXECUTION;
     }

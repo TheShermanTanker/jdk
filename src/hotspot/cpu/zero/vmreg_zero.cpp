@@ -30,12 +30,12 @@ void VMRegImpl::set_regName() {
   int i = 0;
   Register reg = ::as_Register(0);
   for ( ; i < ConcreteRegisterImpl::max_gpr ; ) {
-    regName[i++] = reg->name();
+ // regName[i++] = reg->name();
     reg = reg->successor();
   }
   FloatRegister freg = ::as_FloatRegister(0);
   for ( ; i < ConcreteRegisterImpl::max_fpr ; ) {
-    regName[i++] = freg->name();
+ // regName[i++] = freg->name();
     freg = freg->successor();
   }
   assert(i == ConcreteRegisterImpl::number_of_registers, "fix this");

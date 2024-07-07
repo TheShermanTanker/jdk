@@ -115,6 +115,7 @@ RegisterMap::RegisterMap(const RegisterMap* map) {
   _chunk_index = map->_chunk_index;
 
   pd_initialize_from(map);
+#ifndef ZERO
   if (update_map()) {
     for(int i = 0; i < location_valid_size; i++) {
       LocationValidType bits = map->_location_valid[i];
@@ -131,6 +132,7 @@ RegisterMap::RegisterMap(const RegisterMap* map) {
       }
     }
   }
+#endif
 }
 
 oop RegisterMap::cont() const {
@@ -153,9 +155,11 @@ void RegisterMap::set_stack_chunk(stackChunkOop chunk) {
 void RegisterMap::clear() {
   set_include_argument_oops(true);
   if (update_map()) {
+#ifndef ZERO
     for(int i = 0; i < location_valid_size; i++) {
       _location_valid[i] = 0;
     }
+#endif
     pd_clear();
   } else {
     pd_initialize();
