@@ -134,7 +134,6 @@ hotspot_loom = \
   :tier1_loom
 
 tier1_common = \
-  sources \
   sanity/BasicVMTest.java \
   gtest/GTestWrapper.java \
   gtest/MetaspaceGtests.java \

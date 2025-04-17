@@ -248,7 +248,7 @@ TypeIntMirror<S, U> TypeIntMirror<S, U>::cast() const {
 template <class CTP>
 static constexpr size_t all_instances_size() {
   using U = decltype(CTP::_ulo);
-  constexpr juint max_unsigned = juint(std::numeric_limits<U>::max());
+  constexpr juint max_unsigned = juint(std::is_integral_v<U> ? std::numeric_limits<U>::max() : U(U::max));
   if constexpr (max_unsigned == 1U) {
     // 1 bit
     return 3;

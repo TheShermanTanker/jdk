@@ -27,7 +27,7 @@
 #include "gc/z/zAddress.hpp"
 #include "utilities/globalDefinitions.hpp"
 
-#include <Windows.h>
+#include <windows.h>
 
 class ZPhysicalMemoryBackingImpl;
 

@@ -26,7 +26,6 @@
 #include "nmt/mallocSiteTable.hpp"
 #include "runtime/atomicAccess.hpp"
 #include "utilities/globalDefinitions.hpp"
-#include "utilities/permitForbiddenFunctions.hpp"
 
 // Malloc site hashtable buckets
 Atomic<MallocSiteHashtableEntry*>*  MallocSiteTable::_table = nullptr;
@@ -43,7 +42,7 @@ Atomic<size_t> MallocSiteTable::_entry_count(0);
  * time, it is in single-threaded mode from JVM perspective.
  */
 bool MallocSiteTable::initialize() {
-  _table = (Atomic<MallocSiteHashtableEntry*>*)permit_forbidden_function::malloc(table_size * sizeof(Atomic<MallocSiteHashtableEntry*>));
+  _table = (Atomic<MallocSiteHashtableEntry*>*) ::malloc(table_size * sizeof(Atomic<MallocSiteHashtableEntry*>));
   if (_table == nullptr) {
     return false;
   }

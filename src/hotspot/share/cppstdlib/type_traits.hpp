@@ -25,8 +25,6 @@
 #ifndef SHARE_CPPSTDLIB_TYPE_TRAITS_HPP
 #define SHARE_CPPSTDLIB_TYPE_TRAITS_HPP
 
-#include "utilities/compilerWarnings.hpp"
-
 // HotSpot usage for <type_traits>:
 // * Use the `alignof` operator instead of `std::alignment_of<>`.
 // * Do not use `std::aligned_storage<>` or `std::aligned_union<>`. These are
@@ -35,12 +33,10 @@
 //
 // Other than the above, no restrictions on the facilities in this header.
 
-BEGIN_ALLOW_FORBIDDEN_FUNCTIONS
 #include "utilities/vmassert_uninstall.hpp"
 
 #include <type_traits>
 
 #include "utilities/vmassert_reinstall.hpp" // don't reorder
-END_ALLOW_FORBIDDEN_FUNCTIONS
 
 #endif // SHARE_CPPSTDLIB_TYPE_TRAITS_HPP

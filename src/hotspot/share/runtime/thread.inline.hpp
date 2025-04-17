@@ -30,7 +30,6 @@
 
 #include "gc/shared/tlab_globals.hpp"
 #include "runtime/atomicAccess.hpp"
-#include "utilities/permitForbiddenFunctions.hpp"
 
 #ifdef MACOS_AARCH64
 #include "runtime/os.hpp"
@@ -68,7 +67,7 @@ inline void Thread::init_wx() {
   assert(this == Thread::current(), "should only be called for current thread");
   assert(!_wx_init, "second init");
   _wx_state = WXWrite;
-  permit_forbidden_function::pthread_jit_write_protect_np(false);
+  ::pthread_jit_write_protect_np(false);
   os::current_thread_enable_wx(_wx_state);
   // Side effect: preload base address of libjvm
   guarantee(os::address_is_in_vm(CAST_FROM_FN_PTR(address, &dummy)), "must be");

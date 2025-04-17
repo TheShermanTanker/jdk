@@ -78,7 +78,6 @@
 #include "utilities/fastrand.hpp"
 #include "utilities/globalDefinitions.hpp"
 #include "utilities/macros.hpp"
-#include "utilities/permitForbiddenFunctions.hpp"
 #include "utilities/powerOfTwo.hpp"
 
 #ifndef _WINDOWS
@@ -115,7 +114,7 @@ void os::snprintf_checked(char* buf, size_t len, const char* fmt, ...) {
 int os::vsnprintf(char* buf, size_t len, const char* fmt, va_list args) {
   assert(buf != nullptr || len == 0, "Valid buffer and length must be given");
   assert(fmt != nullptr, "Missing format string");
-  int result = permit_forbidden_function::vsnprintf(buf, len, fmt, args);
+  int result = ::vsnprintf(buf, len, fmt, args);
   // If an error occurred (result < 0) then it's not clear
   // whether the buffer is NUL terminated, so ensure it is.
   if ((result < 0) && (len > 0) && (buf != nullptr)) {
@@ -653,7 +652,7 @@ void* os::malloc(size_t size, MemTag mem_tag, const NativeCallStack& stack) {
     return nullptr;
   }
 
-  void* const outer_ptr = permit_forbidden_function::malloc(outer_size);
+  void* const outer_ptr = ::malloc(outer_size);
   if (outer_ptr == nullptr) {
     return nullptr;
   }
@@ -715,7 +714,7 @@ void* os::realloc(void *memblock, size_t size, MemTag mem_tag, const NativeCallS
     if (success) {
       // If realloc succeeds, the header is freed. Get FreeInfo before that.
       MallocHeader::FreeInfo free_info = header->free_info();
-      void* const new_outer_ptr = permit_forbidden_function::realloc(header, new_outer_size);
+      void* const new_outer_ptr = ::realloc(header, new_outer_size);
       success = new_outer_ptr != nullptr;
       if (success) {
         // realloc(3) succeeded, variable header now points to invalid memory and we need to deaccount the old block.
@@ -742,7 +741,7 @@ void* os::realloc(void *memblock, size_t size, MemTag mem_tag, const NativeCallS
     }
   } else {
     // NMT disabled.
-    rc = permit_forbidden_function::realloc(memblock, size);
+    rc = ::realloc(memblock, size);
     if (rc == nullptr) {
       return nullptr;
     }
@@ -769,7 +768,7 @@ void  os::free(void *memblock) {
   // When NMT is enabled this checks for heap overwrites, then deaccounts the old block.
   void* const old_outer_ptr = MemTracker::record_free(memblock);
 
-  permit_forbidden_function::free(old_outer_ptr);
+  ::free(old_outer_ptr);
 }
 
 void os::init_random(unsigned int initval) {

@@ -24,7 +24,7 @@
 
 #include "runtime/osThread.hpp"
 
-#include <Windows.h>
+#include <windows.h>
 
 OSThread::OSThread()
   : _thread_id(0),

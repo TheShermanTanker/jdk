@@ -76,7 +76,6 @@
 #include "utilities/defaultStream.hpp"
 #include "utilities/events.hpp"
 #include "utilities/macros.hpp"
-#include "utilities/permitForbiddenFunctions.hpp"
 #include "utilities/population_count.hpp"
 #include "utilities/vmError.hpp"
 #include "windbghelp.hpp"
@@ -4722,9 +4721,9 @@ static void exit_process_or_thread(Ept what, int code) {
   if (what == EPT_THREAD) {
     _endthreadex((unsigned)code);
   } else if (what == EPT_PROCESS) {
-    permit_forbidden_function::exit(code);
+    ::exit(code);
   } else { // EPT_PROCESS_DIE
-    permit_forbidden_function::_exit(code);
+    ::_exit(code);
   }
 
   // Should not reach here
@@ -5600,7 +5599,7 @@ char* os::realpath(const char* filename, char* outbuf, size_t outbuflen) {
   }
 
   char* result = nullptr;
-  char* p = permit_forbidden_function::_fullpath(nullptr, filename, 0);
+  char* p = ::_fullpath(nullptr, filename, 0);
   if (p != nullptr) {
     if (strlen(p) < outbuflen) {
       strcpy(outbuf, p);
@@ -5609,7 +5608,7 @@ char* os::realpath(const char* filename, char* outbuf, size_t outbuflen) {
       errno = ENAMETOOLONG;
     }
     ErrnoPreserver ep;
-    permit_forbidden_function::free(p); // *not* os::free
+    ::free(p); // *not* os::free
   }
   return result;
 }

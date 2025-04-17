@@ -25,8 +25,6 @@
 #ifndef SHARE_CPPSTDLIB_CSTDDEF_HPP
 #define SHARE_CPPSTDLIB_CSTDDEF_HPP
 
-#include "utilities/compilerWarnings.hpp"
-
 // HotSpot usage for <cstddef>:
 // permitted:
 // * std::max_align_t, std::nullptr_t
@@ -38,12 +36,10 @@
 // * <upcase>null</> macro - use nullptr instead.
 // * std::byte
 
-BEGIN_ALLOW_FORBIDDEN_FUNCTIONS
 #include "utilities/vmassert_uninstall.hpp"
 
 #include <cstddef>
 
 #include "utilities/vmassert_reinstall.hpp" // don't reorder
-END_ALLOW_FORBIDDEN_FUNCTIONS
 
 #endif // SHARE_CPPSTDLIB_CSTDDEF_HPP

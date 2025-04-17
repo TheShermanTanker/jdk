@@ -30,17 +30,4 @@
 #define PRAGMA_DIAG_PUSH _Pragma("warning(push)")
 #define PRAGMA_DIAG_POP  _Pragma("warning(pop)")
 
-#define PRAGMA_DEPRECATED_IGNORED PRAGMA_DISABLE_MSVC_WARNING(4996)
-
-// This macro is used by the IMPORTED variants of FORBID_C_FUNCTION.
-//
-// Some, but not all, functions we want to forbid using must include a
-// `__declspec(dllimport)` in the declaration.  Failure to do so where needed
-// leads to "redefinition; different linkage" errors for the forbidding
-// declaration. But including a dllimport specifier if not present in the
-// compiler's header leads to the same errors.  It seems one must just know
-// which are imported and which are not, and use the specifier accordingly.
-
-#define FORBIDDEN_FUNCTION_IMPORT_SPEC __declspec(dllimport)
-
 #endif // SHARE_UTILITIES_COMPILERWARNINGS_VISCPP_HPP

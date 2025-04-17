@@ -28,7 +28,6 @@
 #include "jvm.h"
 #include "memory/allocation.inline.hpp"
 #include "utilities/globalDefinitions.hpp"
-#include "utilities/permitForbiddenFunctions.hpp"
 
 #include <cxxabi.h>
 #include <mach-o/loader.h>
@@ -45,7 +44,7 @@ bool MachODecoder::demangle(const char* symbol, char *buf, int buflen) {
   if ((result = abi::__cxa_demangle(symbol, nullptr, nullptr, &status)) != nullptr) {
     jio_snprintf(buf, buflen, "%s", result);
     // call c library's free
-    permit_forbidden_function::free(result);
+    ::free(result);
     return true;
   }
   return false;

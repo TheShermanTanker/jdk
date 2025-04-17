@@ -35,9 +35,9 @@ static_assert(uintn_t<3>::max == 7, "");
 
 template <unsigned int nbits>
 static void test_intn_t() {
-  static_assert(std::numeric_limits<intn_t<nbits>>::min() <= intn_t<nbits>(-1) &&
+  static_assert(intn_t<nbits>(intn_t<nbits>::min) <= intn_t<nbits>(-1) &&
                 intn_t<nbits>(-1) < intn_t<nbits>(0) &&
-                intn_t<nbits>(0) <= std::numeric_limits<intn_t<nbits>>::max(), "basic sanity");
+                intn_t<nbits>(0) <= intn_t<nbits>(intn_t<nbits>::max), "basic sanity");
   constexpr int period = intn_t<nbits>::max - intn_t<nbits>::min + 1;
   for (int i = std::numeric_limits<signed char>::min(); i < std::numeric_limits<signed char>::max(); i++) {
     ASSERT_EQ(intn_t<nbits>(i), intn_t<nbits>(i + period));

@@ -27,7 +27,7 @@
 
 #include "memory/allStatic.hpp"
 #include "utilities/macros.hpp"
-#include <WinSock2.h>
+#include <winsock2.h>
 #include <ws2ipdef.h>
 #include <iphlpapi.h>
 

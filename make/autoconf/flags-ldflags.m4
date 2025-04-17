@@ -50,7 +50,6 @@ AC_DEFUN([FLAGS_SETUP_LDFLAGS_HELPER],
     # add -z,relro (mark relocations read only) for all libs
     # add -z,now ("full relro" - more of the Global Offset Table GOT is marked read only)
     # add --no-as-needed to disable default --as-needed link flag on some GCC toolchains
-    # add --icf=all (Identical Code Folding — merges identical functions)
     if test "x$OPENJDK_TARGET_OS" = xlinux; then
       BASIC_LDFLAGS="-Wl,-z,defs -Wl,-z,relro -Wl,-z,now -Wl,--no-as-needed -Wl,--exclude-libs,ALL"
     elif test "x$OPENJDK_TARGET_OS" = xwindows; then
@@ -112,9 +111,6 @@ AC_DEFUN([FLAGS_SETUP_LDFLAGS_HELPER],
 
   # Setup OS-dependent LDFLAGS
   if test "x$OPENJDK_TARGET_OS" = xmacosx && test "x$TOOLCHAIN_TYPE" = xclang; then
-    if test x$DEBUG_LEVEL = xrelease; then
-      BASIC_LDFLAGS_JDK_ONLY="$BASIC_LDFLAGS_JDK_ONLY -Wl,-dead_strip"
-    fi
     # FIXME: We should really generalize SetSharedLibraryOrigin instead.
     OS_LDFLAGS_JVM_ONLY="-Wl,-rpath,@loader_path/. -Wl,-rpath,@loader_path/.."
     OS_LDFLAGS="-mmacosx-version-min=$MACOSX_VERSION_MIN -Wl,-reproducible"
@@ -214,12 +210,6 @@ AC_DEFUN([FLAGS_SETUP_LDFLAGS_CPU_DEP],
     fi
     if test "x${OPENJDK_$1_CPU}" = "xx86"; then
       $1_CPU_LDFLAGS="-safeseh"
-    fi
-  fi
-
-  if test "x${$3LD_TYPE}" = "xgold"; then
-    if test x$DEBUG_LEVEL = xrelease; then
-      $1_CPU_LDFLAGS="${$1_CPU_LDFLAGS} -Wl,--icf=all"
     fi
   fi
 

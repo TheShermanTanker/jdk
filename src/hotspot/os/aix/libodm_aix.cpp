@@ -28,7 +28,6 @@
 #include "misc_aix.hpp"
 #include "runtime/arguments.hpp"
 #include "runtime/os.hpp"
-#include "utilities/permitForbiddenFunctions.hpp"
 
 #include <dlfcn.h>
 #include <string.h>
@@ -60,7 +59,7 @@ dynamicOdm::~dynamicOdm() {
 }
 
 
-void odmWrapper::clean_data() { if (_data) { permit_forbidden_function::free(_data); _data = nullptr; } }
+void odmWrapper::clean_data() { if (_data) { ::free(_data); _data = nullptr; } }
 
 
 int odmWrapper::class_offset(const char *field)

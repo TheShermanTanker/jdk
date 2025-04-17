@@ -141,24 +141,6 @@ public:
 template <unsigned int nbits>
 constexpr intn_t<nbits>::intn_t(uintn_t<nbits> v) : _v(v._v) {}
 
-namespace std {
-
-template <unsigned int nbits>
-class numeric_limits<intn_t<nbits>> {
-public:
-  constexpr static intn_t<nbits> min() { return intn_t<nbits>(intn_t<nbits>::min); }
-  constexpr static intn_t<nbits> max() { return intn_t<nbits>(intn_t<nbits>::max); }
-};
-
-template <unsigned int nbits>
-class numeric_limits<uintn_t<nbits>> {
-public:
-  constexpr static uintn_t<nbits> min() { return uintn_t<nbits>(uintn_t<nbits>::min); }
-  constexpr static uintn_t<nbits> max() { return uintn_t<nbits>(uintn_t<nbits>::max); }
-};
-
-} // namespace std
-
 template <unsigned int nbits>
 inline unsigned count_leading_zeros(uintn_t<nbits> v) {
   return count_leading_zeros<unsigned int>(v._v & uintn_t<nbits>::_mask) - (32 - nbits);

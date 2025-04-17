@@ -25,17 +25,13 @@
 #ifndef SHARE_CPPSTDLIB_LIMITS_HPP
 #define SHARE_CPPSTDLIB_LIMITS_HPP
 
-#include "utilities/compilerWarnings.hpp"
-
 // HotSpot usage for <limits>:
 // No restrictions on the facilities in this header.
 
-BEGIN_ALLOW_FORBIDDEN_FUNCTIONS
 #include "utilities/vmassert_uninstall.hpp"
 
 #include <limits>
 
 #include "utilities/vmassert_reinstall.hpp" // don't reorder
-END_ALLOW_FORBIDDEN_FUNCTIONS
 
 #endif // SHARE_CPPSTDLIB_LIMITS_HPP

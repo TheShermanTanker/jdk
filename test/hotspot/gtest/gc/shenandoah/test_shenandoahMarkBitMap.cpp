@@ -26,9 +26,7 @@
 #include "gc/shenandoah/shenandoahMarkBitMap.hpp"
 #include "gc/shenandoah/shenandoahMarkBitMap.inline.hpp"
 
-BEGIN_ALLOW_FORBIDDEN_FUNCTIONS
 #include <iostream>
-END_ALLOW_FORBIDDEN_FUNCTIONS
 
 #include "memory/memRegion.hpp"
 #include "unittest.hpp"

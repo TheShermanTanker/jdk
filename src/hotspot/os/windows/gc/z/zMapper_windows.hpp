@@ -28,7 +28,7 @@
 #include "memory/allStatic.hpp"
 #include "utilities/globalDefinitions.hpp"
 
-#include <Windows.h>
+#include <windows.h>
 
 class ZMapper : public AllStatic {
 private:

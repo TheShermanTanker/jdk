@@ -51,10 +51,8 @@
 #undef F2
 
 #include "utilities/vmassert_uninstall.hpp"
-BEGIN_ALLOW_FORBIDDEN_FUNCTIONS
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-END_ALLOW_FORBIDDEN_FUNCTIONS
 #include "utilities/vmassert_reinstall.hpp"
 
 #ifdef UNDEFINED_Log

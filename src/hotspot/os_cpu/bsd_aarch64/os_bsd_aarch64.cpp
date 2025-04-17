@@ -520,7 +520,7 @@ THREAD_LOCAL bool os::_jit_exec_enabled;
 void os::current_thread_enable_wx(WXMode mode) {
   bool exec_enabled = mode != WXWrite;
   if (exec_enabled != _jit_exec_enabled NOT_PRODUCT( || DefaultWXWriteMode == WXWrite)) {
-    permit_forbidden_function::pthread_jit_write_protect_np(exec_enabled);
+    ::pthread_jit_write_protect_np(exec_enabled);
     _jit_exec_enabled = exec_enabled;
   }
 }
