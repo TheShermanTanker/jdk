@@ -32,7 +32,6 @@
 #include "utilities/checkedCast.hpp"
 #include "utilities/compilerWarnings.hpp"
 #include "utilities/debug.hpp"
-#include "utilities/forbiddenFunctions.hpp"
 #include "utilities/macros.hpp"
 
 #include COMPILER_HEADER(utilities/globalDefinitions)

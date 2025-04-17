@@ -37,7 +37,7 @@
 
 #include <math.h>
 #include <psapi.h>
-#include <TlHelp32.h>
+#include <tlhelp32.h>
 
 /*
  * Windows provides a vast plethora of performance objects and counters,

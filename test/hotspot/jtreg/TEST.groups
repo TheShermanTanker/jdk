@@ -140,7 +140,6 @@ serviceability_ttf_virtual = \
   -serviceability/jvmti/negative
 
 tier1_common = \
-  sources \
   sanity/BasicVMTest.java \
   gtest/GTestWrapper.java \
   gtest/MetaspaceGtests.java \

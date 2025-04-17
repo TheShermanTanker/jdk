@@ -27,7 +27,7 @@
 #include "logging/log.hpp"
 #include "utilities/debug.hpp"
 
-#include <Windows.h>
+#include <windows.h>
 
 // Memory reservation, commit, views, and placeholders.
 //

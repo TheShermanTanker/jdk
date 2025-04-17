@@ -26,8 +26,8 @@
 
 #include <cerrno>
 #ifdef _WIN64
-#include <Windows.h>
-#include <Winsock2.h>
+#include <windows.h>
+#include <winsock2.h>
 #endif
 
 // We call this from _thread_in_native, right after a downcall

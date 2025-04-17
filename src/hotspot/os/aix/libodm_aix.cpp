@@ -60,7 +60,7 @@ dynamicOdm::~dynamicOdm() {
 }
 
 
-void odmWrapper::clean_data() { if (_data) { permit_forbidden_function::free(_data); _data = nullptr; } }
+void odmWrapper::clean_data() { if (_data) { ::free(_data); _data = nullptr; } }
 
 
 int odmWrapper::class_offset(const char *field, bool is_aix_5)

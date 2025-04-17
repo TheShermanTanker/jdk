@@ -73,14 +73,14 @@
 #endif
 
 #define read_csr(csr)                                           \
-({                                                              \
+[]() throw() -> unsigned long {                                 \
         unsigned long __v;                                      \
         __asm__ __volatile__ ("csrr %0, %1"                     \
                               : "=r" (__v)                      \
                               : "i" (csr)                       \
                               : "memory");                      \
-        __v;                                                    \
-})
+        return __v;                                             \
+}()
 
 // prctl PR_RISCV_SET_ICACHE_FLUSH_CTX is from Linux 6.9
 #ifndef PR_RISCV_SET_ICACHE_FLUSH_CTX

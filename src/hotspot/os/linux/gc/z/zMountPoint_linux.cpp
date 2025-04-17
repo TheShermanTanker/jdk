@@ -63,11 +63,11 @@ char* ZMountPoint::get_mountpoint(const char* line, const char* filesystem) cons
       strcmp(line_filesystem, filesystem) != 0 ||
       access(line_mountpoint, R_OK|W_OK|X_OK) != 0) {
     // Not a matching or accessible filesystem
-    permit_forbidden_function::free(line_mountpoint);
+    ::free(line_mountpoint);
     line_mountpoint = nullptr;
   }
 
-  permit_forbidden_function::free(line_filesystem);
+  ::free(line_filesystem);
 
   return line_mountpoint;
 }
@@ -91,14 +91,14 @@ void ZMountPoint::get_mountpoints(const char* filesystem, ZArray<char*>* mountpo
   }
 
   // readline will return malloced memory. Need raw ::free, not os::free.
-  permit_forbidden_function::free(line);
+  ::free(line);
   fclose(fd);
 }
 
 void ZMountPoint::free_mountpoints(ZArray<char*>* mountpoints) const {
   ZArrayIterator<char*> iter(mountpoints);
   for (char* mountpoint; iter.next(&mountpoint);) {
-    permit_forbidden_function::free(mountpoint); // *not* os::free
+    ::free(mountpoint); // *not* os::free
   }
   mountpoints->clear();
 }
